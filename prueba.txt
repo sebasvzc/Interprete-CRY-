@@ -11,3 +11,4 @@ imprimir(entero)
 // hola como estamos perros
 @hola como estas 
 ppi@
+leer(real)

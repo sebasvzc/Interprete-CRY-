@@ -21,18 +21,20 @@ int nSim=0;
 %token  MIENTRAS IF ID NUM SUMAUN
 %token  IGUALDAD
 %token  INT LONG SHORT DOUBLE FLOAT CHAR BOOL VERDAD FALSO VOID CONST
-%token IMPRIMIR COMENTARIOSIMPLE COMENTARIOCOMPLEJO
+%token IMPRIMIR COMENTARIOSIMPLE COMENTARIOCOMPLEJO LEER
 
 
 %%
 prog:  listainst;
 listainst: instr listainst ;
 listainst: ;
-instr: declaracion | asignacion | comp | iterativa_while | condicional | imprimir | comentario;
+instr: declaracion | asignacion | comp | iterativa_while | condicional | imprimir | comentario
+| leer;
 comentario: comentarioSimple | comentarioComplejo;
 comentarioSimple: COMENTARIOSIMPLE;
 comentarioComplejo: COMENTARIOCOMPLEJO;
 imprimir: IMPRIMIR '(' expr ')';
+leer: LEER '(' expr ')';
 iterativa_while: MIENTRAS '(' comp ')' bloque ;
 condicional: IF '(' comp ')' bloque;
 bloque: '{' listainst '}' ;
@@ -135,6 +137,7 @@ int yylex(){
         if(!strcmp(lexema,"verdaderoSentimiento")) return VERDAD;
         if(!strcmp(lexema,"vacioProfundo")) return VOID;
         if(!strcmp(lexema,"imprimir")) return IMPRIMIR;
+        if(!strcmp(lexema,"leer")) return LEER;
         return ID;
     }
 
