@@ -2,8 +2,14 @@ enteroAmor x
 realAmor y
 sisi(x>y){
     enteroAmor z
-}osisi (x>y){
+}osisi(x>y){
     realAmor a
-}else{
+}osisi(x>y){
     realAmor b
+}osino{
+    realAmor c
+}
+
+para(x = 1; x < 5; x = x + 1){
+    y = y + 1
 }
