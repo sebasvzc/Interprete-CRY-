@@ -1,1 +1,6 @@
-enteroAmor x
+enteroAmor entero
+constanteRechazo doblementeReal doblemente = 23
+realAmor real
+entero = 32
+real = 234.4
+
