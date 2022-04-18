@@ -18,10 +18,14 @@ int nSim=0;
 %}
 
 
-%token  WHILE IF ID NUM SUMAUN DO FOR
-%token  IGUALDAD ELSE ELIF CONTINUE RESTAUN
-%token  INT LONG SHORT DOUBLE FLOAT CHAR BOOL VERDAD FALSO VOID CONST BITSIZ BISTDE
+%token  WHILE IF ID NUM DO FOR
+%token  IGUALDAD ELSE ELIF CONTINUE
+%token  INT LONG SHORT DOUBLE FLOAT CHAR BOOL VERDAD FALSO VOID CONST BITSIZ BITSDE
 %token RETURN BREAK PASS
+%token  INCREMENTO DECREMENTO AUMENTO DISMINUCION MULTI DIVI MOD
+%token PRINT COMENTARIOSIMPLE COMENTARIOCOMPLEJO
+%token  DE_TIPO DESIGUALDAD SCAN
+%token NEGACION AND OR NAND XOR NOR;
 
 %%
 prog
@@ -40,7 +44,22 @@ instr
     | RETURN
     | BREAK
     | PASS
-    | condicional ;
+    | condicional 
+    | imprimir 
+    | leer 
+    | comentario
+    | funcion;
+comentario
+    : comentarioSimple 
+    | comentarioComplejo;
+comentarioSimple
+    : COMENTARIOSIMPLE;
+comentarioComplejo
+    : COMENTARIOCOMPLEJO;
+imprimir
+    : PRINT '(' expr ')';
+leer
+    : SCAN '(' expr ')';
 iterativa_do
     : DO bloque WHILE '(' comp ')' ;
 iterativa_for
@@ -55,7 +74,16 @@ declaracion
     : identificador ID {$$=asignarSimbolo(lexema,ID); }
     | CONST identificador ID {$$=asignarSimbolo(lexema,ID);} '=' expresion ;
 asignacion
-    : ID { $$=localizaSimboloAnadeNum(lexema,ID);} '=' expresion ;
+    : ID { $$=localizaSimboloAnadeNum(lexema,ID);} asignaciones;
+asignaciones
+    : '=' expresion
+    | INCREMENTO
+    | DECREMENTO
+    | AUMENTO expresion
+    | DISMINUCION expresion 
+    | MULTI expresion
+    | DIVI expresion 
+    | MOD expresion;
 identificador
     : INT 
     | FLOAT 
@@ -68,7 +96,6 @@ identificador
 expresion
     : expr 
     | comp 
-    | sumaunaria ;
 expr 
     : expr '+' term  
     | expr '-' term   
@@ -80,27 +107,35 @@ op
     :'*' 
     |'/' 
     |BITSIZ 
-    |BISTDE 
+    |BITSDE 
     |'%' ;
 factor
     : NUM { $$=localizaSimboloAnadeNum(lexema,NUM);}
     | '(' expr')'  
-    | ID  { $$=localizaSimboloAnadeNum(lexema,ID);} ;
+    | ID  { $$=localizaSimboloAnadeNum(lexema,ID);} 
+    | VERDAD { $$=localizaSimboloAnadeNum(lexema,NUM);} ;
+    | FALSO { $$=localizaSimboloAnadeNum(lexema,NUM);} ; 
 comp
     : expr '>' '=' expr  
     | expr '>'  expr  
     | expr '<'  expr  
     | expr '<' '='  expr  
-    | expr IGUALDAD  expr ;
-sumaunaria
-    : ID SUMAUN 
-    | ID RESTAUN ;
+    | expr IGUALDAD  expr 
+    | expr DESIGUALDAD  expr 
+    | expresion exp_logica expresion;
 else
     : ELSE bloque
     | ELIF '(' comp ')' bloque else
     | ;
-
-
+funcion
+    : DE_TIPO '(' identificador ')' 
+    | NEGACION '(' expr ')' ;
+exp_logica
+    : AND 
+    | OR 
+    | NAND 
+    | XOR 
+    | NOR;
 %%
 
 /*codigo C*/
@@ -179,6 +214,17 @@ int yylex(){
         if(!strcmp(lexema,"osino")) return ELSE;
         if(!strcmp(lexema,"osisi")) return ELIF;
         if(!strcmp(lexema,"volvamos")) return CONTINUE;
+        if(!strcmp(lexema,"imprimir")) return PRINT;
+        if(!strcmp(lexema,"leer")) return SCAN;
+        if(!strcmp(lexema,"deTipo")) return DE_TIPO;
+        if(!strcmp(lexema,"falsoAmor")) return FALSO;
+        if(!strcmp(lexema,"verdaderoSentimiento")) return VERDAD;
+        if(!strcmp(lexema,"jamas")) return NEGACION;
+        if(!strcmp(lexema,"yh")) return AND;
+        if(!strcmp(lexema,"oh")) return OR;
+        if(!strcmp(lexema,"nomas")) return NAND;
+        if(!strcmp(lexema,"ellaOyo")) return XOR;
+        if(!strcmp(lexema,"nituNiyo")) return NOR;
         return ID;
     }
 
@@ -192,7 +238,37 @@ int yylex(){
         lexema[i++]='\0';
         return NUM;
     } 
-                 
+    
+    if (c=='/'){
+        c=getchar();
+        if (c=='/'){  
+            while(getchar()!='\n');
+            return COMENTARIOSIMPLE;                        
+        }
+        else if (c == '=') {
+            return DIVI;
+        }
+        else{
+            ungetc(c,stdin);
+            return '/';
+        }  
+    }
+    
+    if (c=='@'){
+        while(getchar()!='@');
+        return COMENTARIOCOMPLEJO;  
+    } 
+
+    if (c=='!'){
+        c=getchar();
+        if (c=='='){  
+            return DESIGUALDAD;                        
+        }
+        else{
+            ungetc(c,stdin);
+            return '=';
+        }  
+    }             
                
     if (c=='='){
         c=getchar();
@@ -208,7 +284,10 @@ int yylex(){
     if (c=='+'){
         c=getchar();
         if (c=='+'){  
-            return SUMAUN;                        
+            return INCREMENTO;                        
+        }
+        else if(c == '='){
+            return AUMENTO;
         }
         else{
             ungetc(c,stdin);
@@ -219,13 +298,38 @@ int yylex(){
     if (c=='-'){
         c=getchar();
         if (c=='-'){  
-            return RESTAUN ;                        
+            return DECREMENTO ;                        
+        }
+        else if (c == '='){
+            return DISMINUCION;
         }
         else{
             ungetc(c,stdin);
             return '-';
         }  
     }
+    
+    if (c=='*'){
+        c=getchar();
+        if (c=='='){  
+            return MULTI;                        
+        }
+        else{
+            ungetc(c,stdin);
+            return '*';
+        }
+    }     
+       	
+    if (c=='%'){
+        c=getchar();
+        if (c=='='){  
+            return MOD;                        
+        }
+        else{
+            ungetc(c,stdin);
+            return '%';
+        }
+    } 
     
     if (c=='<'){
         c=getchar();
@@ -241,7 +345,7 @@ int yylex(){
     if (c=='>'){
         c=getchar();
         if (c=='>'){  
-            return BISTDE;                        
+            return BITSDE;                        
         }
         else{
             ungetc(c,stdin);
