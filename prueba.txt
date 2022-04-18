@@ -1,1 +1,13 @@
-enteroAmor x
+enteroAmor entero
+doblementeReal real
+caracterCorazoncito carac
+cortaRelacion shorti
+largaDuracion largi
+vacioProfundo vacio
+entero = 3
+entero = 4
+real = 3.2
+imprimir(entero)
+// hola como estamos perros
+@hola como estas 
+ppi@

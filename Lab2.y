@@ -20,20 +20,25 @@ int nSim=0;
 
 %token  MIENTRAS IF ID NUM SUMAUN
 %token  IGUALDAD
-%token  INT LONG SHORT DOUBLE FLOAT CHAR BOOL VERDAD FALSO VOID
+%token  INT LONG SHORT DOUBLE FLOAT CHAR BOOL VERDAD FALSO VOID CONST
+%token IMPRIMIR COMENTARIOSIMPLE COMENTARIOCOMPLEJO
 
 
 %%
 prog:  listainst;
 listainst: instr listainst ;
 listainst: ;
-instr: declaracion | asignacion | comp | iterativa_while | condicional;
+instr: declaracion | asignacion | comp | iterativa_while | condicional | imprimir | comentario;
+comentario: comentarioSimple | comentarioComplejo;
+comentarioSimple: COMENTARIOSIMPLE;
+comentarioComplejo: COMENTARIOCOMPLEJO;
+imprimir: IMPRIMIR '(' expr ')';
 iterativa_while: MIENTRAS '(' comp ')' bloque ;
 condicional: IF '(' comp ')' bloque;
 bloque: '{' listainst '}' ;
 declaracion: identificador ID {$$=asignarSimbolo(lexema,ID);};
 asignacion:  ID {$$=localizaSimboloAnadeNum(lexema,ID);} '=' expresion ;
-identificador: INT;
+identificador: INT | LONG | SHORT | DOUBLE | FLOAT | CHAR | VOID;
 expresion: expr| comp |sumaunaria;
 expr : expr '+' term   ;
 expr : expr '-' term  ;
@@ -129,6 +134,7 @@ int yylex(){
         if(!strcmp(lexema,"falsoAmor")) return FALSO;
         if(!strcmp(lexema,"verdaderoSentimiento")) return VERDAD;
         if(!strcmp(lexema,"vacioProfundo")) return VOID;
+        if(!strcmp(lexema,"imprimir")) return IMPRIMIR;
         return ID;
     }
 
@@ -137,7 +143,7 @@ int yylex(){
         do{
             lexema[i++]=c;
             c=getchar();
-        }while(isdigit(c));
+        }while(isdigit(c) || c=='.');
         ungetc(c,stdin);
         lexema[i++]='\0';
         return NUM;
@@ -165,6 +171,24 @@ int yylex(){
             return '+';
         }  
     }
+    if (c=='/'){
+        c=getchar();
+        if (c=='/'){  
+            while(getchar()!='\n'){
+	     }
+            return COMENTARIOSIMPLE;                        
+        }
+        else{
+            ungetc(c,stdin);
+            return '/';
+        }  
+    }
+    if (c=='@'){
+            while(getchar()!='@'){
+	     }
+            return COMENTARIOCOMPLEJO;  
+    } 
+    
     return c;
 }
 
