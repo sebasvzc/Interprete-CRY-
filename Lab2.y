@@ -18,7 +18,7 @@ int nSim=0;
 %}
 
 
-%token  MIENTRAS IF ID NUM SUMAUN OSINO OSISI FOR DO
+%token  MIENTRAS IF ID NUM SUMAUN OSINO OSISI FOR DO CONTINUE
 %token  IGUALDAD
 %token  INT LONG SHORT DOUBLE FLOAT CHAR BOOL VERDAD FALSO VOID
 
@@ -138,6 +138,7 @@ int yylex(){
         if(!strcmp(lexema,"osisi")) return OSISI;
         if(!strcmp(lexema,"para")) return FOR;
         if(!strcmp(lexema,"haz")) return DO;
+        if(!strcmp(lexema,"volvamos")) return CONTINUE;
         return ID;
     }
 
