@@ -23,6 +23,7 @@ int nSim=0;
 %token  IGUALDAD
 %token  INT LONG SHORT DOUBLE FLOAT CHAR BOOL VERDAD FALSO VOID CONST
 %token  DE_TIPO
+%token NEGACION AND OR NAND XOR NOR;
 
 
 %%
@@ -79,11 +80,15 @@ comp
     : expr '>' '=' expr  {printf("35\n");}
     | expr '>'  expr  {printf("36\n");}
     | expr '<'  expr  {printf("37\n");}
-    | expr IGUALDAD  expr  {printf("38\n");};
+    | expr IGUALDAD  expr  {printf("38\n");}
+    | expr exp_logica expr;
 sumaunaria
     : ID SUMAUN {printf("39\n");}; 
 funcion
-    : DE_TIPO '(' identificador ')' {printf("40\n");};
+    : DE_TIPO '(' identificador ')' {printf("40\n");}
+    | NEGACION '(' expr ')' ;
+exp_logica
+    : AND | OR | NAND | XOR | NOR;
 
 
 %%
@@ -179,6 +184,12 @@ int yylex(){
         if(!strcmp(lexema,"constanteRechazo"))    return CONST;
         if(!strcmp(lexema,"vacioProfundo")) return VOID;
         if(!strcmp(lexema,"deTipo")) return DE_TIPO;
+        if(!strcmp(lexema,"jamas")) return NEGACION;
+        if(!strcmp(lexema,"yh")) return AND;
+        if(!strcmp(lexema,"oh")) return OR;
+        if(!strcmp(lexema,"nomas")) return NAND;
+        if(!strcmp(lexema,"ellaOyo")) return XOR;
+        if(!strcmp(lexema,"nituNiyo")) return NOR;
         return ID;
     }
 
