@@ -1,4 +1,5 @@
-enteroAmor entero = 34
+enteroAmor entero
 constanteRechazo doblementeReal doblemente = 23
-vacioProfundo vacio
+realAmor real
 entero = 32
+real = 234.4

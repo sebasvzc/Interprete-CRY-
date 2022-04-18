@@ -7,6 +7,7 @@ void yyerror(char *s);
 int yylex();
 int asignarSimbolo(char *lexema, int token);
 int localizaSimboloAnadeNum(char *lexema , int token); //Actualizar cabezera
+void ImprimeTablaSimbolo( );
 char lexema[100];
 typedef struct{
         char nombre[100];
@@ -43,12 +44,11 @@ bloque
     : '{' listainst '}' {printf("11\n");}; 
 declaracion
     : identificador ID {printf("12\n"); $$=asignarSimbolo(lexema,ID); }
-    | identificador ID {printf("13\n"); $$=asignarSimbolo(lexema,ID);} '=' expresion
-    | CONST identificador ID {printf("14\n"); $$=asignarSimbolo(lexema,ID);} '=' expresion;
+    | CONST identificador ID {printf("14\n"); $$=asignarSimbolo(lexema,ID);} '=' {printf("102\n");} expresion {printf("103\n");} ;
 asignacion
     : ID { printf("15\n"); $$=localizaSimboloAnadeNum(lexema,ID);} '=' expresion ;
 identificador
-    : INT {printf("16\n");}
+    : INT {printf("16\n");}          ///////////////////
     | FLOAT {printf("17\n");}
     | DOUBLE {printf("18\n");}
     | CHAR {printf("19\n");}
@@ -88,9 +88,20 @@ sumaunaria
 /*análisis léxico*/
 /*localiza el lexema dentro de la tabla de simbolos*/
 
+void ImprimeTablaSimbolo( ){
+    int i;
+    printf("Tabla de simbolos\n");
+    for(i=0;i<nSim ;i++){
+        printf("%d\t%-13s",i,tablaSimbolos[i].nombre);
+        printf("%d\t",tablaSimbolos[i].token);
+        printf("%lf\n",tablaSimbolos[i].valor);
+    }
+}
+
+
 int asignarSimbolo(char *lexema, int token){
 	int i;
-    printf("%s\n",lexema);
+    printf("var %s\n",lexema);
 	for(i=0;i<nSim ;i++){
         if(!strcmp(tablaSimbolos[i].nombre,lexema)){
             printf("Error al declarar una misma variable\n");
@@ -109,6 +120,7 @@ int asignarSimbolo(char *lexema, int token){
 
 int localizaSimboloAnadeNum(char *lexema , int token){ //Mejor nombre? Nosexd
     int i;
+    printf("prob %s\n",lexema);
     for(i=0;i<nSim ;i++){
         if(!strcmp(tablaSimbolos[i].nombre,lexema)){
             return i;
@@ -151,9 +163,9 @@ int yylex(){
         lexema[i++]='\0';
         if(!strcmp(lexema,"if")) return IF; 
         if(!strcmp(lexema,"while")) return MIENTRAS;
-        if(!strcmp(lexema,"enteroAmor")) return INT;
-        if(!strcmp(lexema,"realAmor")) return FLOAT;
-        if(!strcmp(lexema,"doblementeReal")) return DOUBLE;
+        if(!strcmp(lexema,"enteroAmor")) {printf("%s\n",lexema);return INT;}
+        if(!strcmp(lexema,"realAmor")){printf("%s\n",lexema);return FLOAT;}
+        if(!strcmp(lexema,"doblementeReal")) {printf("%s\n",lexema);return DOUBLE;}
         if(!strcmp(lexema,"caracterCorazoncito")) return CHAR;
         if(!strcmp(lexema,"cortaRelacion")) return SHORT;
         if(!strcmp(lexema,"largaDuracion")) return LONG;
@@ -207,6 +219,7 @@ void yyerror(char *s){
 
 int main(){
     if(!yyparse()){
+        ImprimeTablaSimbolo();
         printf("cadena válida\n");
 	}
 	else{
