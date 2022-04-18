@@ -18,7 +18,7 @@ int nSim=0;
 %}
 
 
-%token  MIENTRAS IF ID NUM SUMAUN
+%token  MIENTRAS IF ID NUM SUMAUN OSINO OSISI
 %token  IGUALDAD
 %token  INT LONG SHORT DOUBLE FLOAT CHAR BOOL VERDAD FALSO VOID
 
@@ -29,11 +29,11 @@ listainst: instr listainst ;
 listainst: ;
 instr: declaracion | asignacion | comp | iterativa_while | condicional;
 iterativa_while: MIENTRAS '(' comp ')' bloque ;
-condicional: IF '(' comp ')' bloque;
+condicional: IF '(' comp ')' bloque else;
 bloque: '{' listainst '}' ;
 declaracion: identificador ID {$$=asignarSimbolo(lexema,ID);};
 asignacion:  ID {$$=localizaSimboloAnadeNum(lexema,ID);} '=' expresion ;
-identificador: INT;
+identificador: INT | FLOAT;
 expresion: expr| comp |sumaunaria;
 expr : expr '+' term   ;
 expr : expr '-' term  ;
@@ -48,7 +48,10 @@ comp: expr '>' '=' expr ;
 comp: expr '>'  expr ;
 comp: expr '<'  expr ;
 comp: expr IGUALDAD  expr ;
-sumaunaria: ID SUMAUN; 
+sumaunaria: ID SUMAUN;
+else: ;
+else: OSISI '(' comp ')' bloque else;
+else: OSINO bloque;
 
 
 %%
@@ -117,7 +120,7 @@ int yylex(){
         }while(isalnum(c));
         ungetc(c,stdin);
         lexema[i++]='\0';
-        if(!strcmp(lexema,"if")) return IF; 
+        if(!strcmp(lexema,"sisi")) return IF; 
         if(!strcmp(lexema,"while")) return MIENTRAS;
         if(!strcmp(lexema,"enteroAmor")) return INT;
         if(!strcmp(lexema,"realAmor")) return FLOAT;
@@ -129,6 +132,8 @@ int yylex(){
         if(!strcmp(lexema,"falsoAmor")) return FALSO;
         if(!strcmp(lexema,"verdaderoSentimiento")) return VERDAD;
         if(!strcmp(lexema,"vacioProfundo")) return VOID;
+        if(!strcmp(lexema,"osino")) return OSINO;
+        if(!strcmp(lexema,"osisi")) return OSISI;
         return ID;
     }
 

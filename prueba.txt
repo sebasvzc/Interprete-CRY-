@@ -1,1 +1,9 @@
 enteroAmor x
+realAmor y
+sisi(x>y){
+    enteroAmor z
+}osisi (x>y){
+    realAmor a
+}else{
+    realAmor b
+}
