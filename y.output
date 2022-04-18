@@ -25,150 +25,157 @@ Grammar
     7      | iterativa_while
     8      | iterativa_for
     9      | condicional
+   10      | iterativa_do
 
-   10 iterativa_while: MIENTRAS '(' comp ')' bloque
+   11 iterativa_do: DO bloque MIENTRAS '(' comp ')'
 
-   11 iterativa_for: FOR '(' asignacion ';' comp ';' asignacion ')' bloque
+   12 iterativa_while: MIENTRAS '(' comp ')' bloque
 
-   12 condicional: IF '(' comp ')' bloque else
+   13 iterativa_for: FOR '(' asignacion ';' comp ';' asignacion ')' bloque
 
-   13 bloque: '{' listainst '}'
+   14 condicional: IF '(' comp ')' bloque else
 
-   14 declaracion: identificador ID
+   15 bloque: '{' listainst '}'
 
-   15 @1: %empty
+   16 declaracion: identificador ID
 
-   16 asignacion: ID @1 '=' expresion
+   17 @1: %empty
 
-   17 identificador: INT
-   18              | FLOAT
+   18 asignacion: ID @1 '=' expresion
 
-   19 expresion: expr
-   20          | comp
-   21          | sumaunaria
+   19 identificador: INT
+   20              | FLOAT
 
-   22 expr: expr '+' term
-   23     | expr '-' term
-   24     | term
+   21 expresion: expr
+   22          | comp
+   23          | sumaunaria
 
-   25 term: term opmult factor
-   26     | factor
+   24 expr: expr '+' term
+   25     | expr '-' term
+   26     | term
 
-   27 opmult: '*'
+   27 term: term opmult factor
+   28     | factor
 
-   28 factor: NUM
-   29       | '(' expr ')'
-   30       | ID
+   29 opmult: '*'
 
-   31 comp: expr '>' '=' expr
-   32     | expr '>' expr
-   33     | expr '<' expr
-   34     | expr IGUALDAD expr
+   30 factor: NUM
+   31       | '(' expr ')'
+   32       | ID
 
-   35 sumaunaria: ID SUMAUN
+   33 comp: expr '>' '=' expr
+   34     | expr '>' expr
+   35     | expr '<' expr
+   36     | expr IGUALDAD expr
 
-   36 else: %empty
-   37     | OSISI '(' comp ')' bloque else
-   38     | OSINO bloque
+   37 sumaunaria: ID SUMAUN
+
+   38 else: %empty
+   39     | OSISI '(' comp ')' bloque else
+   40     | OSINO bloque
 
 
 Terminals, with rules where they appear
 
     $end (0) 0
-    '(' (40) 10 11 12 29 37
-    ')' (41) 10 11 12 29 37
-    '*' (42) 27
-    '+' (43) 22
-    '-' (45) 23
-    ';' (59) 11
-    '<' (60) 33
-    '=' (61) 16 31
-    '>' (62) 31 32
-    '{' (123) 13
-    '}' (125) 13
+    '(' (40) 11 12 13 14 31 39
+    ')' (41) 11 12 13 14 31 39
+    '*' (42) 29
+    '+' (43) 24
+    '-' (45) 25
+    ';' (59) 13
+    '<' (60) 35
+    '=' (61) 18 33
+    '>' (62) 33 34
+    '{' (123) 15
+    '}' (125) 15
     error (256)
-    MIENTRAS (258) 10
-    IF (259) 12
-    ID (260) 14 16 30 35
-    NUM (261) 28
-    SUMAUN (262) 35
-    OSINO (263) 38
-    OSISI (264) 37
-    FOR (265) 11
-    IGUALDAD (266) 34
-    INT (267) 17
-    LONG (268)
-    SHORT (269)
-    DOUBLE (270)
-    FLOAT (271) 18
-    CHAR (272)
-    BOOL (273)
-    VERDAD (274)
-    FALSO (275)
-    VOID (276)
+    MIENTRAS (258) 11 12
+    IF (259) 14
+    ID (260) 16 18 32 37
+    NUM (261) 30
+    SUMAUN (262) 37
+    OSINO (263) 40
+    OSISI (264) 39
+    FOR (265) 13
+    DO (266) 11
+    IGUALDAD (267) 36
+    INT (268) 19
+    LONG (269)
+    SHORT (270)
+    DOUBLE (271)
+    FLOAT (272) 20
+    CHAR (273)
+    BOOL (274)
+    VERDAD (275)
+    FALSO (276)
+    VOID (277)
 
 
 Nonterminals, with rules where they appear
 
-    $accept (33)
+    $accept (34)
         on left: 0
-    prog (34)
+    prog (35)
         on left: 1
         on right: 0
-    listainst (35)
+    listainst (36)
         on left: 2 3
-        on right: 1 2 13
-    instr (36)
-        on left: 4 5 6 7 8 9
+        on right: 1 2 15
+    instr (37)
+        on left: 4 5 6 7 8 9 10
         on right: 2
-    iterativa_while (37)
-        on left: 10
-        on right: 7
-    iterativa_for (38)
+    iterativa_do (38)
         on left: 11
-        on right: 8
-    condicional (39)
+        on right: 10
+    iterativa_while (39)
         on left: 12
-        on right: 9
-    bloque (40)
+        on right: 7
+    iterativa_for (40)
         on left: 13
-        on right: 10 11 12 37 38
-    declaracion (41)
+        on right: 8
+    condicional (41)
         on left: 14
-        on right: 4
-    asignacion (42)
-        on left: 16
-        on right: 5 11
-    @1 (43)
+        on right: 9
+    bloque (42)
         on left: 15
+        on right: 11 12 13 14 39 40
+    declaracion (43)
+        on left: 16
+        on right: 4
+    asignacion (44)
+        on left: 18
+        on right: 5 13
+    @1 (45)
+        on left: 17
+        on right: 18
+    identificador (46)
+        on left: 19 20
         on right: 16
-    identificador (44)
-        on left: 17 18
-        on right: 14
-    expresion (45)
-        on left: 19 20 21
-        on right: 16
-    expr (46)
-        on left: 22 23 24
-        on right: 19 22 23 29 31 32 33 34
-    term (47)
-        on left: 25 26
-        on right: 22 23 24 25
-    opmult (48)
-        on left: 27
-        on right: 25
-    factor (49)
-        on left: 28 29 30
-        on right: 25 26
-    comp (50)
-        on left: 31 32 33 34
-        on right: 6 10 11 12 20 37
-    sumaunaria (51)
-        on left: 35
-        on right: 21
-    else (52)
-        on left: 36 37 38
-        on right: 12 37
+    expresion (47)
+        on left: 21 22 23
+        on right: 18
+    expr (48)
+        on left: 24 25 26
+        on right: 21 24 25 31 33 34 35 36
+    term (49)
+        on left: 27 28
+        on right: 24 25 26 27
+    opmult (50)
+        on left: 29
+        on right: 27
+    factor (51)
+        on left: 30 31 32
+        on right: 27 28
+    comp (52)
+        on left: 33 34 35 36
+        on right: 6 11 12 13 14 22 39
+    sumaunaria (53)
+        on left: 37
+        on right: 23
+    else (54)
+        on left: 38 39 40
+        on right: 14 39
 
 
 State 0
@@ -180,108 +187,119 @@ State 0
     ID        shift, and go to state 3
     NUM       shift, and go to state 4
     FOR       shift, and go to state 5
-    INT       shift, and go to state 6
-    FLOAT     shift, and go to state 7
-    '('       shift, and go to state 8
+    DO        shift, and go to state 6
+    INT       shift, and go to state 7
+    FLOAT     shift, and go to state 8
+    '('       shift, and go to state 9
 
     $default  reduce using rule 3 (listainst)
 
-    prog             go to state 9
-    listainst        go to state 10
-    instr            go to state 11
-    iterativa_while  go to state 12
-    iterativa_for    go to state 13
-    condicional      go to state 14
-    declaracion      go to state 15
-    asignacion       go to state 16
-    identificador    go to state 17
-    expr             go to state 18
-    term             go to state 19
-    factor           go to state 20
-    comp             go to state 21
+    prog             go to state 10
+    listainst        go to state 11
+    instr            go to state 12
+    iterativa_do     go to state 13
+    iterativa_while  go to state 14
+    iterativa_for    go to state 15
+    condicional      go to state 16
+    declaracion      go to state 17
+    asignacion       go to state 18
+    identificador    go to state 19
+    expr             go to state 20
+    term             go to state 21
+    factor           go to state 22
+    comp             go to state 23
 
 
 State 1
 
-   10 iterativa_while: MIENTRAS . '(' comp ')' bloque
+   12 iterativa_while: MIENTRAS . '(' comp ')' bloque
 
-    '('  shift, and go to state 22
+    '('  shift, and go to state 24
 
 
 State 2
 
-   12 condicional: IF . '(' comp ')' bloque else
-
-    '('  shift, and go to state 23
-
-
-State 3
-
-   16 asignacion: ID . @1 '=' expresion
-   30 factor: ID .
-
-    '='       reduce using rule 15 (@1)
-    $default  reduce using rule 30 (factor)
-
-    @1  go to state 24
-
-
-State 4
-
-   28 factor: NUM .
-
-    $default  reduce using rule 28 (factor)
-
-
-State 5
-
-   11 iterativa_for: FOR . '(' asignacion ';' comp ';' asignacion ')' bloque
+   14 condicional: IF . '(' comp ')' bloque else
 
     '('  shift, and go to state 25
 
 
+State 3
+
+   18 asignacion: ID . @1 '=' expresion
+   32 factor: ID .
+
+    '='       reduce using rule 17 (@1)
+    $default  reduce using rule 32 (factor)
+
+    @1  go to state 26
+
+
+State 4
+
+   30 factor: NUM .
+
+    $default  reduce using rule 30 (factor)
+
+
+State 5
+
+   13 iterativa_for: FOR . '(' asignacion ';' comp ';' asignacion ')' bloque
+
+    '('  shift, and go to state 27
+
+
 State 6
 
-   17 identificador: INT .
+   11 iterativa_do: DO . bloque MIENTRAS '(' comp ')'
 
-    $default  reduce using rule 17 (identificador)
+    '{'  shift, and go to state 28
+
+    bloque  go to state 29
 
 
 State 7
 
-   18 identificador: FLOAT .
+   19 identificador: INT .
 
-    $default  reduce using rule 18 (identificador)
+    $default  reduce using rule 19 (identificador)
 
 
 State 8
 
-   29 factor: '(' . expr ')'
+   20 identificador: FLOAT .
 
-    ID   shift, and go to state 26
-    NUM  shift, and go to state 4
-    '('  shift, and go to state 8
-
-    expr    go to state 27
-    term    go to state 19
-    factor  go to state 20
+    $default  reduce using rule 20 (identificador)
 
 
 State 9
 
-    0 $accept: prog . $end
+   31 factor: '(' . expr ')'
 
-    $end  shift, and go to state 28
+    ID   shift, and go to state 30
+    NUM  shift, and go to state 4
+    '('  shift, and go to state 9
+
+    expr    go to state 31
+    term    go to state 21
+    factor  go to state 22
 
 
 State 10
+
+    0 $accept: prog . $end
+
+    $end  shift, and go to state 32
+
+
+State 11
 
     1 prog: listainst .
 
     $default  reduce using rule 1 (prog)
 
 
-State 11
+State 12
 
     2 listainst: instr . listainst
 
@@ -290,685 +308,738 @@ State 11
     ID        shift, and go to state 3
     NUM       shift, and go to state 4
     FOR       shift, and go to state 5
-    INT       shift, and go to state 6
-    FLOAT     shift, and go to state 7
-    '('       shift, and go to state 8
+    DO        shift, and go to state 6
+    INT       shift, and go to state 7
+    FLOAT     shift, and go to state 8
+    '('       shift, and go to state 9
 
     $default  reduce using rule 3 (listainst)
 
-    listainst        go to state 29
-    instr            go to state 11
-    iterativa_while  go to state 12
-    iterativa_for    go to state 13
-    condicional      go to state 14
-    declaracion      go to state 15
-    asignacion       go to state 16
-    identificador    go to state 17
-    expr             go to state 18
-    term             go to state 19
-    factor           go to state 20
-    comp             go to state 21
+    listainst        go to state 33
+    instr            go to state 12
+    iterativa_do     go to state 13
+    iterativa_while  go to state 14
+    iterativa_for    go to state 15
+    condicional      go to state 16
+    declaracion      go to state 17
+    asignacion       go to state 18
+    identificador    go to state 19
+    expr             go to state 20
+    term             go to state 21
+    factor           go to state 22
+    comp             go to state 23
 
 
-State 12
+State 13
+
+   10 instr: iterativa_do .
+
+    $default  reduce using rule 10 (instr)
+
+
+State 14
 
     7 instr: iterativa_while .
 
     $default  reduce using rule 7 (instr)
 
 
-State 13
+State 15
 
     8 instr: iterativa_for .
 
     $default  reduce using rule 8 (instr)
 
 
-State 14
+State 16
 
     9 instr: condicional .
 
     $default  reduce using rule 9 (instr)
 
 
-State 15
+State 17
 
     4 instr: declaracion .
 
     $default  reduce using rule 4 (instr)
 
 
-State 16
+State 18
 
     5 instr: asignacion .
 
     $default  reduce using rule 5 (instr)
 
 
-State 17
-
-   14 declaracion: identificador . ID
-
-    ID  shift, and go to state 30
-
-
-State 18
-
-   22 expr: expr . '+' term
-   23     | expr . '-' term
-   31 comp: expr . '>' '=' expr
-   32     | expr . '>' expr
-   33     | expr . '<' expr
-   34     | expr . IGUALDAD expr
-
-    IGUALDAD  shift, and go to state 31
-    '+'       shift, and go to state 32
-    '-'       shift, and go to state 33
-    '>'       shift, and go to state 34
-    '<'       shift, and go to state 35
-
-
 State 19
 
-   24 expr: term .
-   25 term: term . opmult factor
+   16 declaracion: identificador . ID
 
-    '*'  shift, and go to state 36
-
-    $default  reduce using rule 24 (expr)
-
-    opmult  go to state 37
+    ID  shift, and go to state 34
 
 
 State 20
 
-   26 term: factor .
+   24 expr: expr . '+' term
+   25     | expr . '-' term
+   33 comp: expr . '>' '=' expr
+   34     | expr . '>' expr
+   35     | expr . '<' expr
+   36     | expr . IGUALDAD expr
 
-    $default  reduce using rule 26 (term)
+    IGUALDAD  shift, and go to state 35
+    '+'       shift, and go to state 36
+    '-'       shift, and go to state 37
+    '>'       shift, and go to state 38
+    '<'       shift, and go to state 39
 
 
 State 21
+
+   26 expr: term .
+   27 term: term . opmult factor
+
+    '*'  shift, and go to state 40
+
+    $default  reduce using rule 26 (expr)
+
+    opmult  go to state 41
+
+
+State 22
+
+   28 term: factor .
+
+    $default  reduce using rule 28 (term)
+
+
+State 23
 
     6 instr: comp .
 
     $default  reduce using rule 6 (instr)
 
 
-State 22
-
-   10 iterativa_while: MIENTRAS '(' . comp ')' bloque
-
-    ID   shift, and go to state 26
-    NUM  shift, and go to state 4
-    '('  shift, and go to state 8
-
-    expr    go to state 18
-    term    go to state 19
-    factor  go to state 20
-    comp    go to state 38
-
-
-State 23
-
-   12 condicional: IF '(' . comp ')' bloque else
-
-    ID   shift, and go to state 26
-    NUM  shift, and go to state 4
-    '('  shift, and go to state 8
-
-    expr    go to state 18
-    term    go to state 19
-    factor  go to state 20
-    comp    go to state 39
-
-
 State 24
 
-   16 asignacion: ID @1 . '=' expresion
+   12 iterativa_while: MIENTRAS '(' . comp ')' bloque
 
-    '='  shift, and go to state 40
+    ID   shift, and go to state 30
+    NUM  shift, and go to state 4
+    '('  shift, and go to state 9
+
+    expr    go to state 20
+    term    go to state 21
+    factor  go to state 22
+    comp    go to state 42
 
 
 State 25
 
-   11 iterativa_for: FOR '(' . asignacion ';' comp ';' asignacion ')' bloque
+   14 condicional: IF '(' . comp ')' bloque else
 
-    ID  shift, and go to state 41
+    ID   shift, and go to state 30
+    NUM  shift, and go to state 4
+    '('  shift, and go to state 9
 
-    asignacion  go to state 42
+    expr    go to state 20
+    term    go to state 21
+    factor  go to state 22
+    comp    go to state 43
 
 
 State 26
 
-   30 factor: ID .
+   18 asignacion: ID @1 . '=' expresion
 
-    $default  reduce using rule 30 (factor)
+    '='  shift, and go to state 44
 
 
 State 27
 
-   22 expr: expr . '+' term
-   23     | expr . '-' term
-   29 factor: '(' expr . ')'
+   13 iterativa_for: FOR '(' . asignacion ';' comp ';' asignacion ')' bloque
 
-    ')'  shift, and go to state 43
-    '+'  shift, and go to state 32
-    '-'  shift, and go to state 33
+    ID  shift, and go to state 45
+
+    asignacion  go to state 46
 
 
 State 28
 
-    0 $accept: prog $end .
-
-    $default  accept
-
-
-State 29
-
-    2 listainst: instr listainst .
-
-    $default  reduce using rule 2 (listainst)
-
-
-State 30
-
-   14 declaracion: identificador ID .
-
-    $default  reduce using rule 14 (declaracion)
-
-
-State 31
-
-   34 comp: expr IGUALDAD . expr
-
-    ID   shift, and go to state 26
-    NUM  shift, and go to state 4
-    '('  shift, and go to state 8
-
-    expr    go to state 44
-    term    go to state 19
-    factor  go to state 20
-
-
-State 32
-
-   22 expr: expr '+' . term
-
-    ID   shift, and go to state 26
-    NUM  shift, and go to state 4
-    '('  shift, and go to state 8
-
-    term    go to state 45
-    factor  go to state 20
-
-
-State 33
-
-   23 expr: expr '-' . term
-
-    ID   shift, and go to state 26
-    NUM  shift, and go to state 4
-    '('  shift, and go to state 8
-
-    term    go to state 46
-    factor  go to state 20
-
-
-State 34
-
-   31 comp: expr '>' . '=' expr
-   32     | expr '>' . expr
-
-    ID   shift, and go to state 26
-    NUM  shift, and go to state 4
-    '('  shift, and go to state 8
-    '='  shift, and go to state 47
-
-    expr    go to state 48
-    term    go to state 19
-    factor  go to state 20
-
-
-State 35
-
-   33 comp: expr '<' . expr
-
-    ID   shift, and go to state 26
-    NUM  shift, and go to state 4
-    '('  shift, and go to state 8
-
-    expr    go to state 49
-    term    go to state 19
-    factor  go to state 20
-
-
-State 36
-
-   27 opmult: '*' .
-
-    $default  reduce using rule 27 (opmult)
-
-
-State 37
-
-   25 term: term opmult . factor
-
-    ID   shift, and go to state 26
-    NUM  shift, and go to state 4
-    '('  shift, and go to state 8
-
-    factor  go to state 50
-
-
-State 38
-
-   10 iterativa_while: MIENTRAS '(' comp . ')' bloque
-
-    ')'  shift, and go to state 51
-
-
-State 39
-
-   12 condicional: IF '(' comp . ')' bloque else
-
-    ')'  shift, and go to state 52
-
-
-State 40
-
-   16 asignacion: ID @1 '=' . expresion
-
-    ID   shift, and go to state 53
-    NUM  shift, and go to state 4
-    '('  shift, and go to state 8
-
-    expresion   go to state 54
-    expr        go to state 55
-    term        go to state 19
-    factor      go to state 20
-    comp        go to state 56
-    sumaunaria  go to state 57
-
-
-State 41
-
-   16 asignacion: ID . @1 '=' expresion
-
-    $default  reduce using rule 15 (@1)
-
-    @1  go to state 24
-
-
-State 42
-
-   11 iterativa_for: FOR '(' asignacion . ';' comp ';' asignacion ')' bloque
-
-    ';'  shift, and go to state 58
-
-
-State 43
-
-   29 factor: '(' expr ')' .
-
-    $default  reduce using rule 29 (factor)
-
-
-State 44
-
-   22 expr: expr . '+' term
-   23     | expr . '-' term
-   34 comp: expr IGUALDAD expr .
-
-    '+'  shift, and go to state 32
-    '-'  shift, and go to state 33
-
-    $default  reduce using rule 34 (comp)
-
-
-State 45
-
-   22 expr: expr '+' term .
-   25 term: term . opmult factor
-
-    '*'  shift, and go to state 36
-
-    $default  reduce using rule 22 (expr)
-
-    opmult  go to state 37
-
-
-State 46
-
-   23 expr: expr '-' term .
-   25 term: term . opmult factor
-
-    '*'  shift, and go to state 36
-
-    $default  reduce using rule 23 (expr)
-
-    opmult  go to state 37
-
-
-State 47
-
-   31 comp: expr '>' '=' . expr
-
-    ID   shift, and go to state 26
-    NUM  shift, and go to state 4
-    '('  shift, and go to state 8
-
-    expr    go to state 59
-    term    go to state 19
-    factor  go to state 20
-
-
-State 48
-
-   22 expr: expr . '+' term
-   23     | expr . '-' term
-   32 comp: expr '>' expr .
-
-    '+'  shift, and go to state 32
-    '-'  shift, and go to state 33
-
-    $default  reduce using rule 32 (comp)
-
-
-State 49
-
-   22 expr: expr . '+' term
-   23     | expr . '-' term
-   33 comp: expr '<' expr .
-
-    '+'  shift, and go to state 32
-    '-'  shift, and go to state 33
-
-    $default  reduce using rule 33 (comp)
-
-
-State 50
-
-   25 term: term opmult factor .
-
-    $default  reduce using rule 25 (term)
-
-
-State 51
-
-   10 iterativa_while: MIENTRAS '(' comp ')' . bloque
-
-    '{'  shift, and go to state 60
-
-    bloque  go to state 61
-
-
-State 52
-
-   12 condicional: IF '(' comp ')' . bloque else
-
-    '{'  shift, and go to state 60
-
-    bloque  go to state 62
-
-
-State 53
-
-   30 factor: ID .
-   35 sumaunaria: ID . SUMAUN
-
-    SUMAUN  shift, and go to state 63
-
-    $default  reduce using rule 30 (factor)
-
-
-State 54
-
-   16 asignacion: ID @1 '=' expresion .
-
-    $default  reduce using rule 16 (asignacion)
-
-
-State 55
-
-   19 expresion: expr .
-   22 expr: expr . '+' term
-   23     | expr . '-' term
-   31 comp: expr . '>' '=' expr
-   32     | expr . '>' expr
-   33     | expr . '<' expr
-   34     | expr . IGUALDAD expr
-
-    IGUALDAD  shift, and go to state 31
-    '+'       shift, and go to state 32
-    '-'       shift, and go to state 33
-    '>'       shift, and go to state 34
-    '<'       shift, and go to state 35
-
-    $default  reduce using rule 19 (expresion)
-
-
-State 56
-
-   20 expresion: comp .
-
-    $default  reduce using rule 20 (expresion)
-
-
-State 57
-
-   21 expresion: sumaunaria .
-
-    $default  reduce using rule 21 (expresion)
-
-
-State 58
-
-   11 iterativa_for: FOR '(' asignacion ';' . comp ';' asignacion ')' bloque
-
-    ID   shift, and go to state 26
-    NUM  shift, and go to state 4
-    '('  shift, and go to state 8
-
-    expr    go to state 18
-    term    go to state 19
-    factor  go to state 20
-    comp    go to state 64
-
-
-State 59
-
-   22 expr: expr . '+' term
-   23     | expr . '-' term
-   31 comp: expr '>' '=' expr .
-
-    '+'  shift, and go to state 32
-    '-'  shift, and go to state 33
-
-    $default  reduce using rule 31 (comp)
-
-
-State 60
-
-   13 bloque: '{' . listainst '}'
+   15 bloque: '{' . listainst '}'
 
     MIENTRAS  shift, and go to state 1
     IF        shift, and go to state 2
     ID        shift, and go to state 3
     NUM       shift, and go to state 4
     FOR       shift, and go to state 5
-    INT       shift, and go to state 6
-    FLOAT     shift, and go to state 7
-    '('       shift, and go to state 8
+    DO        shift, and go to state 6
+    INT       shift, and go to state 7
+    FLOAT     shift, and go to state 8
+    '('       shift, and go to state 9
 
     $default  reduce using rule 3 (listainst)
 
-    listainst        go to state 65
-    instr            go to state 11
-    iterativa_while  go to state 12
-    iterativa_for    go to state 13
-    condicional      go to state 14
-    declaracion      go to state 15
-    asignacion       go to state 16
-    identificador    go to state 17
-    expr             go to state 18
-    term             go to state 19
-    factor           go to state 20
-    comp             go to state 21
+    listainst        go to state 47
+    instr            go to state 12
+    iterativa_do     go to state 13
+    iterativa_while  go to state 14
+    iterativa_for    go to state 15
+    condicional      go to state 16
+    declaracion      go to state 17
+    asignacion       go to state 18
+    identificador    go to state 19
+    expr             go to state 20
+    term             go to state 21
+    factor           go to state 22
+    comp             go to state 23
+
+
+State 29
+
+   11 iterativa_do: DO bloque . MIENTRAS '(' comp ')'
+
+    MIENTRAS  shift, and go to state 48
+
+
+State 30
+
+   32 factor: ID .
+
+    $default  reduce using rule 32 (factor)
+
+
+State 31
+
+   24 expr: expr . '+' term
+   25     | expr . '-' term
+   31 factor: '(' expr . ')'
+
+    ')'  shift, and go to state 49
+    '+'  shift, and go to state 36
+    '-'  shift, and go to state 37
+
+
+State 32
+
+    0 $accept: prog $end .
+
+    $default  accept
+
+
+State 33
+
+    2 listainst: instr listainst .
+
+    $default  reduce using rule 2 (listainst)
+
+
+State 34
+
+   16 declaracion: identificador ID .
+
+    $default  reduce using rule 16 (declaracion)
+
+
+State 35
+
+   36 comp: expr IGUALDAD . expr
+
+    ID   shift, and go to state 30
+    NUM  shift, and go to state 4
+    '('  shift, and go to state 9
+
+    expr    go to state 50
+    term    go to state 21
+    factor  go to state 22
+
+
+State 36
+
+   24 expr: expr '+' . term
+
+    ID   shift, and go to state 30
+    NUM  shift, and go to state 4
+    '('  shift, and go to state 9
+
+    term    go to state 51
+    factor  go to state 22
+
+
+State 37
+
+   25 expr: expr '-' . term
+
+    ID   shift, and go to state 30
+    NUM  shift, and go to state 4
+    '('  shift, and go to state 9
+
+    term    go to state 52
+    factor  go to state 22
+
+
+State 38
+
+   33 comp: expr '>' . '=' expr
+   34     | expr '>' . expr
+
+    ID   shift, and go to state 30
+    NUM  shift, and go to state 4
+    '('  shift, and go to state 9
+    '='  shift, and go to state 53
+
+    expr    go to state 54
+    term    go to state 21
+    factor  go to state 22
+
+
+State 39
+
+   35 comp: expr '<' . expr
+
+    ID   shift, and go to state 30
+    NUM  shift, and go to state 4
+    '('  shift, and go to state 9
+
+    expr    go to state 55
+    term    go to state 21
+    factor  go to state 22
+
+
+State 40
+
+   29 opmult: '*' .
+
+    $default  reduce using rule 29 (opmult)
+
+
+State 41
+
+   27 term: term opmult . factor
+
+    ID   shift, and go to state 30
+    NUM  shift, and go to state 4
+    '('  shift, and go to state 9
+
+    factor  go to state 56
+
+
+State 42
+
+   12 iterativa_while: MIENTRAS '(' comp . ')' bloque
+
+    ')'  shift, and go to state 57
+
+
+State 43
+
+   14 condicional: IF '(' comp . ')' bloque else
+
+    ')'  shift, and go to state 58
+
+
+State 44
+
+   18 asignacion: ID @1 '=' . expresion
+
+    ID   shift, and go to state 59
+    NUM  shift, and go to state 4
+    '('  shift, and go to state 9
+
+    expresion   go to state 60
+    expr        go to state 61
+    term        go to state 21
+    factor      go to state 22
+    comp        go to state 62
+    sumaunaria  go to state 63
+
+
+State 45
+
+   18 asignacion: ID . @1 '=' expresion
+
+    $default  reduce using rule 17 (@1)
+
+    @1  go to state 26
+
+
+State 46
+
+   13 iterativa_for: FOR '(' asignacion . ';' comp ';' asignacion ')' bloque
+
+    ';'  shift, and go to state 64
+
+
+State 47
+
+   15 bloque: '{' listainst . '}'
+
+    '}'  shift, and go to state 65
+
+
+State 48
+
+   11 iterativa_do: DO bloque MIENTRAS . '(' comp ')'
+
+    '('  shift, and go to state 66
+
+
+State 49
+
+   31 factor: '(' expr ')' .
+
+    $default  reduce using rule 31 (factor)
+
+
+State 50
+
+   24 expr: expr . '+' term
+   25     | expr . '-' term
+   36 comp: expr IGUALDAD expr .
+
+    '+'  shift, and go to state 36
+    '-'  shift, and go to state 37
+
+    $default  reduce using rule 36 (comp)
+
+
+State 51
+
+   24 expr: expr '+' term .
+   27 term: term . opmult factor
+
+    '*'  shift, and go to state 40
+
+    $default  reduce using rule 24 (expr)
+
+    opmult  go to state 41
+
+
+State 52
+
+   25 expr: expr '-' term .
+   27 term: term . opmult factor
+
+    '*'  shift, and go to state 40
+
+    $default  reduce using rule 25 (expr)
+
+    opmult  go to state 41
+
+
+State 53
+
+   33 comp: expr '>' '=' . expr
+
+    ID   shift, and go to state 30
+    NUM  shift, and go to state 4
+    '('  shift, and go to state 9
+
+    expr    go to state 67
+    term    go to state 21
+    factor  go to state 22
+
+
+State 54
+
+   24 expr: expr . '+' term
+   25     | expr . '-' term
+   34 comp: expr '>' expr .
+
+    '+'  shift, and go to state 36
+    '-'  shift, and go to state 37
+
+    $default  reduce using rule 34 (comp)
+
+
+State 55
+
+   24 expr: expr . '+' term
+   25     | expr . '-' term
+   35 comp: expr '<' expr .
+
+    '+'  shift, and go to state 36
+    '-'  shift, and go to state 37
+
+    $default  reduce using rule 35 (comp)
+
+
+State 56
+
+   27 term: term opmult factor .
+
+    $default  reduce using rule 27 (term)
+
+
+State 57
+
+   12 iterativa_while: MIENTRAS '(' comp ')' . bloque
+
+    '{'  shift, and go to state 28
+
+    bloque  go to state 68
+
+
+State 58
+
+   14 condicional: IF '(' comp ')' . bloque else
+
+    '{'  shift, and go to state 28
+
+    bloque  go to state 69
+
+
+State 59
+
+   32 factor: ID .
+   37 sumaunaria: ID . SUMAUN
+
+    SUMAUN  shift, and go to state 70
+
+    $default  reduce using rule 32 (factor)
+
+
+State 60
+
+   18 asignacion: ID @1 '=' expresion .
+
+    $default  reduce using rule 18 (asignacion)
 
 
 State 61
 
-   10 iterativa_while: MIENTRAS '(' comp ')' bloque .
+   21 expresion: expr .
+   24 expr: expr . '+' term
+   25     | expr . '-' term
+   33 comp: expr . '>' '=' expr
+   34     | expr . '>' expr
+   35     | expr . '<' expr
+   36     | expr . IGUALDAD expr
 
-    $default  reduce using rule 10 (iterativa_while)
+    IGUALDAD  shift, and go to state 35
+    '+'       shift, and go to state 36
+    '-'       shift, and go to state 37
+    '>'       shift, and go to state 38
+    '<'       shift, and go to state 39
+
+    $default  reduce using rule 21 (expresion)
 
 
 State 62
 
-   12 condicional: IF '(' comp ')' bloque . else
+   22 expresion: comp .
 
-    OSINO  shift, and go to state 66
-    OSISI  shift, and go to state 67
-
-    $default  reduce using rule 36 (else)
-
-    else  go to state 68
+    $default  reduce using rule 22 (expresion)
 
 
 State 63
 
-   35 sumaunaria: ID SUMAUN .
+   23 expresion: sumaunaria .
 
-    $default  reduce using rule 35 (sumaunaria)
+    $default  reduce using rule 23 (expresion)
 
 
 State 64
 
-   11 iterativa_for: FOR '(' asignacion ';' comp . ';' asignacion ')' bloque
+   13 iterativa_for: FOR '(' asignacion ';' . comp ';' asignacion ')' bloque
 
-    ';'  shift, and go to state 69
+    ID   shift, and go to state 30
+    NUM  shift, and go to state 4
+    '('  shift, and go to state 9
+
+    expr    go to state 20
+    term    go to state 21
+    factor  go to state 22
+    comp    go to state 71
 
 
 State 65
 
-   13 bloque: '{' listainst . '}'
+   15 bloque: '{' listainst '}' .
 
-    '}'  shift, and go to state 70
+    $default  reduce using rule 15 (bloque)
 
 
 State 66
 
-   38 else: OSINO . bloque
+   11 iterativa_do: DO bloque MIENTRAS '(' . comp ')'
 
-    '{'  shift, and go to state 60
+    ID   shift, and go to state 30
+    NUM  shift, and go to state 4
+    '('  shift, and go to state 9
 
-    bloque  go to state 71
+    expr    go to state 20
+    term    go to state 21
+    factor  go to state 22
+    comp    go to state 72
 
 
 State 67
 
-   37 else: OSISI . '(' comp ')' bloque else
+   24 expr: expr . '+' term
+   25     | expr . '-' term
+   33 comp: expr '>' '=' expr .
 
-    '('  shift, and go to state 72
+    '+'  shift, and go to state 36
+    '-'  shift, and go to state 37
+
+    $default  reduce using rule 33 (comp)
 
 
 State 68
 
-   12 condicional: IF '(' comp ')' bloque else .
+   12 iterativa_while: MIENTRAS '(' comp ')' bloque .
 
-    $default  reduce using rule 12 (condicional)
+    $default  reduce using rule 12 (iterativa_while)
 
 
 State 69
 
-   11 iterativa_for: FOR '(' asignacion ';' comp ';' . asignacion ')' bloque
+   14 condicional: IF '(' comp ')' bloque . else
 
-    ID  shift, and go to state 41
+    OSINO  shift, and go to state 73
+    OSISI  shift, and go to state 74
 
-    asignacion  go to state 73
+    $default  reduce using rule 38 (else)
+
+    else  go to state 75
 
 
 State 70
 
-   13 bloque: '{' listainst '}' .
+   37 sumaunaria: ID SUMAUN .
 
-    $default  reduce using rule 13 (bloque)
+    $default  reduce using rule 37 (sumaunaria)
 
 
 State 71
 
-   38 else: OSINO bloque .
+   13 iterativa_for: FOR '(' asignacion ';' comp . ';' asignacion ')' bloque
 
-    $default  reduce using rule 38 (else)
+    ';'  shift, and go to state 76
 
 
 State 72
 
-   37 else: OSISI '(' . comp ')' bloque else
+   11 iterativa_do: DO bloque MIENTRAS '(' comp . ')'
 
-    ID   shift, and go to state 26
-    NUM  shift, and go to state 4
-    '('  shift, and go to state 8
-
-    expr    go to state 18
-    term    go to state 19
-    factor  go to state 20
-    comp    go to state 74
+    ')'  shift, and go to state 77
 
 
 State 73
 
-   11 iterativa_for: FOR '(' asignacion ';' comp ';' asignacion . ')' bloque
+   40 else: OSINO . bloque
 
-    ')'  shift, and go to state 75
-
-
-State 74
-
-   37 else: OSISI '(' comp . ')' bloque else
-
-    ')'  shift, and go to state 76
-
-
-State 75
-
-   11 iterativa_for: FOR '(' asignacion ';' comp ';' asignacion ')' . bloque
-
-    '{'  shift, and go to state 60
-
-    bloque  go to state 77
-
-
-State 76
-
-   37 else: OSISI '(' comp ')' . bloque else
-
-    '{'  shift, and go to state 60
+    '{'  shift, and go to state 28
 
     bloque  go to state 78
 
 
+State 74
+
+   39 else: OSISI . '(' comp ')' bloque else
+
+    '('  shift, and go to state 79
+
+
+State 75
+
+   14 condicional: IF '(' comp ')' bloque else .
+
+    $default  reduce using rule 14 (condicional)
+
+
+State 76
+
+   13 iterativa_for: FOR '(' asignacion ';' comp ';' . asignacion ')' bloque
+
+    ID  shift, and go to state 45
+
+    asignacion  go to state 80
+
+
 State 77
 
-   11 iterativa_for: FOR '(' asignacion ';' comp ';' asignacion ')' bloque .
+   11 iterativa_do: DO bloque MIENTRAS '(' comp ')' .
 
-    $default  reduce using rule 11 (iterativa_for)
+    $default  reduce using rule 11 (iterativa_do)
 
 
 State 78
 
-   37 else: OSISI '(' comp ')' bloque . else
+   40 else: OSINO bloque .
 
-    OSINO  shift, and go to state 66
-    OSISI  shift, and go to state 67
-
-    $default  reduce using rule 36 (else)
-
-    else  go to state 79
+    $default  reduce using rule 40 (else)
 
 
 State 79
 
-   37 else: OSISI '(' comp ')' bloque else .
+   39 else: OSISI '(' . comp ')' bloque else
 
-    $default  reduce using rule 37 (else)
+    ID   shift, and go to state 30
+    NUM  shift, and go to state 4
+    '('  shift, and go to state 9
+
+    expr    go to state 20
+    term    go to state 21
+    factor  go to state 22
+    comp    go to state 81
+
+
+State 80
+
+   13 iterativa_for: FOR '(' asignacion ';' comp ';' asignacion . ')' bloque
+
+    ')'  shift, and go to state 82
+
+
+State 81
+
+   39 else: OSISI '(' comp . ')' bloque else
+
+    ')'  shift, and go to state 83
+
+
+State 82
+
+   13 iterativa_for: FOR '(' asignacion ';' comp ';' asignacion ')' . bloque
+
+    '{'  shift, and go to state 28
+
+    bloque  go to state 84
+
+
+State 83
+
+   39 else: OSISI '(' comp ')' . bloque else
+
+    '{'  shift, and go to state 28
+
+    bloque  go to state 85
+
+
+State 84
+
+   13 iterativa_for: FOR '(' asignacion ';' comp ';' asignacion ')' bloque .
+
+    $default  reduce using rule 13 (iterativa_for)
+
+
+State 85
+
+   39 else: OSISI '(' comp ')' bloque . else
+
+    OSINO  shift, and go to state 73
+    OSISI  shift, and go to state 74
+
+    $default  reduce using rule 38 (else)
+
+    else  go to state 86
+
+
+State 86
+
+   39 else: OSISI '(' comp ')' bloque else .
+
+    $default  reduce using rule 39 (else)

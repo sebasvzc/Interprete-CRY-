@@ -18,7 +18,7 @@ int nSim=0;
 %}
 
 
-%token  MIENTRAS IF ID NUM SUMAUN OSINO OSISI FOR
+%token  MIENTRAS IF ID NUM SUMAUN OSINO OSISI FOR DO
 %token  IGUALDAD
 %token  INT LONG SHORT DOUBLE FLOAT CHAR BOOL VERDAD FALSO VOID
 
@@ -27,9 +27,10 @@ int nSim=0;
 prog:  listainst;
 listainst: instr listainst ;
 listainst: ;
-instr: declaracion | asignacion | comp | iterativa_while | iterativa_for | condicional;
+instr: declaracion | asignacion | comp | iterativa_while | iterativa_for | condicional | iterativa_do ;
+iterativa_do: DO bloque MIENTRAS '(' comp ')' ;
 iterativa_while: MIENTRAS '(' comp ')' bloque ;
-iterativa_for: FOR '(' asignacion ';' comp ';' asignacion ')' bloque;
+iterativa_for: FOR '(' asignacion ';' comp ';' asignacion ')' bloque ;
 condicional: IF '(' comp ')' bloque else;
 bloque: '{' listainst '}' ;
 declaracion: identificador ID {$$=asignarSimbolo(lexema,ID);};
@@ -136,6 +137,7 @@ int yylex(){
         if(!strcmp(lexema,"osino")) return OSINO;
         if(!strcmp(lexema,"osisi")) return OSISI;
         if(!strcmp(lexema,"para")) return FOR;
+        if(!strcmp(lexema,"haz")) return DO;
         return ID;
     }
 

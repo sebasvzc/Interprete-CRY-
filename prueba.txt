@@ -13,3 +13,8 @@ sisi(x>y){
 para(x = 1; x < 5; x = x + 1){
     y = y + 1
 }
+
+haz{
+   x = x + 1
+   y = y + 2
+} mientras (x < 10)
