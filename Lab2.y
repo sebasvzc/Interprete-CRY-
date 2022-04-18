@@ -18,10 +18,12 @@ int nSim=0;
 %}
 
 
-%token  WHILE IF ID NUM SUMAUN DO FOR
-%token  IGUALDAD ELSE ELIF CONTINUE RESTAUN
-%token  INT LONG SHORT DOUBLE FLOAT CHAR BOOL VERDAD FALSO VOID CONST BITSIZ BISTDE
+%token  WHILE IF ID NUM DO FOR
+%token  IGUALDAD ELSE ELIF CONTINUE
+%token  INT LONG SHORT DOUBLE FLOAT CHAR BOOL VERDAD FALSO VOID CONST BITSIZ BITSDE
 %token RETURN BREAK PASS
+%token  INCREMENTO DECREMENTO AUMENTO DISMINUCION MULTI DIVI MOD
+%token IMPRIMIR COMENTARIOSIMPLE COMENTARIOCOMPLEJO
 
 %%
 prog
@@ -40,7 +42,18 @@ instr
     | RETURN
     | BREAK
     | PASS
-    | condicional ;
+    | condicional 
+    | imprimir 
+    | comentario;
+comentario
+    : comentarioSimple 
+    | comentarioComplejo;
+comentarioSimple
+    : COMENTARIOSIMPLE;
+comentarioComplejo
+    : COMENTARIOCOMPLEJO;
+imprimir
+    : IMPRIMIR '(' expr ')';
 iterativa_do
     : DO bloque WHILE '(' comp ')' ;
 iterativa_for
@@ -55,7 +68,16 @@ declaracion
     : identificador ID {$$=asignarSimbolo(lexema,ID); }
     | CONST identificador ID {$$=asignarSimbolo(lexema,ID);} '=' expresion ;
 asignacion
-    : ID { $$=localizaSimboloAnadeNum(lexema,ID);} '=' expresion ;
+    : ID { $$=localizaSimboloAnadeNum(lexema,ID);} asignaciones;
+asignaciones
+    : '=' expresion
+    | INCREMENTO
+    | DECREMENTO
+    | AUMENTO expresion
+    | DISMINUCION expresion 
+    | MULTI expresion
+    | DIVI expresion 
+    | MOD expresion;
 identificador
     : INT 
     | FLOAT 
@@ -68,7 +90,6 @@ identificador
 expresion
     : expr 
     | comp 
-    | sumaunaria ;
 expr 
     : expr '+' term  
     | expr '-' term   
@@ -80,7 +101,7 @@ op
     :'*' 
     |'/' 
     |BITSIZ 
-    |BISTDE 
+    |BITSDE 
     |'%' ;
 factor
     : NUM { $$=localizaSimboloAnadeNum(lexema,NUM);}
@@ -92,9 +113,6 @@ comp
     | expr '<'  expr  
     | expr '<' '='  expr  
     | expr IGUALDAD  expr ;
-sumaunaria
-    : ID SUMAUN 
-    | ID RESTAUN ;
 else
     : ELSE bloque
     | ELIF '(' comp ')' bloque else
@@ -179,6 +197,7 @@ int yylex(){
         if(!strcmp(lexema,"osino")) return ELSE;
         if(!strcmp(lexema,"osisi")) return ELIF;
         if(!strcmp(lexema,"volvamos")) return CONTINUE;
+        if(!strcmp(lexema,"imprimir")) return IMPRIMIR;
         return ID;
     }
 
@@ -192,6 +211,28 @@ int yylex(){
         lexema[i++]='\0';
         return NUM;
     } 
+    
+    if (c=='/'){
+        c=getchar();
+        if (c=='/'){  
+            while(getchar()!='\n');
+            return COMENTARIOSIMPLE;                        
+        }
+        else if (c == '=') {
+            return DIVI;
+        }
+        else{
+            ungetc(c,stdin);
+            return '/';
+        }  
+    }
+    
+    if (c=='@'){
+        while(getchar()!='@');
+        return COMENTARIOCOMPLEJO;  
+    } 
+
+    
                  
                
     if (c=='='){
@@ -208,7 +249,10 @@ int yylex(){
     if (c=='+'){
         c=getchar();
         if (c=='+'){  
-            return SUMAUN;                        
+            return INCREMENTO;                        
+        }
+        else if(c == '='){
+            return AUMENTO;
         }
         else{
             ungetc(c,stdin);
@@ -219,13 +263,38 @@ int yylex(){
     if (c=='-'){
         c=getchar();
         if (c=='-'){  
-            return RESTAUN ;                        
+            return DECREMENTO ;                        
+        }
+        else if (c == '='){
+            return DISMINUCION;
         }
         else{
             ungetc(c,stdin);
             return '-';
         }  
     }
+    
+    if (c=='*'){
+        c=getchar();
+        if (c=='='){  
+            return MULTI;                        
+        }
+        else{
+            ungetc(c,stdin);
+            return '*';
+        }
+    }     
+       	
+    if (c=='%'){
+        c=getchar();
+        if (c=='='){  
+            return MOD;                        
+        }
+        else{
+            ungetc(c,stdin);
+            return '%';
+        }
+    } 
     
     if (c=='<'){
         c=getchar();
@@ -241,7 +310,7 @@ int yylex(){
     if (c=='>'){
         c=getchar();
         if (c=='>'){  
-            return BISTDE;                        
+            return BITSDE;                        
         }
         else{
             ungetc(c,stdin);
