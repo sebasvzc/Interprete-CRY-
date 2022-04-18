@@ -83,7 +83,7 @@ comp
 sumaunaria
     : ID SUMAUN {printf("39\n");}; 
 funcion
-    : DE_TIPO '(' comp ')' bloque {printf("40\n");};
+    : DE_TIPO '(' identificador ')' {printf("40\n");};
 
 
 %%
