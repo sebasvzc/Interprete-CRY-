@@ -6,7 +6,7 @@
 void yyerror(char *s);
 int yylex();
 int asignarSimbolo(char *lexema, int token);
-int localizaSimboloAnadeNum(char *lexema , int token); //Actualizar cabezera
+int localizaSimboloAnadeNum(char *lexema , int token);
 char lexema[100];
 typedef struct{
         char nombre[100];
@@ -18,10 +18,10 @@ int nSim=0;
 %}
 
 
-%token  MIENTRAS IF ID NUM SUMAUN DO FOR
-%token  IGUALDAD OSINO OSISI CONTINUE RESTAUN
+%token  WHILE IF ID NUM SUMAUN DO FOR
+%token  IGUALDAD ELSE ELIF CONTINUE RESTAUN
 %token  INT LONG SHORT DOUBLE FLOAT CHAR BOOL VERDAD FALSO VOID CONST BITSIZ BISTDE
-
+%token RETURN BREAK PASS
 
 %%
 prog
@@ -37,13 +37,16 @@ instr
     | iterativa_do  
     | iterativa_for  
     | CONTINUE
+    | RETURN
+    | BREAK
+    | PASS
     | condicional ;
 iterativa_do
-    : DO bloque MIENTRAS '(' comp ')' ;
+    : DO bloque WHILE '(' comp ')' ;
 iterativa_for
     : FOR '(' asignacion ';' comp ';' asignacion ')' bloque ;
 iterativa_while
-    : MIENTRAS '(' comp ')' bloque  else;
+    : WHILE '(' comp ')' bloque  else;
 condicional
     : IF '(' comp ')' bloque ;
 bloque
@@ -93,8 +96,8 @@ sumaunaria
     : ID SUMAUN 
     | ID RESTAUN ;
 else
-    : OSINO bloque
-    | OSISI '(' comp ')' bloque else
+    : ELSE bloque
+    | ELIF '(' comp ')' bloque else
     | ;
 
 
@@ -112,16 +115,13 @@ int asignarSimbolo(char *lexema, int token){
         }
     }
     strcpy(tablaSimbolos[i].nombre,lexema);
-    /*if(token == NUM ){                        No creo q sea necesario pues no vamos a declarar un numero
-        tablaSimbolos[i].valor=atof(lexema); 
-    }*/ 
     tablaSimbolos[nSim].valor=0.0;
     tablaSimbolos[i].token=token;
     nSim++;
     return nSim-1;
 }
 
-int localizaSimboloAnadeNum(char *lexema , int token){ //Mejor nombre? Nosexd
+int localizaSimboloAnadeNum(char *lexema , int token){ 
     int i;
     for(i=0;i<nSim ;i++){
         if(!strcmp(tablaSimbolos[i].nombre,lexema)){
@@ -129,19 +129,14 @@ int localizaSimboloAnadeNum(char *lexema , int token){ //Mejor nombre? Nosexd
         }
     }
     if(token == NUM ){ 
-        strcpy(tablaSimbolos[i].nombre,lexema); //Solo debemos aniadir el lexema si es numero, sino solo debemos msotrar el error de abajo
+        strcpy(tablaSimbolos[i].nombre,lexema); 
         tablaSimbolos[i].valor=atof(lexema); 
-        tablaSimbolos[i].token=token;  //Falto aniadir el token del num
+        tablaSimbolos[i].token=token;  
     } 
     else{ 
         printf("Variable no reconocida\n");
         exit(1);
     }
-    /* 
-        tablaSimbolos[i].token=token;
-        nSim++;
-        return nSim-1;     
-    */
 }
 
 int yylex(){
@@ -163,8 +158,11 @@ int yylex(){
         }while(isalnum(c));
         ungetc(c,stdin);
         lexema[i++]='\0';
+        if(!strcmp(lexema,"terminamos")) return BREAK;
+        if(!strcmp(lexema,"regresemos")) return RETURN;
+        if(!strcmp(lexema,"nada")) return PASS;
         if(!strcmp(lexema,"sisi")) return IF; 
-        if(!strcmp(lexema,"mientras")) return MIENTRAS;
+        if(!strcmp(lexema,"mientras")) return WHILE;
         if(!strcmp(lexema,"enteroAmor")) return INT;
         if(!strcmp(lexema,"realAmor"))return FLOAT;
         if(!strcmp(lexema,"doblementeReal"))return DOUBLE;
@@ -178,8 +176,8 @@ int yylex(){
         if(!strcmp(lexema,"vacioProfundo")) return VOID;
         if(!strcmp(lexema,"haz")) return DO;
         if(!strcmp(lexema,"para")) return FOR;
-        if(!strcmp(lexema,"osino")) return OSINO;
-        if(!strcmp(lexema,"osisi")) return OSISI;
+        if(!strcmp(lexema,"osino")) return ELSE;
+        if(!strcmp(lexema,"osisi")) return ELIF;
         if(!strcmp(lexema,"volvamos")) return CONTINUE;
         return ID;
     }
