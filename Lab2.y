@@ -25,6 +25,7 @@ int nSim=0;
 %token  INCREMENTO DECREMENTO AUMENTO DISMINUCION MULTI DIVI MOD
 %token PRINT COMENTARIOSIMPLE COMENTARIOCOMPLEJO
 %token  DE_TIPO DESIGUALDAD SCAN
+%token NEGACION AND OR NAND XOR NOR;
 
 %%
 prog
@@ -120,14 +121,21 @@ comp
     | expr '<'  expr  
     | expr '<' '='  expr  
     | expr IGUALDAD  expr 
-    | expr DESIGUALDAD  expr ;
+    | expr DESIGUALDAD  expr 
+    | expresion exp_logica expresion;
 else
     : ELSE bloque
     | ELIF '(' comp ')' bloque else
     | ;
 funcion
-    : DE_TIPO '(' identificador ')' ;
-
+    : DE_TIPO '(' identificador ')' 
+    | NEGACION '(' expr ')' ;
+exp_logica
+    : AND 
+    | OR 
+    | NAND 
+    | XOR 
+    | NOR;
 %%
 
 /*codigo C*/
@@ -211,6 +219,12 @@ int yylex(){
         if(!strcmp(lexema,"deTipo")) return DE_TIPO;
         if(!strcmp(lexema,"falsoAmor")) return FALSO;
         if(!strcmp(lexema,"verdaderoSentimiento")) return VERDAD;
+        if(!strcmp(lexema,"jamas")) return NEGACION;
+        if(!strcmp(lexema,"yh")) return AND;
+        if(!strcmp(lexema,"oh")) return OR;
+        if(!strcmp(lexema,"nomas")) return NAND;
+        if(!strcmp(lexema,"ellaOyo")) return XOR;
+        if(!strcmp(lexema,"nituNiyo")) return NOR;
         return ID;
     }
 

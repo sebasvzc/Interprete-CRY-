@@ -17,7 +17,7 @@ mientras (entero < real){
 		haz{
 			cortaRelacion cortito
 			cortito = 23/345
-			sisi(cortito==4){
+			sisi(verdaderoSentimiento yh falsoAmor){
 				terminamos
 			}
 			nada
