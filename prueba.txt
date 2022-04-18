@@ -12,11 +12,19 @@ mientras (entero < real){
 		haz{
 			cortaRelacion cortito
 			cortito = 23
+			sisi(cortito==4){
+				terminamos
+			}
+			nada
 		}mientras(entero > 234)
-		para(i=42;i<43;i=i+1){
-			cortito = 22
+		para(i=2;i<43;i=i+1){
+			sisi(i==4){
+				volvamos
+			}
+			cortito = cortito + 22
 		}
 	}
 	entero = 3434 % 234
 }
 real = real - entero * (24323.54)
+regresemos
