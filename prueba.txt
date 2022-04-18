@@ -1,1 +1,4 @@
-enteroAmor x
+enteroAmor entero = 34
+constanteRechazo doblementeReal doblemente = 23
+vacioProfundo vacio
+entero = 32
