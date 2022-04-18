@@ -18,7 +18,7 @@ int nSim=0;
 %}
 
 
-%token  MIENTRAS IF ID NUM SUMAUN
+%token  MIENTRAS IF ID NUM SUMAUN OSISI OSINO
 %token  IGUALDAD
 %token  INT LONG SHORT DOUBLE FLOAT CHAR BOOL VERDAD FALSO VOID
 
@@ -49,7 +49,9 @@ comp: expr '>'  expr ;
 comp: expr '<'  expr ;
 comp: expr IGUALDAD  expr ;
 sumaunaria: ID SUMAUN; 
-
+else: ;
+else: OSISI '(' comp ')' bloque else;
+else: OSINO bloque;
 
 %%
 
@@ -129,6 +131,8 @@ int yylex(){
         if(!strcmp(lexema,"falsoAmor")) return FALSO;
         if(!strcmp(lexema,"verdaderoSentimiento")) return VERDAD;
         if(!strcmp(lexema,"vacioProfundo")) return VOID;
+        if(!strcmp(lexema,"osisi")) return OSISI;
+        if(!strcmp(lexema,"osino")) return OSINO;
         return ID;
     }
 
