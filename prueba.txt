@@ -1,10 +1,13 @@
 //Este es el inicio de un gran interprete
 enteroAmor entero
 enteroAmor i
+boolCool buleano
 constanteRechazo doblementeReal doblemente = 23
 realAmor real
+leer(entero)
 entero = 32 + 234
 real = 234.4 - 2323
+buleano = verdaderoSentimiento
 mientras (entero < real){
 	real = 1000.43 / entero
 	entero = 3434 % real

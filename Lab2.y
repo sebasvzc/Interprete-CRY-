@@ -23,7 +23,8 @@ int nSim=0;
 %token  INT LONG SHORT DOUBLE FLOAT CHAR BOOL VERDAD FALSO VOID CONST BITSIZ BITSDE
 %token RETURN BREAK PASS
 %token  INCREMENTO DECREMENTO AUMENTO DISMINUCION MULTI DIVI MOD
-%token IMPRIMIR COMENTARIOSIMPLE COMENTARIOCOMPLEJO
+%token PRINT COMENTARIOSIMPLE COMENTARIOCOMPLEJO
+%token  DE_TIPO DESIGUALDAD SCAN
 
 %%
 prog
@@ -44,7 +45,9 @@ instr
     | PASS
     | condicional 
     | imprimir 
-    | comentario;
+    | leer 
+    | comentario
+    | funcion;
 comentario
     : comentarioSimple 
     | comentarioComplejo;
@@ -53,7 +56,9 @@ comentarioSimple
 comentarioComplejo
     : COMENTARIOCOMPLEJO;
 imprimir
-    : IMPRIMIR '(' expr ')';
+    : PRINT '(' expr ')';
+leer
+    : SCAN '(' expr ')';
 iterativa_do
     : DO bloque WHILE '(' comp ')' ;
 iterativa_for
@@ -106,18 +111,22 @@ op
 factor
     : NUM { $$=localizaSimboloAnadeNum(lexema,NUM);}
     | '(' expr')'  
-    | ID  { $$=localizaSimboloAnadeNum(lexema,ID);} ;
+    | ID  { $$=localizaSimboloAnadeNum(lexema,ID);} 
+    | VERDAD { $$=localizaSimboloAnadeNum(lexema,NUM);} ;
+    | FALSO { $$=localizaSimboloAnadeNum(lexema,NUM);} ; 
 comp
     : expr '>' '=' expr  
     | expr '>'  expr  
     | expr '<'  expr  
     | expr '<' '='  expr  
-    | expr IGUALDAD  expr ;
+    | expr IGUALDAD  expr 
+    | expr DESIGUALDAD  expr ;
 else
     : ELSE bloque
     | ELIF '(' comp ')' bloque else
     | ;
-
+funcion
+    : DE_TIPO '(' identificador ')' ;
 
 %%
 
@@ -197,7 +206,11 @@ int yylex(){
         if(!strcmp(lexema,"osino")) return ELSE;
         if(!strcmp(lexema,"osisi")) return ELIF;
         if(!strcmp(lexema,"volvamos")) return CONTINUE;
-        if(!strcmp(lexema,"imprimir")) return IMPRIMIR;
+        if(!strcmp(lexema,"imprimir")) return PRINT;
+        if(!strcmp(lexema,"leer")) return SCAN;
+        if(!strcmp(lexema,"deTipo")) return DE_TIPO;
+        if(!strcmp(lexema,"falsoAmor")) return FALSO;
+        if(!strcmp(lexema,"verdaderoSentimiento")) return VERDAD;
         return ID;
     }
 
@@ -232,8 +245,16 @@ int yylex(){
         return COMENTARIOCOMPLEJO;  
     } 
 
-    
-                 
+    if (c=='!'){
+        c=getchar();
+        if (c=='='){  
+            return DESIGUALDAD;                        
+        }
+        else{
+            ungetc(c,stdin);
+            return '=';
+        }  
+    }             
                
     if (c=='='){
         c=getchar();
