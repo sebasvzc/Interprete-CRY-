@@ -1,5 +1,22 @@
 enteroAmor entero
+enteroAmor i
 constanteRechazo doblementeReal doblemente = 23
 realAmor real
-entero = 32
-real = 234.4
+entero = 32 + 234
+real = 234.4 - 2323
+mientras (entero < real){
+	real = 1000.43 / entero
+	entero = 3434 % real
+	sisi(243243==3234){
+		entero = 3434 % 234
+		haz{
+			cortaRelacion cortito
+			cortito = 23
+		}mientras(entero > 234)
+		para(i=42;i<43;i=i+1){
+			cortito = 22
+		}
+	}
+	entero = 3434 % 234
+}
+real = real - entero * (24323.54)

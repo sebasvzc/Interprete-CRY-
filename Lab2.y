@@ -7,7 +7,6 @@ void yyerror(char *s);
 int yylex();
 int asignarSimbolo(char *lexema, int token);
 int localizaSimboloAnadeNum(char *lexema , int token); //Actualizar cabezera
-void ImprimeTablaSimbolo( );
 char lexema[100];
 typedef struct{
         char nombre[100];
@@ -19,67 +18,84 @@ int nSim=0;
 %}
 
 
-%token  MIENTRAS IF ID NUM SUMAUN
-%token  IGUALDAD
-%token  INT LONG SHORT DOUBLE FLOAT CHAR BOOL VERDAD FALSO VOID CONST
+%token  MIENTRAS IF ID NUM SUMAUN DO FOR
+%token  IGUALDAD OSINO OSISI CONTINUE RESTAUN
+%token  INT LONG SHORT DOUBLE FLOAT CHAR BOOL VERDAD FALSO VOID CONST BITSIZ BISTDE
 
 
 %%
 prog
-    : listainst{printf("1\n");};
+    : listainst;
 listainst
-    : instr listainst {printf("2\n");}
-    | {printf("3\n");};
+    : instr listainst 
+    | ;
 instr
-    : declaracion  {printf("4\n");}
-    | asignacion  {printf("5\n");}
-    | comp  {printf("6\n");}
-    | iterativa_while  {printf("7\n");}
-    | condicional {printf("8\n");};
+    : declaracion 
+    | asignacion 
+    | comp 
+    | iterativa_while  
+    | iterativa_do  
+    | iterativa_for  
+    | CONTINUE
+    | condicional ;
+iterativa_do
+    : DO bloque MIENTRAS '(' comp ')' ;
+iterativa_for
+    : FOR '(' asignacion ';' comp ';' asignacion ')' bloque ;
 iterativa_while
-    : MIENTRAS '(' comp ')' bloque  {printf("9\n");};
+    : MIENTRAS '(' comp ')' bloque  else;
 condicional
-    : IF '(' comp ')' bloque {printf("10\n");};
+    : IF '(' comp ')' bloque ;
 bloque
-    : '{' listainst '}' {printf("11\n");}; 
+    : '{' listainst '}' ; 
 declaracion
-    : identificador ID {printf("12\n"); $$=asignarSimbolo(lexema,ID); }
-    | CONST identificador ID {printf("14\n"); $$=asignarSimbolo(lexema,ID);} '=' {printf("102\n");} expresion {printf("103\n");} ;
+    : identificador ID {$$=asignarSimbolo(lexema,ID); }
+    | CONST identificador ID {$$=asignarSimbolo(lexema,ID);} '=' expresion ;
 asignacion
-    : ID { printf("15\n"); $$=localizaSimboloAnadeNum(lexema,ID);} '=' expresion ;
+    : ID { $$=localizaSimboloAnadeNum(lexema,ID);} '=' expresion ;
 identificador
-    : INT {printf("16\n");}          ///////////////////
-    | FLOAT {printf("17\n");}
-    | DOUBLE {printf("18\n");}
-    | CHAR {printf("19\n");}
-    | LONG {printf("20\n");}
-    | VOID {printf("21\n");}
-    | BOOL {printf("22\n");}
-    | SHORT {printf("23\n");}; 
+    : INT 
+    | FLOAT 
+    | DOUBLE 
+    | CHAR 
+    | LONG 
+    | VOID 
+    | BOOL 
+    | SHORT ; 
 expresion
-    : expr {printf("24\n");}
-    | comp  {printf("25\n");}
-    | sumaunaria {printf("26\n");}; 
+    : expr 
+    | comp 
+    | sumaunaria ;
 expr 
-    : expr '+' term  {printf("27\n");}
-    | expr '-' term   {printf("28\n");}
-    | term   {printf("29\n");};
+    : expr '+' term  
+    | expr '-' term   
+    | term ;
 term 
-    : term opmult factor  {printf("30\n");}
-    | factor  {printf("31\n");};
-opmult
-    :'*' {printf("32\n");};
+    : term op factor  
+    | factor ;
+op
+    :'*' 
+    |'/' 
+    |BITSIZ 
+    |BISTDE 
+    |'%' ;
 factor
-    : NUM {  printf("33\n"); $$=localizaSimboloAnadeNum(lexema,NUM);}
+    : NUM { $$=localizaSimboloAnadeNum(lexema,NUM);}
     | '(' expr')'  
-    | ID  {  printf("34\n"); $$=localizaSimboloAnadeNum(lexema,ID);};
+    | ID  { $$=localizaSimboloAnadeNum(lexema,ID);} ;
 comp
-    : expr '>' '=' expr  {printf("35\n");}
-    | expr '>'  expr  {printf("36\n");}
-    | expr '<'  expr  {printf("37\n");}
-    | expr IGUALDAD  expr  {printf("38\n");};
+    : expr '>' '=' expr  
+    | expr '>'  expr  
+    | expr '<'  expr  
+    | expr '<' '='  expr  
+    | expr IGUALDAD  expr ;
 sumaunaria
-    : ID SUMAUN {printf("39\n");}; 
+    : ID SUMAUN 
+    | ID RESTAUN ;
+else
+    : OSINO bloque
+    | OSISI '(' comp ')' bloque else
+    | ;
 
 
 %%
@@ -87,21 +103,8 @@ sumaunaria
 /*codigo C*/
 /*análisis léxico*/
 /*localiza el lexema dentro de la tabla de simbolos*/
-
-void ImprimeTablaSimbolo( ){
-    int i;
-    printf("Tabla de simbolos\n");
-    for(i=0;i<nSim ;i++){
-        printf("%d\t%-13s",i,tablaSimbolos[i].nombre);
-        printf("%d\t",tablaSimbolos[i].token);
-        printf("%lf\n",tablaSimbolos[i].valor);
-    }
-}
-
-
 int asignarSimbolo(char *lexema, int token){
 	int i;
-    printf("var %s\n",lexema);
 	for(i=0;i<nSim ;i++){
         if(!strcmp(tablaSimbolos[i].nombre,lexema)){
             printf("Error al declarar una misma variable\n");
@@ -120,7 +123,6 @@ int asignarSimbolo(char *lexema, int token){
 
 int localizaSimboloAnadeNum(char *lexema , int token){ //Mejor nombre? Nosexd
     int i;
-    printf("prob %s\n",lexema);
     for(i=0;i<nSim ;i++){
         if(!strcmp(tablaSimbolos[i].nombre,lexema)){
             return i;
@@ -161,11 +163,11 @@ int yylex(){
         }while(isalnum(c));
         ungetc(c,stdin);
         lexema[i++]='\0';
-        if(!strcmp(lexema,"if")) return IF; 
-        if(!strcmp(lexema,"while")) return MIENTRAS;
-        if(!strcmp(lexema,"enteroAmor")) {printf("%s\n",lexema);return INT;}
-        if(!strcmp(lexema,"realAmor")){printf("%s\n",lexema);return FLOAT;}
-        if(!strcmp(lexema,"doblementeReal")) {printf("%s\n",lexema);return DOUBLE;}
+        if(!strcmp(lexema,"sisi")) return IF; 
+        if(!strcmp(lexema,"mientras")) return MIENTRAS;
+        if(!strcmp(lexema,"enteroAmor")) return INT;
+        if(!strcmp(lexema,"realAmor"))return FLOAT;
+        if(!strcmp(lexema,"doblementeReal"))return DOUBLE;
         if(!strcmp(lexema,"caracterCorazoncito")) return CHAR;
         if(!strcmp(lexema,"cortaRelacion")) return SHORT;
         if(!strcmp(lexema,"largaDuracion")) return LONG;
@@ -174,6 +176,11 @@ int yylex(){
         if(!strcmp(lexema,"verdaderoSentimiento")) return VERDAD;
         if(!strcmp(lexema,"constanteRechazo"))    return CONST;
         if(!strcmp(lexema,"vacioProfundo")) return VOID;
+        if(!strcmp(lexema,"haz")) return DO;
+        if(!strcmp(lexema,"para")) return FOR;
+        if(!strcmp(lexema,"osino")) return OSINO;
+        if(!strcmp(lexema,"osisi")) return OSISI;
+        if(!strcmp(lexema,"volvamos")) return CONTINUE;
         return ID;
     }
 
@@ -210,6 +217,40 @@ int yylex(){
             return '+';
         }  
     }
+    
+    if (c=='-'){
+        c=getchar();
+        if (c=='-'){  
+            return RESTAUN ;                        
+        }
+        else{
+            ungetc(c,stdin);
+            return '-';
+        }  
+    }
+    
+    if (c=='<'){
+        c=getchar();
+        if (c=='<'){  
+            return BITSIZ;                        
+        }
+        else{
+            ungetc(c,stdin);
+            return '<';
+        }  
+    }
+    
+    if (c=='>'){
+        c=getchar();
+        if (c=='>'){  
+            return BISTDE;                        
+        }
+        else{
+            ungetc(c,stdin);
+            return '>';
+        }  
+    }
+    
     return c;
 }
 
@@ -219,7 +260,6 @@ void yyerror(char *s){
 
 int main(){
     if(!yyparse()){
-        ImprimeTablaSimbolo();
         printf("cadena válida\n");
 	}
 	else{
