@@ -93,62 +93,34 @@ int yylex() {
         } while (isalnum(c));
         ungetc(c, stdin);
         lexema[i++] = '\0';
-        if (!strcmp(lexema, "enteroAmor"))
-            return INT;
-        if (!strcmp(lexema, "realAmor"))
-            return FLOAT;
-        if (!strcmp(lexema, "doblementeReal"))
-            return DOUBLE;
-        if (!strcmp(lexema, "caracterCorazoncito"))
-            return CHAR;
-        if (!strcmp(lexema, "cortaRelacion"))
-            return SHORT;
-        if (!strcmp(lexema, "largaDuracion"))
-            return LONG;
-        if (!strcmp(lexema, "boolCool"))
-            return BOOL;
-        if (!strcmp(lexema, "verdaderoSentimiento"))
-            return TRUE;
-        if (!strcmp(lexema, "falsoAmor"))
-            return FALSE;
-        if (!strcmp(lexema, "vacioProfundo"))
-            return VOID;
-        if (!strcmp(lexema, "oh"))
-            return OR;
-        if (!strcmp(lexema, "mas"))
-            return AND;
-        if (!strcmp(lexema, "//"))
-            return PALITOSDOBLES;
-        if (!strcmp(lexema, "sisi"))
-            return SI;
-        if (!strcmp(lexema, "osino"))
-            return SINO;
-        if (!strcmp(lexema, "osisi"))
-            return OSISI;
-        if (!strcmp(lexema, "mientras"))
-            return MIENTRAS;
-        if (!strcmp(lexema, "para"))
-            return PARA;
-        if (!strcmp(lexema, "imprimir"))
-            return PRINT;
-        if (!strcmp(lexema, "++"))
-            return INC;
-        if (!strcmp(lexema, "--"))
-            return DEC;
-        if (!strcmp(lexema, "+="))
-            return INCN;
-        if (!strcmp(lexema, "-="))
-            return DECN;
-        if (!strcmp(lexema, "*="))
-            return MULN;
-        if (!strcmp(lexema, "/="))
-            return DIVN;
-        if (!strcmp(lexema, "%="))
-            return RESTN;
-        if (!strcmp(lexema, "//"))
-            return PALITOSDOBLES;
-        if (!strcmp(lexema, "constanteRechazo"))
-            return CONST;
+        if (!strcmp(lexema, "enteroAmor"))          return INT;
+        if (!strcmp(lexema, "realAmor"))            return FLOAT;
+        if (!strcmp(lexema, "doblementeReal"))      return DOUBLE;
+        if (!strcmp(lexema, "caracterCorazoncito")) return CHAR;
+        if (!strcmp(lexema, "cortaRelacion"))       return SHORT;
+        if (!strcmp(lexema, "largaDuracion"))       return LONG;
+        if (!strcmp(lexema, "boolCool"))            return BOOL;
+        if (!strcmp(lexema, "verdaderoSentimiento"))return TRUE;
+        if (!strcmp(lexema, "falsoAmor"))           return FALSE;
+        if (!strcmp(lexema, "vacioProfundo"))       return VOID;
+        if (!strcmp(lexema, "oh"))                  return OR;
+        if (!strcmp(lexema, "mas"))                 return AND;
+        if (!strcmp(lexema, "//"))                  return PALITOSDOBLES;
+        if (!strcmp(lexema, "sisi"))                return SI;
+        if (!strcmp(lexema, "osino"))               return SINO;
+        if (!strcmp(lexema, "osisi"))               return OSISI;
+        if (!strcmp(lexema, "mientras"))            return MIENTRAS;
+        if (!strcmp(lexema, "para"))                return PARA;
+        if (!strcmp(lexema, "imprimir"))            return PRINT;
+        if (!strcmp(lexema, "++"))                  return INC;
+        if (!strcmp(lexema, "--"))                  return DEC;
+        if (!strcmp(lexema, "+="))                  return INCN;
+        if (!strcmp(lexema, "-="))                  return DECN;
+        if (!strcmp(lexema, "*="))                  return MULN;
+        if (!strcmp(lexema, "/="))                  return DIVN;
+        if (!strcmp(lexema, "%="))                  return RESTN;
+        if (!strcmp(lexema, "//"))                  return PALITOSDOBLES;
+        if (!strcmp(lexema, "constanteRechazo"))    return CONST;
         return ID;
     }
 

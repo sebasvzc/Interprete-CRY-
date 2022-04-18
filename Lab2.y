@@ -6,7 +6,7 @@
 void yyerror(char *s);
 int yylex();
 int asignarSimbolo(char *lexema, int token);
-int localizaSimbolo(char *lexema , int token);
+int localizaSimboloAnadeNum(char *lexema , int token); //Actualizar cabezera
 char lexema[100];
 typedef struct{
         char nombre[100];
@@ -32,7 +32,7 @@ iterativa_while: MIENTRAS '(' comp ')' bloque ;
 condicional: IF '(' comp ')' bloque;
 bloque: '{' listainst '}' ;
 declaracion: identificador ID {$$=asignarSimbolo(lexema,ID);};
-asignacion:  ID {$$=localizaSimbolo(lexema,ID);} '=' expresion ;
+asignacion:  ID {$$=localizaSimboloAnadeNum(lexema,ID);} '=' expresion ;
 identificador: INT;
 expresion: expr| comp |sumaunaria;
 expr : expr '+' term   ;
@@ -41,9 +41,9 @@ expr : term  ;
 term : term opmult factor ;
 term : factor ;
 opmult:'*';
-factor: NUM { $$=localizaSimbolo(lexema,NUM);};
+factor: NUM { $$=localizaSimboloAnadeNum(lexema,NUM);};
 factor: '(' expr')'  ;
-factor: ID  { $$=localizaSimbolo(lexema,ID);};
+factor: ID  { $$=localizaSimboloAnadeNum(lexema,ID);};
 comp: expr '>' '=' expr ;
 comp: expr '>'  expr ;
 comp: expr '<'  expr ;
@@ -66,27 +66,26 @@ int asignarSimbolo(char *lexema, int token){
         }
     }
     strcpy(tablaSimbolos[i].nombre,lexema);
-    if(token == NUM ){ 
+    /*if(token == NUM ){                        No creo q sea necesario pues no vamos a declarar un numero
         tablaSimbolos[i].valor=atof(lexema); 
-    } 
-    else{ 
-        tablaSimbolos[nSim].valor=0.0; 
-    } 
+    }*/ 
+    tablaSimbolos[nSim].valor=0.0;
     tablaSimbolos[i].token=token;
     nSim++;
     return nSim-1;
 }
 
-int localizaSimbolo(char *lexema , int token){
+int localizaSimboloAnadeNum(char *lexema , int token){ //Mejor nombre? Nosexd
     int i;
     for(i=0;i<nSim ;i++){
         if(!strcmp(tablaSimbolos[i].nombre,lexema)){
             return i;
         }
     }
-    strcpy(tablaSimbolos[i].nombre,lexema);
     if(token == NUM ){ 
+        strcpy(tablaSimbolos[i].nombre,lexema); //Solo debemos aniadir el lexema si es numero, sino solo debemos msotrar el error de abajo
         tablaSimbolos[i].valor=atof(lexema); 
+        tablaSimbolos[i].token=token;  //Falto aniadir el token del num
     } 
     else{ 
         printf("Variable no reconocida\n");
