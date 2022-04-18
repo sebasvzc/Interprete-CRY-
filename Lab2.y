@@ -21,7 +21,7 @@ int nSim=0;
 
 %token  MIENTRAS IF ID NUM SUMAUN
 %token  IGUALDAD
-%token  INT LONG SHORT DOUBLE FLOAT CHAR BOOL VERDAD FALSO VOID CONST
+%token  INT LONG SHORT DOUBLE FLOAT CHAR BOOL VERDAD FALSO VOID CONST BITSIZ BISTDE
 
 
 %%
@@ -65,10 +65,14 @@ expr
     | expr '-' term   {printf("28\n");}
     | term   {printf("29\n");};
 term 
-    : term opmult factor  {printf("30\n");}
+    : term op factor  {printf("30\n");}
     | factor  {printf("31\n");};
-opmult
-    :'*' {printf("32\n");};
+op
+    :'*' {printf("32\n");}
+    |'/' {printf("32\n");}
+    |BITSIZ {printf("32\n");}
+    |BISTDE {printf("32\n");}
+    |'%' {printf("32\n");};
 factor
     : NUM {  printf("33\n"); $$=localizaSimboloAnadeNum(lexema,NUM);}
     | '(' expr')'  
@@ -77,6 +81,7 @@ comp
     : expr '>' '=' expr  {printf("35\n");}
     | expr '>'  expr  {printf("36\n");}
     | expr '<'  expr  {printf("37\n");}
+    | expr '<' '='  expr  {printf("37\n");}
     | expr IGUALDAD  expr  {printf("38\n");};
 sumaunaria
     : ID SUMAUN {printf("39\n");}; 
@@ -161,8 +166,8 @@ int yylex(){
         }while(isalnum(c));
         ungetc(c,stdin);
         lexema[i++]='\0';
-        if(!strcmp(lexema,"if")) return IF; 
-        if(!strcmp(lexema,"while")) return MIENTRAS;
+        if(!strcmp(lexema,"sisi")) return IF; 
+        if(!strcmp(lexema,"mientras")) return MIENTRAS;
         if(!strcmp(lexema,"enteroAmor")) {printf("%s\n",lexema);return INT;}
         if(!strcmp(lexema,"realAmor")){printf("%s\n",lexema);return FLOAT;}
         if(!strcmp(lexema,"doblementeReal")) {printf("%s\n",lexema);return DOUBLE;}
@@ -210,6 +215,29 @@ int yylex(){
             return '+';
         }  
     }
+    
+    if (c=='<'){
+        c=getchar();
+        if (c=='<'){  
+            return BITSIZ;                        
+        }
+        else{
+            ungetc(c,stdin);
+            return '<';
+        }  
+    }
+    
+    if (c=='>'){
+        c=getchar();
+        if (c=='>'){  
+            return BISTDE;                        
+        }
+        else{
+            ungetc(c,stdin);
+            return '>';
+        }  
+    }
+    
     return c;
 }
 
