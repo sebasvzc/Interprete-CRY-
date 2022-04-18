@@ -22,6 +22,7 @@ int nSim=0;
 %token  MIENTRAS IF ID NUM SUMAUN
 %token  IGUALDAD
 %token  INT LONG SHORT DOUBLE FLOAT CHAR BOOL VERDAD FALSO VOID CONST
+%token  DE_TIPO
 
 
 %%
@@ -36,6 +37,7 @@ instr
     | comp  {printf("6\n");}
     | iterativa_while  {printf("7\n");}
     | condicional {printf("8\n");};
+    | funcion {printf("8.5\n");};
 iterativa_while
     : MIENTRAS '(' comp ')' bloque  {printf("9\n");};
 condicional
@@ -80,6 +82,8 @@ comp
     | expr IGUALDAD  expr  {printf("38\n");};
 sumaunaria
     : ID SUMAUN {printf("39\n");}; 
+funcion
+    : DETIPO '(' comp ')' bloque {printf("40\n");};
 
 
 %%
@@ -170,10 +174,11 @@ int yylex(){
         if(!strcmp(lexema,"cortaRelacion")) return SHORT;
         if(!strcmp(lexema,"largaDuracion")) return LONG;
         if(!strcmp(lexema,"boolCool")) return BOOL;
-        if(!strcmp(lexema,"falsoAmor")) return FALSO;
+        if(!strcmp(lexema,"falsoAmor")) FALSO;
         if(!strcmp(lexema,"verdaderoSentimiento")) return VERDAD;
         if(!strcmp(lexema,"constanteRechazo"))    return CONST;
         if(!strcmp(lexema,"vacioProfundo")) return VOID;
+        if(!strcmp(lexema,"deTipo")) return DE_TIPO;
         return ID;
     }
 
