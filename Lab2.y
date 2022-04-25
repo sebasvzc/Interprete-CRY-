@@ -122,7 +122,7 @@ comp
     | expr '<' '='  expr  
     | expr IGUALDAD  expr 
     | expr DESIGUALDAD  expr 
-    | expresion exp_logica expresion;
+    | expr exp_logica expr;
 else
     : ELSE bloque
     | ELIF '(' comp ')' bloque else
@@ -217,8 +217,6 @@ int yylex(){
         if(!strcmp(lexema,"imprimir")) return PRINT;
         if(!strcmp(lexema,"leer")) return SCAN;
         if(!strcmp(lexema,"deTipo")) return DE_TIPO;
-        if(!strcmp(lexema,"falsoAmor")) return FALSO;
-        if(!strcmp(lexema,"verdaderoSentimiento")) return VERDAD;
         if(!strcmp(lexema,"jamas")) return NEGACION;
         if(!strcmp(lexema,"yh")) return AND;
         if(!strcmp(lexema,"oh")) return OR;
