@@ -95,7 +95,7 @@ identificador
     | SHORT ; 
 expresion
     : expr 
-    | comp 
+    | comp ;
 expr 
     : expr '+' term  
     | expr '-' term   
