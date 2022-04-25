@@ -1,3 +1,3 @@
 # Interprete-CRY++
 
-Hola xd
+Ejecutar el archivo bash.sh para realizar la prueba.
