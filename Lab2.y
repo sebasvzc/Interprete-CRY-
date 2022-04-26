@@ -39,9 +39,16 @@ int nVarTemp=1;
 %token PRINT COMENTARIOSIMPLE COMENTARIOCOMPLEJO
 %token  DE_TIPO DESIGUALDAD SCAN
 %token NEGACION AND OR NAND XOR NOR;
+//tokens de pedro C
 %token COMPMAYOR COMPMENOR COMPMAYORIGUAL COMPMENORIGUAL COMPIGUAL COMPDESIGUAL COMPLOGICO SALTARF SALTAR COMPAND COMPOR COMPNAND
-%token ASIGNAR INCREMENTAR DECREMENTAR AUMENTAR DISMINUIR SUMAR RESTAR MULTIPLICAR DIVIDIR MODULAR COMPXOR COMPNOR MOVERBDE MOVERBIZ
+%token ASIGNAR INCREMENTAR DECREMENTAR AUMENTAR DISMINUIR COMPXOR COMPNOR
+//tokens de Pedro C y cbas
+%token MULTIPLICAR DIVIDIR MODULAR
+//tokens de cbas
+%token SUMAR RESTAR MOVERBDE MOVERBIZ
+//tokens de gerar
 %token IMPRIMIR DECLARAR DECLARARCONST
+//Cuidado usando tokens de otros que pueden ser otra operacion de la q parecen
 
 %%
 prog
@@ -97,7 +104,7 @@ declaracion
     : identificador ID {$$=asignarSimbolo(lexema,ID); } {generaCodigo(DECLARAR,$3,'-','-');}
     | CONST identificador ID {$$=asignarSimbolo(lexema,ID);} '=' expresion {generaCodigo(DECLARARCONST,$4,$6,'-');};
 asignacion
-    : ID {$$=localizaSimboloAnadeNum(lexema,ID);} '=' expresion {generaCodigo(ASIGNAR,$1,$4,'-');};
+    : ID {$$=localizaSimboloAnadeNum(lexema,ID);} '=' expresion {generaCodigo(ASIGNAR,$2,$4,'-');};
 incremento
     : ID INCREMENTO {generaCodigo(INCREMENTAR,$1,$1,1);};
 
