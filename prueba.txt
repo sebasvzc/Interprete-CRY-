@@ -32,7 +32,7 @@ mientras (entero < real){
 	}
 	entero = 3434 % 234
 }
-imprimir(entero)
+imprimir(real)
 real = real - entero * (24323.54)
 @
 ez
