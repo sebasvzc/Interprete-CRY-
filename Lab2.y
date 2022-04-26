@@ -40,7 +40,8 @@ int nVarTemp=1;
 %token  DE_TIPO DESIGUALDAD SCAN
 %token NEGACION AND OR NAND XOR NOR;
 %token COMPMAYOR COMPMENOR COMPMAYORIGUAL COMPMENORIGUAL COMPIGUAL COMPDESIGUAL COMPLOGICO SALTARF SALTAR COMPAND COMPOR COMPNAND
-%token ASIGNAR INCREMENTAR DECREMENTAR AUMENTAR DISMINUIR SUMAR RESTAR MULTIPLICAR DIVIDIR MODULAR COMPXOR COMPNOR
+%token ASIGNAR INCREMENTAR DECREMENTAR AUMENTAR DISMINUIR SUMAR RESTAR MULTIPLICAR DIVIDIR MODULAR COMPXOR COMPNOR MOVERBDE MOVERBIZ
+%token 
 
 %%
 prog
@@ -87,16 +88,16 @@ iterativa_do
 iterativa_for
     : FOR '(' asignacion ';' comp ';' asignacion ')' bloque ;
 iterativa_while
-    : WHILE '(' comp ')' bloque  else;
+    : WHILE '(' {$$=cx+1;} comp {generaCodigo(SALTARF,$4,'?','-'); $$=cx;} ')' bloque {generaCodigo(SALTAR,$3,'-','-'); $$=cx;} { tablaCodigo[$5].a2 = cx +1 ; };
 condicional
     : IF '(' comp ')' {generaCodigo(SALTARF,$3,'?','-'); $$=cx;} bloque { tablaCodigo[$5].a2 = cx +1 ; } else;
 bloque
     : '{' listainst '}' ; 
 declaracion
-    : identificador ID {$$=asignarSimbolo(lexema,ID); }
+    : identificador ID {$$=asignarSimbolo(lexema,ID); } 
     | CONST identificador ID {$$=asignarSimbolo(lexema,ID);} '=' expresion ;
 asignacion
-    : ID '=' expresion {generaCodigo(ASIGNAR,$1,$3,'-');};
+    : ID {$$=localizaSimboloAnadeNum(lexema,ID);} '=' expresion {generaCodigo(ASIGNAR,$1,$4,'-');};
 incremento
     : ID INCREMENTO {generaCodigo(INCREMENTAR,$1,$1,1);};
 
@@ -128,26 +129,30 @@ identificador
     | BOOL 
     | SHORT ; 
 expresion
-    : expr 
+    : expr
     | comp ;
 expr 
-    : expr '+' term  
-    | expr '-' term   
+    : expr '+' term  { int i=genTemp(); generaCodigo(SUMAR,i,$1,$3); $$=i;}  
+    | expr '-' term   { int i=genTemp(); generaCodigo(RESTAR,i,$1,$3); $$=i;}  
     | term ;
 term 
-    : term op factor  
+    : term op factor  { int i=genTemp(); if($2==1) generaCodigo(MULTIPLICAR,i,$1,$3); 
+                                    else if($2==2) generaCodigo(DIVIDIR,i,$1,$3); 
+                                    else if($2==3) generaCodigo(MOVERBIZ,i,$1,$3); 
+                                    else if($2==4) generaCodigo(MOVERBDE,i,$1,$3); 
+                                    else if($2==5) generaCodigo(MODULAR,i,$1,$3); $$=i;}  
     | factor ;
 op
-    :'*' 
-    |'/' 
-    |BITSIZ 
-    |BITSDE 
-    |'%' ;
+    :'*' {$$=1;}
+    |'/'  {$$=2;}
+    |BITSIZ  {$$=3;}
+    |BITSDE  {$$=4;}
+    |'%' {$$=5;} ;
 factor
     : NUM { $$=localizaSimboloAnadeNum(lexema,NUM);}
     | '(' expr')'  
     | ID  { $$=localizaSimboloAnadeNum(lexema,ID);} 
-    | VERDAD { $$=localizaSimboloAnadeNum(lexema,NUM);} ;
+    | VERDAD { $$=localizaSimboloAnadeNum(lexema,NUM);} 
     | FALSO { $$=localizaSimboloAnadeNum(lexema,NUM);} ; 
 comp
     : expr '>' '=' expr  {int i=genTemp(); generaCodigo(COMPMAYORIGUAL,i,$1,$4);$$=i;} 
@@ -217,7 +222,7 @@ int asignarSimbolo(char *lexema, int token){
 	int i;
 	for(i=0;i<nSim ;i++){
         if(!strcmp(tablaSimbolos[i].nombre,lexema)){
-            printf("Error al declarar una misma variable\n");
+            printf("Error al declarar una misma variable: %s\n",lexema);
             exit(1);
         }
     }
@@ -241,7 +246,7 @@ int localizaSimboloAnadeNum(char *lexema , int token){
         tablaSimbolos[i].token=token;  
     } 
     else if(token == ID){ 
-        printf("Variable no reconocida\n");
+        printf("Variable no reconocida: %s\n", lexema);
         exit(1);
     }
     nSim++;
