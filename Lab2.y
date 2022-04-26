@@ -28,6 +28,8 @@ TipoTS tablaSimbolos[100];
 int nSim=0;
 int cx = -1;
 int nVarTemp=1;
+int regreso[100];
+int cont_r=0;
 %}
 
 
@@ -48,8 +50,8 @@ int nVarTemp=1;
 %token MOVERBDE MOVERBIZ
 //tokens de gerar
 %token IMPRIMIR DECLARAR DECLARARCONST
-//token de pedro
-%token SALTARV
+//token de pedro Y
+%token SALTARV CONTINUAR
 //Cuidado usando tokens de otros que pueden ser otra operacion de la q parecen
 
 %%
@@ -65,7 +67,7 @@ instr
     | iterativa_while  
     | iterativa_do  
     | iterativa_for  
-    | CONTINUE
+    | CONTINUE {generaCodigo(CONTINUAR,regreso[cont_r-1],'-','-');}
     | RETURN
     | BREAK
     | PASS
@@ -86,11 +88,15 @@ imprimir
 leer
     : SCAN '(' expr ')';
 iterativa_do
-    : DO {$$=cx+1;} bloque WHILE '(' {$$=cx+1;} comp {generaCodigo(SALTARV,$7,$2,'-'); $$=cx;} ')' ;
+    : DO {regreso[cont_r++]=cx+1; $$=cx+1;} bloque WHILE '(' {$$=cx+1;} comp {generaCodigo(SALTARV,$7,$2,'-'); cont_r--; $$=cx;} ')' ;
 iterativa_for
-    : FOR '(' asignacion ';' {$$=cx+1;} comp {generaCodigo(SALTARF,$6,'?','-'); $$=cx;} {generaCodigo(SALTAR,'?','-','-'); $$=cx;} ';' {$$=cx+1;} asignacion {generaCodigo(SALTAR,$5,'-','-'); $$=cx;} ')' { tablaCodigo[$8].a1= cx + 1; } {$$=cx+1;} bloque {generaCodigo(SALTAR,$10,'-','-'); $$=cx;} { tablaCodigo[$7].a2 = cx +1 ; } ;
+    : FOR '(' asignacion ';' 
+            {regreso[cont_r++]=cx+1; $$=cx+1;} comp {generaCodigo(SALTARF,$6,'?','-'); $$=cx;} {generaCodigo(SALTAR,'?','-','-'); $$=cx;} ';' 
+            {$$=cx+1;} asignacion {generaCodigo(SALTAR,$5,'-','-'); $$=cx;} ')' 
+            { tablaCodigo[$8].a1= cx + 1; } {$$=cx+1;} bloque {generaCodigo(SALTAR,$10,'-','-'); $$=cx;} { tablaCodigo[$7].a2 = cx +1 ; cont_r--;} ; 
 iterativa_while
-    : WHILE '(' {$$=cx+1;} comp {generaCodigo(SALTARF,$4,'?','-'); $$=cx;} ')' bloque {generaCodigo(SALTAR,$3,'-','-'); $$=cx;} { tablaCodigo[$5].a2 = cx +1 ; };
+    : WHILE '(' {regreso[cont_r++]=cx+1; $$=cx+1;} comp {generaCodigo(SALTARF,$4,'?','-'); $$=cx;} ')' 
+            bloque {generaCodigo(SALTAR,$3,'-','-'); $$=cx;} { tablaCodigo[$5].a2 = cx +1 ; cont_r--;};
 condicional
     : IF '(' comp ')' {generaCodigo(SALTARF,$3,'?','-'); $$=cx;} bloque { tablaCodigo[$5].a2 = cx +1 ; } else;
 bloque
@@ -99,14 +105,14 @@ declaracion
     : identificador ID {$$=asignarSimbolo(lexema,ID); } {generaCodigo(DECLARAR,$3,'-','-');}
     | CONST identificador ID {$$=asignarSimbolo(lexema,ID);} '=' expresion {generaCodigo(DECLARARCONST,$4,$6,'-');};
 asignacion
-    : ID {$$=localizaSimboloAnadeNum(lexema,ID);} asignar expresion {if($3==1)generaCodigo(ASIGNAR,$1,$4,'-');
-                                                                else if($3==2)generaCodigo(SUMAR,$1,$1,$4);
-                                                                else if($3==3)generaCodigo(RESTAR,$1,$1,$4);
-                                                                else if($3==4)generaCodigo(MULTIPLICAR,$1,$1,$4);
-                                                                else if($3==5)generaCodigo(DIVIDIR,$1,$1,$4);
-                                                                else if($3==6)generaCodigo(MODULAR,$1,$1,$4);}
-    | ID {$$=localizaSimboloAnadeNum(lexema,ID);} INCREMENTO {generaCodigo(INCREMENTAR,$1,'-','-');}
-    | ID {$$=localizaSimboloAnadeNum(lexema,ID);} DECREMENTO {generaCodigo(DECREMENTAR,$1,'-','-');};
+    : ID {$$=localizaSimboloAnadeNum(lexema,ID);} asignar expresion {if($3==1)generaCodigo(ASIGNAR,$2,$4,'-');
+                                                                else if($3==2)generaCodigo(SUMAR,$2,$2,$4);
+                                                                else if($3==3)generaCodigo(RESTAR,$2,$2,$4);
+                                                                else if($3==4)generaCodigo(MULTIPLICAR,$2,$2,$4);
+                                                                else if($3==5)generaCodigo(DIVIDIR,$2,$2,$4);
+                                                                else if($3==6)generaCodigo(MODULAR,$2,$2,$4);}
+    | ID {$$=localizaSimboloAnadeNum(lexema,ID);} INCREMENTO {generaCodigo(INCREMENTAR,$2,'-','-');}
+    | ID {$$=localizaSimboloAnadeNum(lexema,ID);} DECREMENTO {generaCodigo(DECREMENTAR,$2,'-','-');};
     
 asignar
     : '='{$$=1;}
