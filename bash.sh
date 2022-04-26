@@ -1,5 +1,5 @@
 #!/bin/bash
 
-yacc -v Lab2.y
+yacc -v Lab.y
 gcc y.tab.c -o ejecutable
 ./ejecutable < prueba.txt
