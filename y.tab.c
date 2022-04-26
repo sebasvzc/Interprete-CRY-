@@ -1690,7 +1690,7 @@ yyreduce:
 
   case 49:
 #line 100 "Lab2.y"
-                                                                {generaCodigo(ASIGNAR,yyvsp[-3],yyvsp[0],'-');}
+                                                                {generaCodigo(ASIGNAR,yyvsp[-2],yyvsp[0],'-');}
 #line 1695 "y.tab.c"
     break;
 

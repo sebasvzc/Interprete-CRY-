@@ -97,7 +97,7 @@ declaracion
     : identificador ID {$$=asignarSimbolo(lexema,ID); } {generaCodigo(DECLARAR,$3,'-','-');}
     | CONST identificador ID {$$=asignarSimbolo(lexema,ID);} '=' expresion {generaCodigo(DECLARARCONST,$4,$6,'-');};
 asignacion
-    : ID {$$=localizaSimboloAnadeNum(lexema,ID);} '=' expresion {generaCodigo(ASIGNAR,$1,$4,'-');};
+    : ID {$$=localizaSimboloAnadeNum(lexema,ID);} '=' expresion {generaCodigo(ASIGNAR,$2,$4,'-');};
 incremento
     : ID INCREMENTO {generaCodigo(INCREMENTAR,$1,$1,1);};
 
