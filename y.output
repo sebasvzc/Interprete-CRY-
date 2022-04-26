@@ -24,6 +24,8 @@ Terminals unused in grammar
     MODULAR
     COMPXOR
     COMPNOR
+    MOVERBDE
+    MOVERBIZ
 
 
 Grammar
@@ -73,156 +75,164 @@ Grammar
 
    33 iterativa_for: FOR '(' asignacion ';' comp ';' asignacion ')' bloque
 
-   34 iterativa_while: WHILE '(' comp ')' bloque else
+   34 @1: %empty
 
-   35 @1: %empty
+   35 @2: %empty
 
-   36 $@2: %empty
+   36 @3: %empty
 
-   37 condicional: IF '(' comp ')' @1 bloque $@2 else
+   37 iterativa_while: WHILE '(' @1 comp @2 ')' bloque @3
 
-   38 bloque: '{' listainst '}'
+   38 @4: %empty
 
-   39 declaracion: identificador ID
+   39 $@5: %empty
 
-   40 @3: %empty
+   40 condicional: IF '(' comp ')' @4 bloque $@5 else
 
-   41 declaracion: CONST identificador ID @3 '=' expresion
+   41 bloque: '{' listainst '}'
 
-   42 asignacion: ID '=' expresion
+   42 declaracion: identificador ID
 
-   43 incremento: ID INCREMENTO
+   43 @6: %empty
 
-   44 decrementar: ID DECREMENTO
+   44 declaracion: CONST identificador ID @6 '=' expresion
 
-   45 aumentavalor: ID AUMENTO expresion
+   45 @7: %empty
 
-   46 disminuyevalor: ID DISMINUCION expresion
+   46 asignacion: ID @7 '=' expresion
 
-   47 multiplicavalor: ID MULTI expresion
+   47 incremento: ID INCREMENTO
 
-   48 dividevalor: ID DIVI expresion
+   48 decrementar: ID DECREMENTO
 
-   49 modulavalor: ID MOD expresion
+   49 aumentavalor: ID AUMENTO expresion
 
-   50 identificador: INT
-   51              | FLOAT
-   52              | DOUBLE
-   53              | CHAR
-   54              | LONG
-   55              | VOID
-   56              | BOOL
-   57              | SHORT
+   50 disminuyevalor: ID DISMINUCION expresion
 
-   58 expresion: expr
-   59          | comp
+   51 multiplicavalor: ID MULTI expresion
 
-   60 expr: expr '+' term
-   61     | expr '-' term
-   62     | term
+   52 dividevalor: ID DIVI expresion
 
-   63 term: term op factor
-   64     | factor
+   53 modulavalor: ID MOD expresion
 
-   65 op: '*'
-   66   | '/'
-   67   | BITSIZ
-   68   | BITSDE
-   69   | '%'
+   54 identificador: INT
+   55              | FLOAT
+   56              | DOUBLE
+   57              | CHAR
+   58              | LONG
+   59              | VOID
+   60              | BOOL
+   61              | SHORT
 
-   70 factor: NUM
-   71       | '(' expr ')'
-   72       | ID
-   73       | VERDAD
-   74       | FALSO
+   62 expresion: expr
+   63          | comp
 
-   75 comp: expr '>' '=' expr
-   76     | expr '>' expr
-   77     | expr '<' expr
-   78     | expr '<' '=' expr
-   79     | expr IGUALDAD expr
-   80     | expr DESIGUALDAD expr
-   81     | expr AND expr
-   82     | expr OR expr
-   83     | expr NAND expr
-   84     | expr XOR expr
-   85     | expr NOR expr
+   64 expr: expr '+' term
+   65     | expr '-' term
+   66     | term
 
-   86 else: ELSE bloque
+   67 term: term op factor
+   68     | factor
 
-   87 @4: %empty
+   69 op: '*'
+   70   | '/'
+   71   | BITSIZ
+   72   | BITSDE
+   73   | '%'
 
-   88 $@5: %empty
+   74 factor: NUM
+   75       | '(' expr ')'
+   76       | ID
+   77       | VERDAD
+   78       | FALSO
 
-   89 else: ELIF '(' comp ')' @4 bloque $@5 else
-   90     | %empty
+   79 comp: expr '>' '=' expr
+   80     | expr '>' expr
+   81     | expr '<' expr
+   82     | expr '<' '=' expr
+   83     | expr IGUALDAD expr
+   84     | expr DESIGUALDAD expr
+   85     | expr AND expr
+   86     | expr OR expr
+   87     | expr NAND expr
+   88     | expr XOR expr
+   89     | expr NOR expr
 
-   91 funcion: DE_TIPO '(' identificador ')'
-   92        | NEGACION '(' expr ')'
+   90 else: ELSE bloque
+
+   91 @8: %empty
+
+   92 $@9: %empty
+
+   93 else: ELIF '(' comp ')' @8 bloque $@9 else
+   94     | %empty
+
+   95 funcion: DE_TIPO '(' identificador ')'
+   96        | NEGACION '(' expr ')'
 
 
 Terminals, with rules where they appear
 
     $end (0) 0
-    '%' (37) 69
-    '(' (40) 30 31 32 33 34 37 71 89 91 92
-    ')' (41) 30 31 32 33 34 37 71 89 91 92
-    '*' (42) 65
-    '+' (43) 60
-    '-' (45) 61
-    '/' (47) 66
+    '%' (37) 73
+    '(' (40) 30 31 32 33 37 40 75 93 95 96
+    ')' (41) 30 31 32 33 37 40 75 93 95 96
+    '*' (42) 69
+    '+' (43) 64
+    '-' (45) 65
+    '/' (47) 70
     ';' (59) 33
-    '<' (60) 77 78
-    '=' (61) 41 42 75 78
-    '>' (62) 75 76
-    '{' (123) 38
-    '}' (125) 38
+    '<' (60) 81 82
+    '=' (61) 44 46 79 82
+    '>' (62) 79 80
+    '{' (123) 41
+    '}' (125) 41
     error (256)
-    WHILE (258) 32 34
-    IF (259) 37
-    ID (260) 39 41 42 43 44 45 46 47 48 49 72
-    NUM (261) 70
+    WHILE (258) 32 37
+    IF (259) 40
+    ID (260) 42 44 46 47 48 49 50 51 52 53 76
+    NUM (261) 74
     DO (262) 32
     FOR (263) 33
-    IGUALDAD (264) 79
-    ELSE (265) 86
-    ELIF (266) 89
+    IGUALDAD (264) 83
+    ELSE (265) 90
+    ELIF (266) 93
     CONTINUE (267) 17
-    INT (268) 50
-    LONG (269) 54
-    SHORT (270) 57
-    DOUBLE (271) 52
-    FLOAT (272) 51
-    CHAR (273) 53
-    BOOL (274) 56
-    VERDAD (275) 73
-    FALSO (276) 74
-    VOID (277) 55
-    CONST (278) 41
-    BITSIZ (279) 67
-    BITSDE (280) 68
+    INT (268) 54
+    LONG (269) 58
+    SHORT (270) 61
+    DOUBLE (271) 56
+    FLOAT (272) 55
+    CHAR (273) 57
+    BOOL (274) 60
+    VERDAD (275) 77
+    FALSO (276) 78
+    VOID (277) 59
+    CONST (278) 44
+    BITSIZ (279) 71
+    BITSDE (280) 72
     RETURN (281) 18
     BREAK (282) 19
     PASS (283) 20
-    INCREMENTO (284) 43
-    DECREMENTO (285) 44
-    AUMENTO (286) 45
-    DISMINUCION (287) 46
-    MULTI (288) 47
-    DIVI (289) 48
-    MOD (290) 49
+    INCREMENTO (284) 47
+    DECREMENTO (285) 48
+    AUMENTO (286) 49
+    DISMINUCION (287) 50
+    MULTI (288) 51
+    DIVI (289) 52
+    MOD (290) 53
     PRINT (291) 30
     COMENTARIOSIMPLE (292) 28
     COMENTARIOCOMPLEJO (293) 29
-    DE_TIPO (294) 91
-    DESIGUALDAD (295) 80
+    DE_TIPO (294) 95
+    DESIGUALDAD (295) 84
     SCAN (296) 31
-    NEGACION (297) 92
-    AND (298) 81
-    OR (299) 82
-    NAND (300) 83
-    XOR (301) 84
-    NOR (302) 85
+    NEGACION (297) 96
+    AND (298) 85
+    OR (299) 86
+    NAND (300) 87
+    XOR (301) 88
+    NOR (302) 89
     COMPMAYOR (303)
     COMPMENOR (304)
     COMPMAYORIGUAL (305)
@@ -247,119 +257,133 @@ Terminals, with rules where they appear
     MODULAR (324)
     COMPXOR (325)
     COMPNOR (326)
+    MOVERBDE (327)
+    MOVERBIZ (328)
 
 
 Nonterminals, with rules where they appear
 
-    $accept (85)
+    $accept (87)
         on left: 0
-    prog (86)
+    prog (88)
         on left: 1
         on right: 0
-    listainst (87)
+    listainst (89)
         on left: 2 3
-        on right: 1 2 38
-    instr (88)
+        on right: 1 2 41
+    instr (90)
         on left: 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25
         on right: 2
-    comentario (89)
+    comentario (91)
         on left: 26 27
         on right: 24
-    comentarioSimple (90)
+    comentarioSimple (92)
         on left: 28
         on right: 26
-    comentarioComplejo (91)
+    comentarioComplejo (93)
         on left: 29
         on right: 27
-    imprimir (92)
+    imprimir (94)
         on left: 30
         on right: 22
-    leer (93)
+    leer (95)
         on left: 31
         on right: 23
-    iterativa_do (94)
+    iterativa_do (96)
         on left: 32
         on right: 15
-    iterativa_for (95)
+    iterativa_for (97)
         on left: 33
         on right: 16
-    iterativa_while (96)
-        on left: 34
-        on right: 14
-    condicional (97)
+    iterativa_while (98)
         on left: 37
-        on right: 21
-    @1 (98)
+        on right: 14
+    @1 (99)
+        on left: 34
+        on right: 37
+    @2 (100)
         on left: 35
         on right: 37
-    $@2 (99)
+    @3 (101)
         on left: 36
         on right: 37
-    bloque (100)
-        on left: 38
-        on right: 32 33 34 37 86 89
-    declaracion (101)
-        on left: 39 41
-        on right: 4
-    @3 (102)
+    condicional (102)
         on left: 40
-        on right: 41
-    asignacion (103)
-        on left: 42
-        on right: 5 33
-    incremento (104)
+        on right: 21
+    @4 (103)
+        on left: 38
+        on right: 40
+    $@5 (104)
+        on left: 39
+        on right: 40
+    bloque (105)
+        on left: 41
+        on right: 32 33 37 40 90 93
+    declaracion (106)
+        on left: 42 44
+        on right: 4
+    @6 (107)
         on left: 43
-        on right: 6
-    decrementar (105)
-        on left: 44
-        on right: 7
-    aumentavalor (106)
-        on left: 45
-        on right: 8
-    disminuyevalor (107)
+        on right: 44
+    asignacion (108)
         on left: 46
-        on right: 9
-    multiplicavalor (108)
+        on right: 5 33
+    @7 (109)
+        on left: 45
+        on right: 46
+    incremento (110)
         on left: 47
-        on right: 10
-    dividevalor (109)
+        on right: 6
+    decrementar (111)
         on left: 48
-        on right: 11
-    modulavalor (110)
+        on right: 7
+    aumentavalor (112)
         on left: 49
+        on right: 8
+    disminuyevalor (113)
+        on left: 50
+        on right: 9
+    multiplicavalor (114)
+        on left: 51
+        on right: 10
+    dividevalor (115)
+        on left: 52
+        on right: 11
+    modulavalor (116)
+        on left: 53
         on right: 12
-    identificador (111)
-        on left: 50 51 52 53 54 55 56 57
-        on right: 39 41 91
-    expresion (112)
-        on left: 58 59
-        on right: 41 42 45 46 47 48 49
-    expr (113)
-        on left: 60 61 62
-        on right: 30 31 58 60 61 71 75 76 77 78 79 80 81 82 83 84 85 92
-    term (114)
-        on left: 63 64
-        on right: 60 61 62 63
-    op (115)
-        on left: 65 66 67 68 69
-        on right: 63
-    factor (116)
-        on left: 70 71 72 73 74
-        on right: 63 64
-    comp (117)
-        on left: 75 76 77 78 79 80 81 82 83 84 85
-        on right: 13 32 33 34 37 59 89
-    else (118)
-        on left: 86 89 90
-        on right: 34 37 89
-    @4 (119)
-        on left: 87
-        on right: 89
-    $@5 (120)
-        on left: 88
-        on right: 89
-    funcion (121)
-        on left: 91 92
+    identificador (117)
+        on left: 54 55 56 57 58 59 60 61
+        on right: 42 44 95
+    expresion (118)
+        on left: 62 63
+        on right: 44 46 49 50 51 52 53
+    expr (119)
+        on left: 64 65 66
+        on right: 30 31 62 64 65 75 79 80 81 82 83 84 85 86 87 88 89 96
+    term (120)
+        on left: 67 68
+        on right: 64 65 66 67
+    op (121)
+        on left: 69 70 71 72 73
+        on right: 67
+    factor (122)
+        on left: 74 75 76 77 78
+        on right: 67 68
+    comp (123)
+        on left: 79 80 81 82 83 84 85 86 87 88 89
+        on right: 13 32 33 37 40 63 93
+    else (124)
+        on left: 90 93 94
+        on right: 40 93
+    @8 (125)
+        on left: 91
+        on right: 93
+    $@9 (126)
+        on left: 92
+        on right: 93
+    funcion (127)
+        on left: 95 96
         on right: 25
 
 
@@ -429,29 +453,29 @@ State 0
 
 State 1
 
-   34 iterativa_while: WHILE . '(' comp ')' bloque else
+   37 iterativa_while: WHILE . '(' @1 comp @2 ')' bloque @3
 
     '('  shift, and go to state 56
 
 
 State 2
 
-   37 condicional: IF . '(' comp ')' @1 bloque $@2 else
+   40 condicional: IF . '(' comp ')' @4 bloque $@5 else
 
     '('  shift, and go to state 57
 
 
 State 3
 
-   42 asignacion: ID . '=' expresion
-   43 incremento: ID . INCREMENTO
-   44 decrementar: ID . DECREMENTO
-   45 aumentavalor: ID . AUMENTO expresion
-   46 disminuyevalor: ID . DISMINUCION expresion
-   47 multiplicavalor: ID . MULTI expresion
-   48 dividevalor: ID . DIVI expresion
-   49 modulavalor: ID . MOD expresion
-   72 factor: ID .
+   46 asignacion: ID . @7 '=' expresion
+   47 incremento: ID . INCREMENTO
+   48 decrementar: ID . DECREMENTO
+   49 aumentavalor: ID . AUMENTO expresion
+   50 disminuyevalor: ID . DISMINUCION expresion
+   51 multiplicavalor: ID . MULTI expresion
+   52 dividevalor: ID . DIVI expresion
+   53 modulavalor: ID . MOD expresion
+   76 factor: ID .
 
     INCREMENTO   shift, and go to state 58
     DECREMENTO   shift, and go to state 59
@@ -460,16 +484,18 @@ State 3
     MULTI        shift, and go to state 62
     DIVI         shift, and go to state 63
     MOD          shift, and go to state 64
-    '='          shift, and go to state 65
 
-    $default  reduce using rule 72 (factor)
+    '='       reduce using rule 45 (@7)
+    $default  reduce using rule 76 (factor)
+
+    @7  go to state 65
 
 
 State 4
 
-   70 factor: NUM .
+   74 factor: NUM .
 
-    $default  reduce using rule 70 (factor)
+    $default  reduce using rule 74 (factor)
 
 
 State 5
@@ -497,77 +523,77 @@ State 7
 
 State 8
 
-   50 identificador: INT .
-
-    $default  reduce using rule 50 (identificador)
-
-
-State 9
-
-   54 identificador: LONG .
+   54 identificador: INT .
 
     $default  reduce using rule 54 (identificador)
 
 
+State 9
+
+   58 identificador: LONG .
+
+    $default  reduce using rule 58 (identificador)
+
+
 State 10
 
-   57 identificador: SHORT .
+   61 identificador: SHORT .
 
-    $default  reduce using rule 57 (identificador)
+    $default  reduce using rule 61 (identificador)
 
 
 State 11
 
-   52 identificador: DOUBLE .
-
-    $default  reduce using rule 52 (identificador)
-
-
-State 12
-
-   51 identificador: FLOAT .
-
-    $default  reduce using rule 51 (identificador)
-
-
-State 13
-
-   53 identificador: CHAR .
-
-    $default  reduce using rule 53 (identificador)
-
-
-State 14
-
-   56 identificador: BOOL .
+   56 identificador: DOUBLE .
 
     $default  reduce using rule 56 (identificador)
 
 
-State 15
+State 12
 
-   73 factor: VERDAD .
-
-    $default  reduce using rule 73 (factor)
-
-
-State 16
-
-   74 factor: FALSO .
-
-    $default  reduce using rule 74 (factor)
-
-
-State 17
-
-   55 identificador: VOID .
+   55 identificador: FLOAT .
 
     $default  reduce using rule 55 (identificador)
 
 
+State 13
+
+   57 identificador: CHAR .
+
+    $default  reduce using rule 57 (identificador)
+
+
+State 14
+
+   60 identificador: BOOL .
+
+    $default  reduce using rule 60 (identificador)
+
+
+State 15
+
+   77 factor: VERDAD .
+
+    $default  reduce using rule 77 (factor)
+
+
+State 16
+
+   78 factor: FALSO .
+
+    $default  reduce using rule 78 (factor)
+
+
+State 17
+
+   59 identificador: VOID .
+
+    $default  reduce using rule 59 (identificador)
+
+
 State 18
 
-   41 declaracion: CONST . identificador ID @3 '=' expresion
+   44 declaracion: CONST . identificador ID @6 '=' expresion
 
     INT     shift, and go to state 8
     LONG    shift, and go to state 9
@@ -625,7 +651,7 @@ State 24
 
 State 25
 
-   91 funcion: DE_TIPO . '(' identificador ')'
+   95 funcion: DE_TIPO . '(' identificador ')'
 
     '('  shift, and go to state 71
 
@@ -639,14 +665,14 @@ State 26
 
 State 27
 
-   92 funcion: NEGACION . '(' expr ')'
+   96 funcion: NEGACION . '(' expr ')'
 
     '('  shift, and go to state 73
 
 
 State 28
 
-   71 factor: '(' . expr ')'
+   75 factor: '(' . expr ')'
 
     ID      shift, and go to state 74
     NUM     shift, and go to state 4
@@ -864,26 +890,26 @@ State 49
 
 State 50
 
-   39 declaracion: identificador . ID
+   42 declaracion: identificador . ID
 
     ID  shift, and go to state 78
 
 
 State 51
 
-   60 expr: expr . '+' term
-   61     | expr . '-' term
-   75 comp: expr . '>' '=' expr
-   76     | expr . '>' expr
-   77     | expr . '<' expr
-   78     | expr . '<' '=' expr
-   79     | expr . IGUALDAD expr
-   80     | expr . DESIGUALDAD expr
-   81     | expr . AND expr
-   82     | expr . OR expr
-   83     | expr . NAND expr
-   84     | expr . XOR expr
-   85     | expr . NOR expr
+   64 expr: expr . '+' term
+   65     | expr . '-' term
+   79 comp: expr . '>' '=' expr
+   80     | expr . '>' expr
+   81     | expr . '<' expr
+   82     | expr . '<' '=' expr
+   83     | expr . IGUALDAD expr
+   84     | expr . DESIGUALDAD expr
+   85     | expr . AND expr
+   86     | expr . OR expr
+   87     | expr . NAND expr
+   88     | expr . XOR expr
+   89     | expr . NOR expr
 
     IGUALDAD     shift, and go to state 79
     DESIGUALDAD  shift, and go to state 80
@@ -900,8 +926,8 @@ State 51
 
 State 52
 
-   62 expr: term .
-   63 term: term . op factor
+   66 expr: term .
+   67 term: term . op factor
 
     BITSIZ  shift, and go to state 90
     BITSDE  shift, and go to state 91
@@ -909,16 +935,16 @@ State 52
     '/'     shift, and go to state 93
     '%'     shift, and go to state 94
 
-    $default  reduce using rule 62 (expr)
+    $default  reduce using rule 66 (expr)
 
     op  go to state 95
 
 
 State 53
 
-   64 term: factor .
+   68 term: factor .
 
-    $default  reduce using rule 64 (term)
+    $default  reduce using rule 68 (term)
 
 
 State 54
@@ -937,23 +963,16 @@ State 55
 
 State 56
 
-   34 iterativa_while: WHILE '(' . comp ')' bloque else
+   37 iterativa_while: WHILE '(' . @1 comp @2 ')' bloque @3
 
-    ID      shift, and go to state 74
-    NUM     shift, and go to state 4
-    VERDAD  shift, and go to state 15
-    FALSO   shift, and go to state 16
-    '('     shift, and go to state 28
+    $default  reduce using rule 34 (@1)
 
-    expr    go to state 51
-    term    go to state 52
-    factor  go to state 53
-    comp    go to state 96
+    @1  go to state 96
 
 
 State 57
 
-   37 condicional: IF '(' . comp ')' @1 bloque $@2 else
+   40 condicional: IF '(' . comp ')' @4 bloque $@5 else
 
     ID      shift, and go to state 74
     NUM     shift, and go to state 4
@@ -969,21 +988,21 @@ State 57
 
 State 58
 
-   43 incremento: ID INCREMENTO .
+   47 incremento: ID INCREMENTO .
 
-    $default  reduce using rule 43 (incremento)
+    $default  reduce using rule 47 (incremento)
 
 
 State 59
 
-   44 decrementar: ID DECREMENTO .
+   48 decrementar: ID DECREMENTO .
 
-    $default  reduce using rule 44 (decrementar)
+    $default  reduce using rule 48 (decrementar)
 
 
 State 60
 
-   45 aumentavalor: ID AUMENTO . expresion
+   49 aumentavalor: ID AUMENTO . expresion
 
     ID      shift, and go to state 74
     NUM     shift, and go to state 4
@@ -1000,7 +1019,7 @@ State 60
 
 State 61
 
-   46 disminuyevalor: ID DISMINUCION . expresion
+   50 disminuyevalor: ID DISMINUCION . expresion
 
     ID      shift, and go to state 74
     NUM     shift, and go to state 4
@@ -1017,7 +1036,7 @@ State 61
 
 State 62
 
-   47 multiplicavalor: ID MULTI . expresion
+   51 multiplicavalor: ID MULTI . expresion
 
     ID      shift, and go to state 74
     NUM     shift, and go to state 4
@@ -1034,7 +1053,7 @@ State 62
 
 State 63
 
-   48 dividevalor: ID DIVI . expresion
+   52 dividevalor: ID DIVI . expresion
 
     ID      shift, and go to state 74
     NUM     shift, and go to state 4
@@ -1051,7 +1070,7 @@ State 63
 
 State 64
 
-   49 modulavalor: ID MOD . expresion
+   53 modulavalor: ID MOD . expresion
 
     ID      shift, and go to state 74
     NUM     shift, and go to state 4
@@ -1068,24 +1087,14 @@ State 64
 
 State 65
 
-   42 asignacion: ID '=' . expresion
+   46 asignacion: ID @7 . '=' expresion
 
-    ID      shift, and go to state 74
-    NUM     shift, and go to state 4
-    VERDAD  shift, and go to state 15
-    FALSO   shift, and go to state 16
-    '('     shift, and go to state 28
-
-    expresion  go to state 105
-    expr       go to state 99
-    term       go to state 52
-    factor     go to state 53
-    comp       go to state 100
+    '='  shift, and go to state 105
 
 
 State 66
 
-   38 bloque: '{' . listainst '}'
+   41 bloque: '{' . listainst '}'
 
     WHILE               shift, and go to state 1
     IF                  shift, and go to state 2
@@ -1164,7 +1173,7 @@ State 68
 
 State 69
 
-   41 declaracion: CONST identificador . ID @3 '=' expresion
+   44 declaracion: CONST identificador . ID @6 '=' expresion
 
     ID  shift, and go to state 110
 
@@ -1186,7 +1195,7 @@ State 70
 
 State 71
 
-   91 funcion: DE_TIPO '(' . identificador ')'
+   95 funcion: DE_TIPO '(' . identificador ')'
 
     INT     shift, and go to state 8
     LONG    shift, and go to state 9
@@ -1217,7 +1226,7 @@ State 72
 
 State 73
 
-   92 funcion: NEGACION '(' . expr ')'
+   96 funcion: NEGACION '(' . expr ')'
 
     ID      shift, and go to state 74
     NUM     shift, and go to state 4
@@ -1232,16 +1241,16 @@ State 73
 
 State 74
 
-   72 factor: ID .
+   76 factor: ID .
 
-    $default  reduce using rule 72 (factor)
+    $default  reduce using rule 76 (factor)
 
 
 State 75
 
-   60 expr: expr . '+' term
-   61     | expr . '-' term
-   71 factor: '(' expr . ')'
+   64 expr: expr . '+' term
+   65     | expr . '-' term
+   75 factor: '(' expr . ')'
 
     ')'  shift, and go to state 115
     '+'  shift, and go to state 86
@@ -1264,14 +1273,14 @@ State 77
 
 State 78
 
-   39 declaracion: identificador ID .
+   42 declaracion: identificador ID .
 
-    $default  reduce using rule 39 (declaracion)
+    $default  reduce using rule 42 (declaracion)
 
 
 State 79
 
-   79 comp: expr IGUALDAD . expr
+   83 comp: expr IGUALDAD . expr
 
     ID      shift, and go to state 74
     NUM     shift, and go to state 4
@@ -1286,7 +1295,7 @@ State 79
 
 State 80
 
-   80 comp: expr DESIGUALDAD . expr
+   84 comp: expr DESIGUALDAD . expr
 
     ID      shift, and go to state 74
     NUM     shift, and go to state 4
@@ -1301,7 +1310,7 @@ State 80
 
 State 81
 
-   81 comp: expr AND . expr
+   85 comp: expr AND . expr
 
     ID      shift, and go to state 74
     NUM     shift, and go to state 4
@@ -1316,7 +1325,7 @@ State 81
 
 State 82
 
-   82 comp: expr OR . expr
+   86 comp: expr OR . expr
 
     ID      shift, and go to state 74
     NUM     shift, and go to state 4
@@ -1331,7 +1340,7 @@ State 82
 
 State 83
 
-   83 comp: expr NAND . expr
+   87 comp: expr NAND . expr
 
     ID      shift, and go to state 74
     NUM     shift, and go to state 4
@@ -1346,7 +1355,7 @@ State 83
 
 State 84
 
-   84 comp: expr XOR . expr
+   88 comp: expr XOR . expr
 
     ID      shift, and go to state 74
     NUM     shift, and go to state 4
@@ -1361,7 +1370,7 @@ State 84
 
 State 85
 
-   85 comp: expr NOR . expr
+   89 comp: expr NOR . expr
 
     ID      shift, and go to state 74
     NUM     shift, and go to state 4
@@ -1376,7 +1385,7 @@ State 85
 
 State 86
 
-   60 expr: expr '+' . term
+   64 expr: expr '+' . term
 
     ID      shift, and go to state 74
     NUM     shift, and go to state 4
@@ -1390,7 +1399,7 @@ State 86
 
 State 87
 
-   61 expr: expr '-' . term
+   65 expr: expr '-' . term
 
     ID      shift, and go to state 74
     NUM     shift, and go to state 4
@@ -1404,8 +1413,8 @@ State 87
 
 State 88
 
-   75 comp: expr '>' . '=' expr
-   76     | expr '>' . expr
+   79 comp: expr '>' . '=' expr
+   80     | expr '>' . expr
 
     ID      shift, and go to state 74
     NUM     shift, and go to state 4
@@ -1421,8 +1430,8 @@ State 88
 
 State 89
 
-   77 comp: expr '<' . expr
-   78     | expr '<' . '=' expr
+   81 comp: expr '<' . expr
+   82     | expr '<' . '=' expr
 
     ID      shift, and go to state 74
     NUM     shift, and go to state 4
@@ -1438,42 +1447,42 @@ State 89
 
 State 90
 
-   67 op: BITSIZ .
+   71 op: BITSIZ .
 
-    $default  reduce using rule 67 (op)
+    $default  reduce using rule 71 (op)
 
 
 State 91
 
-   68 op: BITSDE .
+   72 op: BITSDE .
 
-    $default  reduce using rule 68 (op)
+    $default  reduce using rule 72 (op)
 
 
 State 92
 
-   65 op: '*' .
-
-    $default  reduce using rule 65 (op)
-
-
-State 93
-
-   66 op: '/' .
-
-    $default  reduce using rule 66 (op)
-
-
-State 94
-
-   69 op: '%' .
+   69 op: '*' .
 
     $default  reduce using rule 69 (op)
 
 
+State 93
+
+   70 op: '/' .
+
+    $default  reduce using rule 70 (op)
+
+
+State 94
+
+   73 op: '%' .
+
+    $default  reduce using rule 73 (op)
+
+
 State 95
 
-   63 term: term op . factor
+   67 term: term op . factor
 
     ID      shift, and go to state 74
     NUM     shift, and go to state 4
@@ -1486,41 +1495,50 @@ State 95
 
 State 96
 
-   34 iterativa_while: WHILE '(' comp . ')' bloque else
+   37 iterativa_while: WHILE '(' @1 . comp @2 ')' bloque @3
 
-    ')'  shift, and go to state 130
+    ID      shift, and go to state 74
+    NUM     shift, and go to state 4
+    VERDAD  shift, and go to state 15
+    FALSO   shift, and go to state 16
+    '('     shift, and go to state 28
+
+    expr    go to state 51
+    term    go to state 52
+    factor  go to state 53
+    comp    go to state 130
 
 
 State 97
 
-   37 condicional: IF '(' comp . ')' @1 bloque $@2 else
+   40 condicional: IF '(' comp . ')' @4 bloque $@5 else
 
     ')'  shift, and go to state 131
 
 
 State 98
 
-   45 aumentavalor: ID AUMENTO expresion .
+   49 aumentavalor: ID AUMENTO expresion .
 
-    $default  reduce using rule 45 (aumentavalor)
+    $default  reduce using rule 49 (aumentavalor)
 
 
 State 99
 
-   58 expresion: expr .
-   60 expr: expr . '+' term
-   61     | expr . '-' term
-   75 comp: expr . '>' '=' expr
-   76     | expr . '>' expr
-   77     | expr . '<' expr
-   78     | expr . '<' '=' expr
-   79     | expr . IGUALDAD expr
-   80     | expr . DESIGUALDAD expr
-   81     | expr . AND expr
-   82     | expr . OR expr
-   83     | expr . NAND expr
-   84     | expr . XOR expr
-   85     | expr . NOR expr
+   62 expresion: expr .
+   64 expr: expr . '+' term
+   65     | expr . '-' term
+   79 comp: expr . '>' '=' expr
+   80     | expr . '>' expr
+   81     | expr . '<' expr
+   82     | expr . '<' '=' expr
+   83     | expr . IGUALDAD expr
+   84     | expr . DESIGUALDAD expr
+   85     | expr . AND expr
+   86     | expr . OR expr
+   87     | expr . NAND expr
+   88     | expr . XOR expr
+   89     | expr . NOR expr
 
     IGUALDAD     shift, and go to state 79
     DESIGUALDAD  shift, and go to state 80
@@ -1534,254 +1552,47 @@ State 99
     '>'          shift, and go to state 88
     '<'          shift, and go to state 89
 
-    $default  reduce using rule 58 (expresion)
+    $default  reduce using rule 62 (expresion)
 
 
 State 100
 
-   59 expresion: comp .
+   63 expresion: comp .
 
-    $default  reduce using rule 59 (expresion)
+    $default  reduce using rule 63 (expresion)
 
 
 State 101
 
-   46 disminuyevalor: ID DISMINUCION expresion .
+   50 disminuyevalor: ID DISMINUCION expresion .
 
-    $default  reduce using rule 46 (disminuyevalor)
+    $default  reduce using rule 50 (disminuyevalor)
 
 
 State 102
 
-   47 multiplicavalor: ID MULTI expresion .
+   51 multiplicavalor: ID MULTI expresion .
 
-    $default  reduce using rule 47 (multiplicavalor)
+    $default  reduce using rule 51 (multiplicavalor)
 
 
 State 103
 
-   48 dividevalor: ID DIVI expresion .
+   52 dividevalor: ID DIVI expresion .
 
-    $default  reduce using rule 48 (dividevalor)
+    $default  reduce using rule 52 (dividevalor)
 
 
 State 104
 
-   49 modulavalor: ID MOD expresion .
+   53 modulavalor: ID MOD expresion .
 
-    $default  reduce using rule 49 (modulavalor)
+    $default  reduce using rule 53 (modulavalor)
 
 
 State 105
 
-   42 asignacion: ID '=' expresion .
-
-    $default  reduce using rule 42 (asignacion)
-
-
-State 106
-
-   38 bloque: '{' listainst . '}'
-
-    '}'  shift, and go to state 132
-
-
-State 107
-
-   32 iterativa_do: DO bloque WHILE . '(' comp ')'
-
-    '('  shift, and go to state 133
-
-
-State 108
-
-   42 asignacion: ID . '=' expresion
-
-    '='  shift, and go to state 65
-
-
-State 109
-
-   33 iterativa_for: FOR '(' asignacion . ';' comp ';' asignacion ')' bloque
-
-    ';'  shift, and go to state 134
-
-
-State 110
-
-   41 declaracion: CONST identificador ID . @3 '=' expresion
-
-    $default  reduce using rule 40 (@3)
-
-    @3  go to state 135
-
-
-State 111
-
-   30 imprimir: PRINT '(' expr . ')'
-   60 expr: expr . '+' term
-   61     | expr . '-' term
-
-    ')'  shift, and go to state 136
-    '+'  shift, and go to state 86
-    '-'  shift, and go to state 87
-
-
-State 112
-
-   91 funcion: DE_TIPO '(' identificador . ')'
-
-    ')'  shift, and go to state 137
-
-
-State 113
-
-   31 leer: SCAN '(' expr . ')'
-   60 expr: expr . '+' term
-   61     | expr . '-' term
-
-    ')'  shift, and go to state 138
-    '+'  shift, and go to state 86
-    '-'  shift, and go to state 87
-
-
-State 114
-
-   60 expr: expr . '+' term
-   61     | expr . '-' term
-   92 funcion: NEGACION '(' expr . ')'
-
-    ')'  shift, and go to state 139
-    '+'  shift, and go to state 86
-    '-'  shift, and go to state 87
-
-
-State 115
-
-   71 factor: '(' expr ')' .
-
-    $default  reduce using rule 71 (factor)
-
-
-State 116
-
-   60 expr: expr . '+' term
-   61     | expr . '-' term
-   79 comp: expr IGUALDAD expr .
-
-    '+'  shift, and go to state 86
-    '-'  shift, and go to state 87
-
-    $default  reduce using rule 79 (comp)
-
-
-State 117
-
-   60 expr: expr . '+' term
-   61     | expr . '-' term
-   80 comp: expr DESIGUALDAD expr .
-
-    '+'  shift, and go to state 86
-    '-'  shift, and go to state 87
-
-    $default  reduce using rule 80 (comp)
-
-
-State 118
-
-   60 expr: expr . '+' term
-   61     | expr . '-' term
-   81 comp: expr AND expr .
-
-    '+'  shift, and go to state 86
-    '-'  shift, and go to state 87
-
-    $default  reduce using rule 81 (comp)
-
-
-State 119
-
-   60 expr: expr . '+' term
-   61     | expr . '-' term
-   82 comp: expr OR expr .
-
-    '+'  shift, and go to state 86
-    '-'  shift, and go to state 87
-
-    $default  reduce using rule 82 (comp)
-
-
-State 120
-
-   60 expr: expr . '+' term
-   61     | expr . '-' term
-   83 comp: expr NAND expr .
-
-    '+'  shift, and go to state 86
-    '-'  shift, and go to state 87
-
-    $default  reduce using rule 83 (comp)
-
-
-State 121
-
-   60 expr: expr . '+' term
-   61     | expr . '-' term
-   84 comp: expr XOR expr .
-
-    '+'  shift, and go to state 86
-    '-'  shift, and go to state 87
-
-    $default  reduce using rule 84 (comp)
-
-
-State 122
-
-   60 expr: expr . '+' term
-   61     | expr . '-' term
-   85 comp: expr NOR expr .
-
-    '+'  shift, and go to state 86
-    '-'  shift, and go to state 87
-
-    $default  reduce using rule 85 (comp)
-
-
-State 123
-
-   60 expr: expr '+' term .
-   63 term: term . op factor
-
-    BITSIZ  shift, and go to state 90
-    BITSDE  shift, and go to state 91
-    '*'     shift, and go to state 92
-    '/'     shift, and go to state 93
-    '%'     shift, and go to state 94
-
-    $default  reduce using rule 60 (expr)
-
-    op  go to state 95
-
-
-State 124
-
-   61 expr: expr '-' term .
-   63 term: term . op factor
-
-    BITSIZ  shift, and go to state 90
-    BITSDE  shift, and go to state 91
-    '*'     shift, and go to state 92
-    '/'     shift, and go to state 93
-    '%'     shift, and go to state 94
-
-    $default  reduce using rule 61 (expr)
-
-    op  go to state 95
-
-
-State 125
-
-   75 comp: expr '>' '=' . expr
+   46 asignacion: ID @7 '=' . expresion
 
     ID      shift, and go to state 74
     NUM     shift, and go to state 4
@@ -1789,26 +1600,218 @@ State 125
     FALSO   shift, and go to state 16
     '('     shift, and go to state 28
 
-    expr    go to state 140
-    term    go to state 52
-    factor  go to state 53
+    expresion  go to state 132
+    expr       go to state 99
+    term       go to state 52
+    factor     go to state 53
+    comp       go to state 100
 
 
-State 126
+State 106
 
-   60 expr: expr . '+' term
-   61     | expr . '-' term
-   76 comp: expr '>' expr .
+   41 bloque: '{' listainst . '}'
+
+    '}'  shift, and go to state 133
+
+
+State 107
+
+   32 iterativa_do: DO bloque WHILE . '(' comp ')'
+
+    '('  shift, and go to state 134
+
+
+State 108
+
+   46 asignacion: ID . @7 '=' expresion
+
+    $default  reduce using rule 45 (@7)
+
+    @7  go to state 65
+
+
+State 109
+
+   33 iterativa_for: FOR '(' asignacion . ';' comp ';' asignacion ')' bloque
+
+    ';'  shift, and go to state 135
+
+
+State 110
+
+   44 declaracion: CONST identificador ID . @6 '=' expresion
+
+    $default  reduce using rule 43 (@6)
+
+    @6  go to state 136
+
+
+State 111
+
+   30 imprimir: PRINT '(' expr . ')'
+   64 expr: expr . '+' term
+   65     | expr . '-' term
+
+    ')'  shift, and go to state 137
+    '+'  shift, and go to state 86
+    '-'  shift, and go to state 87
+
+
+State 112
+
+   95 funcion: DE_TIPO '(' identificador . ')'
+
+    ')'  shift, and go to state 138
+
+
+State 113
+
+   31 leer: SCAN '(' expr . ')'
+   64 expr: expr . '+' term
+   65     | expr . '-' term
+
+    ')'  shift, and go to state 139
+    '+'  shift, and go to state 86
+    '-'  shift, and go to state 87
+
+
+State 114
+
+   64 expr: expr . '+' term
+   65     | expr . '-' term
+   96 funcion: NEGACION '(' expr . ')'
+
+    ')'  shift, and go to state 140
+    '+'  shift, and go to state 86
+    '-'  shift, and go to state 87
+
+
+State 115
+
+   75 factor: '(' expr ')' .
+
+    $default  reduce using rule 75 (factor)
+
+
+State 116
+
+   64 expr: expr . '+' term
+   65     | expr . '-' term
+   83 comp: expr IGUALDAD expr .
 
     '+'  shift, and go to state 86
     '-'  shift, and go to state 87
 
-    $default  reduce using rule 76 (comp)
+    $default  reduce using rule 83 (comp)
 
 
-State 127
+State 117
 
-   78 comp: expr '<' '=' . expr
+   64 expr: expr . '+' term
+   65     | expr . '-' term
+   84 comp: expr DESIGUALDAD expr .
+
+    '+'  shift, and go to state 86
+    '-'  shift, and go to state 87
+
+    $default  reduce using rule 84 (comp)
+
+
+State 118
+
+   64 expr: expr . '+' term
+   65     | expr . '-' term
+   85 comp: expr AND expr .
+
+    '+'  shift, and go to state 86
+    '-'  shift, and go to state 87
+
+    $default  reduce using rule 85 (comp)
+
+
+State 119
+
+   64 expr: expr . '+' term
+   65     | expr . '-' term
+   86 comp: expr OR expr .
+
+    '+'  shift, and go to state 86
+    '-'  shift, and go to state 87
+
+    $default  reduce using rule 86 (comp)
+
+
+State 120
+
+   64 expr: expr . '+' term
+   65     | expr . '-' term
+   87 comp: expr NAND expr .
+
+    '+'  shift, and go to state 86
+    '-'  shift, and go to state 87
+
+    $default  reduce using rule 87 (comp)
+
+
+State 121
+
+   64 expr: expr . '+' term
+   65     | expr . '-' term
+   88 comp: expr XOR expr .
+
+    '+'  shift, and go to state 86
+    '-'  shift, and go to state 87
+
+    $default  reduce using rule 88 (comp)
+
+
+State 122
+
+   64 expr: expr . '+' term
+   65     | expr . '-' term
+   89 comp: expr NOR expr .
+
+    '+'  shift, and go to state 86
+    '-'  shift, and go to state 87
+
+    $default  reduce using rule 89 (comp)
+
+
+State 123
+
+   64 expr: expr '+' term .
+   67 term: term . op factor
+
+    BITSIZ  shift, and go to state 90
+    BITSDE  shift, and go to state 91
+    '*'     shift, and go to state 92
+    '/'     shift, and go to state 93
+    '%'     shift, and go to state 94
+
+    $default  reduce using rule 64 (expr)
+
+    op  go to state 95
+
+
+State 124
+
+   65 expr: expr '-' term .
+   67 term: term . op factor
+
+    BITSIZ  shift, and go to state 90
+    BITSDE  shift, and go to state 91
+    '*'     shift, and go to state 92
+    '/'     shift, and go to state 93
+    '%'     shift, and go to state 94
+
+    $default  reduce using rule 65 (expr)
+
+    op  go to state 95
+
+
+State 125
+
+   79 comp: expr '>' '=' . expr
 
     ID      shift, and go to state 74
     NUM     shift, and go to state 4
@@ -1821,53 +1824,21 @@ State 127
     factor  go to state 53
 
 
-State 128
+State 126
 
-   60 expr: expr . '+' term
-   61     | expr . '-' term
-   77 comp: expr '<' expr .
+   64 expr: expr . '+' term
+   65     | expr . '-' term
+   80 comp: expr '>' expr .
 
     '+'  shift, and go to state 86
     '-'  shift, and go to state 87
 
-    $default  reduce using rule 77 (comp)
+    $default  reduce using rule 80 (comp)
 
 
-State 129
+State 127
 
-   63 term: term op factor .
-
-    $default  reduce using rule 63 (term)
-
-
-State 130
-
-   34 iterativa_while: WHILE '(' comp ')' . bloque else
-
-    '{'  shift, and go to state 66
-
-    bloque  go to state 142
-
-
-State 131
-
-   37 condicional: IF '(' comp ')' . @1 bloque $@2 else
-
-    $default  reduce using rule 35 (@1)
-
-    @1  go to state 143
-
-
-State 132
-
-   38 bloque: '{' listainst '}' .
-
-    $default  reduce using rule 38 (bloque)
-
-
-State 133
-
-   32 iterativa_do: DO bloque WHILE '(' . comp ')'
+   82 comp: expr '<' '=' . expr
 
     ID      shift, and go to state 74
     NUM     shift, and go to state 4
@@ -1875,15 +1846,65 @@ State 133
     FALSO   shift, and go to state 16
     '('     shift, and go to state 28
 
-    expr    go to state 51
+    expr    go to state 142
     term    go to state 52
     factor  go to state 53
-    comp    go to state 144
+
+
+State 128
+
+   64 expr: expr . '+' term
+   65     | expr . '-' term
+   81 comp: expr '<' expr .
+
+    '+'  shift, and go to state 86
+    '-'  shift, and go to state 87
+
+    $default  reduce using rule 81 (comp)
+
+
+State 129
+
+   67 term: term op factor .
+
+    $default  reduce using rule 67 (term)
+
+
+State 130
+
+   37 iterativa_while: WHILE '(' @1 comp . @2 ')' bloque @3
+
+    $default  reduce using rule 35 (@2)
+
+    @2  go to state 143
+
+
+State 131
+
+   40 condicional: IF '(' comp ')' . @4 bloque $@5 else
+
+    $default  reduce using rule 38 (@4)
+
+    @4  go to state 144
+
+
+State 132
+
+   46 asignacion: ID @7 '=' expresion .
+
+    $default  reduce using rule 46 (asignacion)
+
+
+State 133
+
+   41 bloque: '{' listainst '}' .
+
+    $default  reduce using rule 41 (bloque)
 
 
 State 134
 
-   33 iterativa_for: FOR '(' asignacion ';' . comp ';' asignacion ')' bloque
+   32 iterativa_do: DO bloque WHILE '(' . comp ')'
 
     ID      shift, and go to state 74
     NUM     shift, and go to state 4
@@ -1899,180 +1920,7 @@ State 134
 
 State 135
 
-   41 declaracion: CONST identificador ID @3 . '=' expresion
-
-    '='  shift, and go to state 146
-
-
-State 136
-
-   30 imprimir: PRINT '(' expr ')' .
-
-    $default  reduce using rule 30 (imprimir)
-
-
-State 137
-
-   91 funcion: DE_TIPO '(' identificador ')' .
-
-    $default  reduce using rule 91 (funcion)
-
-
-State 138
-
-   31 leer: SCAN '(' expr ')' .
-
-    $default  reduce using rule 31 (leer)
-
-
-State 139
-
-   92 funcion: NEGACION '(' expr ')' .
-
-    $default  reduce using rule 92 (funcion)
-
-
-State 140
-
-   60 expr: expr . '+' term
-   61     | expr . '-' term
-   75 comp: expr '>' '=' expr .
-
-    '+'  shift, and go to state 86
-    '-'  shift, and go to state 87
-
-    $default  reduce using rule 75 (comp)
-
-
-State 141
-
-   60 expr: expr . '+' term
-   61     | expr . '-' term
-   78 comp: expr '<' '=' expr .
-
-    '+'  shift, and go to state 86
-    '-'  shift, and go to state 87
-
-    $default  reduce using rule 78 (comp)
-
-
-State 142
-
-   34 iterativa_while: WHILE '(' comp ')' bloque . else
-
-    ELSE  shift, and go to state 147
-    ELIF  shift, and go to state 148
-
-    $default  reduce using rule 90 (else)
-
-    else  go to state 149
-
-
-State 143
-
-   37 condicional: IF '(' comp ')' @1 . bloque $@2 else
-
-    '{'  shift, and go to state 66
-
-    bloque  go to state 150
-
-
-State 144
-
-   32 iterativa_do: DO bloque WHILE '(' comp . ')'
-
-    ')'  shift, and go to state 151
-
-
-State 145
-
-   33 iterativa_for: FOR '(' asignacion ';' comp . ';' asignacion ')' bloque
-
-    ';'  shift, and go to state 152
-
-
-State 146
-
-   41 declaracion: CONST identificador ID @3 '=' . expresion
-
-    ID      shift, and go to state 74
-    NUM     shift, and go to state 4
-    VERDAD  shift, and go to state 15
-    FALSO   shift, and go to state 16
-    '('     shift, and go to state 28
-
-    expresion  go to state 153
-    expr       go to state 99
-    term       go to state 52
-    factor     go to state 53
-    comp       go to state 100
-
-
-State 147
-
-   86 else: ELSE . bloque
-
-    '{'  shift, and go to state 66
-
-    bloque  go to state 154
-
-
-State 148
-
-   89 else: ELIF . '(' comp ')' @4 bloque $@5 else
-
-    '('  shift, and go to state 155
-
-
-State 149
-
-   34 iterativa_while: WHILE '(' comp ')' bloque else .
-
-    $default  reduce using rule 34 (iterativa_while)
-
-
-State 150
-
-   37 condicional: IF '(' comp ')' @1 bloque . $@2 else
-
-    $default  reduce using rule 36 ($@2)
-
-    $@2  go to state 156
-
-
-State 151
-
-   32 iterativa_do: DO bloque WHILE '(' comp ')' .
-
-    $default  reduce using rule 32 (iterativa_do)
-
-
-State 152
-
-   33 iterativa_for: FOR '(' asignacion ';' comp ';' . asignacion ')' bloque
-
-    ID  shift, and go to state 108
-
-    asignacion  go to state 157
-
-
-State 153
-
-   41 declaracion: CONST identificador ID @3 '=' expresion .
-
-    $default  reduce using rule 41 (declaracion)
-
-
-State 154
-
-   86 else: ELSE bloque .
-
-    $default  reduce using rule 86 (else)
-
-
-State 155
-
-   89 else: ELIF '(' . comp ')' @4 bloque $@5 else
+   33 iterativa_for: FOR '(' asignacion ';' . comp ';' asignacion ')' bloque
 
     ID      shift, and go to state 74
     NUM     shift, and go to state 4
@@ -2083,40 +1931,212 @@ State 155
     expr    go to state 51
     term    go to state 52
     factor  go to state 53
-    comp    go to state 158
+    comp    go to state 146
 
 
-State 156
+State 136
 
-   37 condicional: IF '(' comp ')' @1 bloque $@2 . else
+   44 declaracion: CONST identificador ID @6 . '=' expresion
 
-    ELSE  shift, and go to state 147
-    ELIF  shift, and go to state 148
+    '='  shift, and go to state 147
 
-    $default  reduce using rule 90 (else)
+
+State 137
+
+   30 imprimir: PRINT '(' expr ')' .
+
+    $default  reduce using rule 30 (imprimir)
+
+
+State 138
+
+   95 funcion: DE_TIPO '(' identificador ')' .
+
+    $default  reduce using rule 95 (funcion)
+
+
+State 139
+
+   31 leer: SCAN '(' expr ')' .
+
+    $default  reduce using rule 31 (leer)
+
+
+State 140
+
+   96 funcion: NEGACION '(' expr ')' .
+
+    $default  reduce using rule 96 (funcion)
+
+
+State 141
+
+   64 expr: expr . '+' term
+   65     | expr . '-' term
+   79 comp: expr '>' '=' expr .
+
+    '+'  shift, and go to state 86
+    '-'  shift, and go to state 87
+
+    $default  reduce using rule 79 (comp)
+
+
+State 142
+
+   64 expr: expr . '+' term
+   65     | expr . '-' term
+   82 comp: expr '<' '=' expr .
+
+    '+'  shift, and go to state 86
+    '-'  shift, and go to state 87
+
+    $default  reduce using rule 82 (comp)
+
+
+State 143
+
+   37 iterativa_while: WHILE '(' @1 comp @2 . ')' bloque @3
+
+    ')'  shift, and go to state 148
+
+
+State 144
+
+   40 condicional: IF '(' comp ')' @4 . bloque $@5 else
+
+    '{'  shift, and go to state 66
+
+    bloque  go to state 149
+
+
+State 145
+
+   32 iterativa_do: DO bloque WHILE '(' comp . ')'
+
+    ')'  shift, and go to state 150
+
+
+State 146
+
+   33 iterativa_for: FOR '(' asignacion ';' comp . ';' asignacion ')' bloque
+
+    ';'  shift, and go to state 151
+
+
+State 147
+
+   44 declaracion: CONST identificador ID @6 '=' . expresion
+
+    ID      shift, and go to state 74
+    NUM     shift, and go to state 4
+    VERDAD  shift, and go to state 15
+    FALSO   shift, and go to state 16
+    '('     shift, and go to state 28
+
+    expresion  go to state 152
+    expr       go to state 99
+    term       go to state 52
+    factor     go to state 53
+    comp       go to state 100
+
+
+State 148
+
+   37 iterativa_while: WHILE '(' @1 comp @2 ')' . bloque @3
+
+    '{'  shift, and go to state 66
+
+    bloque  go to state 153
+
+
+State 149
+
+   40 condicional: IF '(' comp ')' @4 bloque . $@5 else
+
+    $default  reduce using rule 39 ($@5)
+
+    $@5  go to state 154
+
+
+State 150
+
+   32 iterativa_do: DO bloque WHILE '(' comp ')' .
+
+    $default  reduce using rule 32 (iterativa_do)
+
+
+State 151
+
+   33 iterativa_for: FOR '(' asignacion ';' comp ';' . asignacion ')' bloque
+
+    ID  shift, and go to state 108
+
+    asignacion  go to state 155
+
+
+State 152
+
+   44 declaracion: CONST identificador ID @6 '=' expresion .
+
+    $default  reduce using rule 44 (declaracion)
+
+
+State 153
+
+   37 iterativa_while: WHILE '(' @1 comp @2 ')' bloque . @3
+
+    $default  reduce using rule 36 (@3)
+
+    @3  go to state 156
+
+
+State 154
+
+   40 condicional: IF '(' comp ')' @4 bloque $@5 . else
+
+    ELSE  shift, and go to state 157
+    ELIF  shift, and go to state 158
+
+    $default  reduce using rule 94 (else)
 
     else  go to state 159
 
 
-State 157
+State 155
 
    33 iterativa_for: FOR '(' asignacion ';' comp ';' asignacion . ')' bloque
 
     ')'  shift, and go to state 160
 
 
+State 156
+
+   37 iterativa_while: WHILE '(' @1 comp @2 ')' bloque @3 .
+
+    $default  reduce using rule 37 (iterativa_while)
+
+
+State 157
+
+   90 else: ELSE . bloque
+
+    '{'  shift, and go to state 66
+
+    bloque  go to state 161
+
+
 State 158
 
-   89 else: ELIF '(' comp . ')' @4 bloque $@5 else
+   93 else: ELIF . '(' comp ')' @8 bloque $@9 else
 
-    ')'  shift, and go to state 161
+    '('  shift, and go to state 162
 
 
 State 159
 
-   37 condicional: IF '(' comp ')' @1 bloque $@2 else .
+   40 condicional: IF '(' comp ')' @4 bloque $@5 else .
 
-    $default  reduce using rule 37 (condicional)
+    $default  reduce using rule 40 (condicional)
 
 
 State 160
@@ -2125,57 +2145,87 @@ State 160
 
     '{'  shift, and go to state 66
 
-    bloque  go to state 162
+    bloque  go to state 163
 
 
 State 161
 
-   89 else: ELIF '(' comp ')' . @4 bloque $@5 else
+   90 else: ELSE bloque .
 
-    $default  reduce using rule 87 (@4)
-
-    @4  go to state 163
+    $default  reduce using rule 90 (else)
 
 
 State 162
+
+   93 else: ELIF '(' . comp ')' @8 bloque $@9 else
+
+    ID      shift, and go to state 74
+    NUM     shift, and go to state 4
+    VERDAD  shift, and go to state 15
+    FALSO   shift, and go to state 16
+    '('     shift, and go to state 28
+
+    expr    go to state 51
+    term    go to state 52
+    factor  go to state 53
+    comp    go to state 164
+
+
+State 163
 
    33 iterativa_for: FOR '(' asignacion ';' comp ';' asignacion ')' bloque .
 
     $default  reduce using rule 33 (iterativa_for)
 
 
-State 163
-
-   89 else: ELIF '(' comp ')' @4 . bloque $@5 else
-
-    '{'  shift, and go to state 66
-
-    bloque  go to state 164
-
-
 State 164
 
-   89 else: ELIF '(' comp ')' @4 bloque . $@5 else
+   93 else: ELIF '(' comp . ')' @8 bloque $@9 else
 
-    $default  reduce using rule 88 ($@5)
-
-    $@5  go to state 165
+    ')'  shift, and go to state 165
 
 
 State 165
 
-   89 else: ELIF '(' comp ')' @4 bloque $@5 . else
+   93 else: ELIF '(' comp ')' . @8 bloque $@9 else
 
-    ELSE  shift, and go to state 147
-    ELIF  shift, and go to state 148
+    $default  reduce using rule 91 (@8)
 
-    $default  reduce using rule 90 (else)
-
-    else  go to state 166
+    @8  go to state 166
 
 
 State 166
 
-   89 else: ELIF '(' comp ')' @4 bloque $@5 else .
+   93 else: ELIF '(' comp ')' @8 . bloque $@9 else
 
-    $default  reduce using rule 89 (else)
+    '{'  shift, and go to state 66
+
+    bloque  go to state 167
+
+
+State 167
+
+   93 else: ELIF '(' comp ')' @8 bloque . $@9 else
+
+    $default  reduce using rule 92 ($@9)
+
+    $@9  go to state 168
+
+
+State 168
+
+   93 else: ELIF '(' comp ')' @8 bloque $@9 . else
+
+    ELSE  shift, and go to state 157
+    ELIF  shift, and go to state 158
+
+    $default  reduce using rule 94 (else)
+
+    else  go to state 169
+
+
+State 169
+
+   93 else: ELIF '(' comp ')' @8 bloque $@9 else .
+
+    $default  reduce using rule 93 (else)
