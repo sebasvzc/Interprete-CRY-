@@ -41,7 +41,7 @@ int nVarTemp=1;
 %token NEGACION AND OR NAND XOR NOR;
 %token COMPMAYOR COMPMENOR COMPMAYORIGUAL COMPMENORIGUAL COMPIGUAL COMPDESIGUAL COMPLOGICO SALTARF SALTAR COMPAND COMPOR COMPNAND
 %token ASIGNAR INCREMENTAR DECREMENTAR AUMENTAR DISMINUIR SUMAR RESTAR MULTIPLICAR DIVIDIR MODULAR COMPXOR COMPNOR MOVERBDE MOVERBIZ
-%token 
+%token IMPRIMIR DECLARAR DECLARARCONST
 
 %%
 prog
@@ -80,7 +80,7 @@ comentarioSimple
 comentarioComplejo
     : COMENTARIOCOMPLEJO;
 imprimir
-    : PRINT '(' expr ')';
+    : PRINT '(' expresion {generaCodigo(IMPRIMIR,$3,'-','-');} ')';
 leer
     : SCAN '(' expr ')';
 iterativa_do
@@ -94,8 +94,8 @@ condicional
 bloque
     : '{' listainst '}' ; 
 declaracion
-    : identificador ID {$$=asignarSimbolo(lexema,ID); } 
-    | CONST identificador ID {$$=asignarSimbolo(lexema,ID);} '=' expresion ;
+    : identificador ID {$$=asignarSimbolo(lexema,ID); } {generaCodigo(DECLARAR,$3,'-','-');}
+    | CONST identificador ID {$$=asignarSimbolo(lexema,ID);} '=' expresion {generaCodigo(DECLARARCONST,$4,$6,'-');};
 asignacion
     : ID {$$=localizaSimboloAnadeNum(lexema,ID);} '=' expresion {generaCodigo(ASIGNAR,$1,$4,'-');};
 incremento
@@ -129,7 +129,7 @@ identificador
     | BOOL 
     | SHORT ; 
 expresion
-    : expr
+    : expr 
     | comp ;
 expr 
     : expr '+' term  { int i=genTemp(); generaCodigo(SUMAR,i,$1,$3); $$=i;}  
@@ -152,7 +152,7 @@ factor
     : NUM { $$=localizaSimboloAnadeNum(lexema,NUM);}
     | '(' expr')'  
     | ID  { $$=localizaSimboloAnadeNum(lexema,ID);} 
-    | VERDAD { $$=localizaSimboloAnadeNum(lexema,NUM);} 
+    | VERDAD { $$=localizaSimboloAnadeNum(lexema,NUM);}
     | FALSO { $$=localizaSimboloAnadeNum(lexema,NUM);} ; 
 comp
     : expr '>' '=' expr  {int i=genTemp(); generaCodigo(COMPMAYORIGUAL,i,$1,$4);$$=i;} 
