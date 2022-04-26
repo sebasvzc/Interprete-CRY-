@@ -5,6 +5,10 @@
 #include<ctype.h>
 void yyerror(char *s);
 int yylex();
+void imprimeTablaCodigo();
+void imprimeTablaSimbolo();
+int genTemp();
+void generaCodigo(int op,int a1,int a2,int a3);
 int asignarSimbolo(char *lexema, int token);
 int localizaSimboloAnadeNum(char *lexema , int token);
 char lexema[100];
@@ -13,8 +17,17 @@ typedef struct{
         int token;
         double valor;
 }TipoTS;
+typedef struct{
+        int op;
+        int a1;
+        int a2;
+        int a3; 
+}TipoTC;
+TipoTC tablaCodigo[100];
 TipoTS tablaSimbolos[100];
 int nSim=0;
+int cx = -1;
+int nVarTemp=1;
 %}
 
 
@@ -26,6 +39,8 @@ int nSim=0;
 %token PRINT COMENTARIOSIMPLE COMENTARIOCOMPLEJO
 %token  DE_TIPO DESIGUALDAD SCAN
 %token NEGACION AND OR NAND XOR NOR;
+%token COMPMAYOR COMPMENOR COMPMAYORIGUAL COMPMENORIGUAL COMPIGUAL COMPDESIGUAL COMPLOGICO SALTARF SALTAR COMPAND COMPOR COMPNAND
+%token ASIGNAR INCREMENTAR DECREMENTAR AUMENTAR DISMINUIR SUMAR RESTAR MULTIPLICAR DIVIDIR MODULAR COMPXOR COMPNOR
 
 %%
 prog
@@ -35,7 +50,14 @@ listainst
     | ;
 instr
     : declaracion 
-    | asignacion 
+    | asignacion
+    | incremento 
+    | decrementar
+    | aumentavalor
+    | disminuyevalor
+    | multiplicavalor
+    | dividevalor
+    | modulavalor
     | comp 
     | iterativa_while  
     | iterativa_do  
@@ -67,23 +89,35 @@ iterativa_for
 iterativa_while
     : WHILE '(' comp ')' bloque  else;
 condicional
-    : IF '(' comp ')' bloque ;
+    : IF '(' comp ')' {generaCodigo(SALTARF,$3,'?','-'); $$=cx;} bloque { tablaCodigo[$5].a2 = cx +1 ; } else;
 bloque
     : '{' listainst '}' ; 
 declaracion
     : identificador ID {$$=asignarSimbolo(lexema,ID); }
     | CONST identificador ID {$$=asignarSimbolo(lexema,ID);} '=' expresion ;
 asignacion
-    : ID { $$=localizaSimboloAnadeNum(lexema,ID);} asignaciones;
-asignaciones
-    : '=' expresion
-    | INCREMENTO
-    | DECREMENTO
-    | AUMENTO expresion
-    | DISMINUCION expresion 
-    | MULTI expresion
-    | DIVI expresion 
-    | MOD expresion;
+    : ID '=' expresion {generaCodigo(ASIGNAR,$1,$3,'-');};
+incremento
+    : ID INCREMENTO {generaCodigo(INCREMENTAR,$1,$1,1);};
+
+decrementar
+    : ID DECREMENTO {generaCodigo(DECREMENTAR,$1,$1,1);};
+
+aumentavalor
+    : ID AUMENTO expresion {generaCodigo(AUMENTAR,$1,$1,$3);};
+
+disminuyevalor
+    : ID DISMINUCION expresion {generaCodigo(DISMINUIR,$1,$1,$3);};
+    
+multiplicavalor
+    : ID MULTI expresion {generaCodigo(MULTIPLICAR,$1,$1,$3);};
+
+dividevalor
+    : ID DIVI expresion {generaCodigo(DIVIDIR,$1,$1,$3);};
+
+modulavalor
+    : ID MOD expresion {generaCodigo(MODULAR,$1,$1,$3);};
+    
 identificador
     : INT 
     | FLOAT 
@@ -116,27 +150,62 @@ factor
     | VERDAD { $$=localizaSimboloAnadeNum(lexema,NUM);} ;
     | FALSO { $$=localizaSimboloAnadeNum(lexema,NUM);} ; 
 comp
-    : expr '>' '=' expr  
-    | expr '>'  expr  
-    | expr '<'  expr  
-    | expr '<' '='  expr  
-    | expr IGUALDAD  expr 
-    | expr DESIGUALDAD  expr 
-    | expr exp_logica expr;
+    : expr '>' '=' expr  {int i=genTemp(); generaCodigo(COMPMAYORIGUAL,i,$1,$4);$$=i;} 
+    | expr '>'  expr  {int i=genTemp(); generaCodigo(COMPMAYOR,i,$1,$3);$$=i;} 
+    | expr '<'  expr  {int i=genTemp(); generaCodigo(COMPMENOR,i,$1,$3);$$=i;} 
+    | expr '<' '='  expr  {int i=genTemp(); generaCodigo(COMPMENORIGUAL,i,$1,$4);$$=i;} 
+    | expr IGUALDAD  expr {int i=genTemp(); generaCodigo(COMPIGUAL,i,$1,$3);$$=i;} 
+    | expr DESIGUALDAD  expr {int i=genTemp(); generaCodigo(COMPDESIGUAL,i,$1,$3);$$=i;} 
+    | expr AND expr {int i=genTemp(); generaCodigo(COMPAND,i,$1,$3);$$=i;}
+    | expr OR expr {int i=genTemp(); generaCodigo(COMPOR,i,$1,$3);$$=i;}
+    | expr NAND expr {int i=genTemp(); generaCodigo(COMPNAND,i,$1,$3);$$=i;}
+    | expr XOR expr {int i=genTemp(); generaCodigo(COMPXOR,i,$1,$3);$$=i;}
+    | expr NOR expr {int i=genTemp(); generaCodigo(COMPNOR,i,$1,$3);$$=i;};
 else
     : ELSE bloque
-    | ELIF '(' comp ')' bloque else
+    | ELIF '(' comp ')'{generaCodigo(SALTARF,$3,'?','-'); $$=cx;} bloque { tablaCodigo[$5].a2 = cx +1 ; } else
     | ;
 funcion
     : DE_TIPO '(' identificador ')' 
     | NEGACION '(' expr ')' ;
-exp_logica
-    : AND 
-    | OR 
-    | NAND 
-    | XOR 
-    | NOR;
 %%
+
+void imprimeTablaCodigo(){
+    for(int p=0;p<35;p++)putchar('-');
+    printf("\nTabla de Codigos\n");
+    for(int p=0;p<35;p++)putchar('-');
+    putchar('\n');
+    for(int i=0;i<=cx ;i++){
+        printf("%2d\t%3d\t%3d\t%3d\t%3d\t\n",
+        i, tablaCodigo[i].op,tablaCodigo[i].a1, tablaCodigo[i].a2, tablaCodigo[i].a3);
+    }putchar('\n');
+}
+void imprimeTablaSimbolo(){
+    putchar('\n');
+    for(int p=0;p<35;p++)putchar('-');
+    printf("\nTabla de Simbolos\n");
+    for(int p=0;p<35;p++)putchar('-');
+    putchar('\n');
+    for(int i=0;i<nSim ;i++){
+        printf("%2d   %-12s %5d %11.4lf\n",
+        i, tablaSimbolos[i].nombre,tablaSimbolos[i].token,tablaSimbolos[i].valor);
+    }putchar('\n');
+}
+int genTemp(){
+    int pos;
+    char t[10]; 
+    sprintf(t,"_T%d",nVarTemp++);
+    pos= asignarSimbolo(t,ID);
+    return pos;
+}
+void generaCodigo(int op,int a1,int a2,int a3){
+    cx++;
+    tablaCodigo[cx].op=op;
+    tablaCodigo[cx].a1=a1;
+    tablaCodigo[cx].a2=a2;
+    tablaCodigo[cx].a3=a3;
+}
+
 
 /*codigo C*/
 /*análisis léxico*/
@@ -196,7 +265,7 @@ int yylex(){
         if(!strcmp(lexema,"terminamos")) return BREAK;
         if(!strcmp(lexema,"regresemos")) return RETURN;
         if(!strcmp(lexema,"nada")) return PASS;
-        if(!strcmp(lexema,"sisi")) return IF; 
+        if(!strcmp(lexema,"sisi")) return IF;
         if(!strcmp(lexema,"mientras")) return WHILE;
         if(!strcmp(lexema,"enteroAmor")) return INT;
         if(!strcmp(lexema,"realAmor"))return FLOAT;
@@ -360,10 +429,12 @@ void yyerror(char *s){
 
 int main(){
     if(!yyparse()){
-        printf("cadena válida\n");
+        imprimeTablaSimbolo();
+        imprimeTablaCodigo(); 
+        printf("Cadena válida\n\n");
 	}
 	else{
-        printf("cadena inválida\n");	
+        printf("Cadena inválida\n\n");	
 	}
     return 0;
 }
