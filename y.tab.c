@@ -66,7 +66,7 @@
 
 
 /* First part of user prologue.  */
-#line 1 "Lab2.y"
+#line 1 "Lab.y"
 
 #include<stdio.h>
 #include<stdlib.h>
@@ -1618,157 +1618,157 @@ yyreduce:
   switch (yyn)
     {
   case 11:
-#line 70 "Lab2.y"
+#line 70 "Lab.y"
                {generaCodigo(CONTINUAR,regreso[cont_r-1],'-','-');}
 #line 1624 "y.tab.c"
     break;
 
   case 24:
-#line 87 "Lab2.y"
+#line 87 "Lab.y"
                           {generaCodigo(IMPRIMIR,yyvsp[0],'-','-');}
 #line 1630 "y.tab.c"
     break;
 
   case 27:
-#line 91 "Lab2.y"
+#line 91 "Lab.y"
          {regreso[cont_r++]=cx+1; yyval=cx+1;}
 #line 1636 "y.tab.c"
     break;
 
   case 28:
-#line 91 "Lab2.y"
+#line 91 "Lab.y"
                                                              {yyval=cx+1;}
 #line 1642 "y.tab.c"
     break;
 
   case 29:
-#line 91 "Lab2.y"
+#line 91 "Lab.y"
                                                                              {generaCodigo(SALTARV,yyvsp[0],yyvsp[-5],'-'); cont_r--; yyval=cx;}
 #line 1648 "y.tab.c"
     break;
 
   case 31:
-#line 94 "Lab2.y"
+#line 94 "Lab.y"
             {regreso[cont_r++]=cx+1; yyval=cx+1;}
 #line 1654 "y.tab.c"
     break;
 
   case 32:
-#line 94 "Lab2.y"
+#line 94 "Lab.y"
                                                     {generaCodigo(SALTARF,yyvsp[0],'?','-'); yyval=cx;}
 #line 1660 "y.tab.c"
     break;
 
   case 33:
-#line 94 "Lab2.y"
+#line 94 "Lab.y"
                                                                                                {generaCodigo(SALTAR,'?','-','-'); yyval=cx;}
 #line 1666 "y.tab.c"
     break;
 
   case 34:
-#line 95 "Lab2.y"
+#line 95 "Lab.y"
             {yyval=cx+1;}
 #line 1672 "y.tab.c"
     break;
 
   case 35:
-#line 95 "Lab2.y"
+#line 95 "Lab.y"
                                   {generaCodigo(SALTAR,yyvsp[-6],'-','-'); yyval=cx;}
 #line 1678 "y.tab.c"
     break;
 
   case 36:
-#line 96 "Lab2.y"
+#line 96 "Lab.y"
             { tablaCodigo[yyvsp[-5]].a1= cx + 1; }
 #line 1684 "y.tab.c"
     break;
 
   case 37:
-#line 96 "Lab2.y"
+#line 96 "Lab.y"
                                             {yyval=cx+1;}
 #line 1690 "y.tab.c"
     break;
 
   case 38:
-#line 96 "Lab2.y"
+#line 96 "Lab.y"
                                                               {generaCodigo(SALTAR,yyvsp[-6],'-','-'); yyval=cx;}
 #line 1696 "y.tab.c"
     break;
 
   case 39:
-#line 96 "Lab2.y"
+#line 96 "Lab.y"
                                                                                                          { tablaCodigo[yyvsp[-10]].a2 = cx +1 ; cont_r--;}
 #line 1702 "y.tab.c"
     break;
 
   case 40:
-#line 98 "Lab2.y"
+#line 98 "Lab.y"
                 {regreso[cont_r++]=cx+1; yyval=cx+1;}
 #line 1708 "y.tab.c"
     break;
 
   case 41:
-#line 98 "Lab2.y"
+#line 98 "Lab.y"
                                                         {generaCodigo(SALTARF,yyvsp[0],'?','-'); yyval=cx;}
 #line 1714 "y.tab.c"
     break;
 
   case 42:
-#line 99 "Lab2.y"
+#line 99 "Lab.y"
                    {generaCodigo(SALTAR,yyvsp[-4],'-','-'); yyval=cx;}
 #line 1720 "y.tab.c"
     break;
 
   case 43:
-#line 99 "Lab2.y"
+#line 99 "Lab.y"
                                                              { tablaCodigo[yyvsp[-3]].a2 = cx +1 ; cont_r--;}
 #line 1726 "y.tab.c"
     break;
 
   case 44:
-#line 101 "Lab2.y"
+#line 101 "Lab.y"
                       {generaCodigo(SALTARF,yyvsp[-1],'?','-'); yyval=cx;}
 #line 1732 "y.tab.c"
     break;
 
   case 45:
-#line 101 "Lab2.y"
+#line 101 "Lab.y"
                                                                         { tablaCodigo[yyvsp[-1]].a2 = cx +1 ; }
 #line 1738 "y.tab.c"
     break;
 
   case 48:
-#line 105 "Lab2.y"
+#line 105 "Lab.y"
                        {yyval=asignarSimbolo(lexema,ID); }
 #line 1744 "y.tab.c"
     break;
 
   case 49:
-#line 105 "Lab2.y"
+#line 105 "Lab.y"
                                                         {generaCodigo(DECLARAR,yyvsp[0],'-','-');}
 #line 1750 "y.tab.c"
     break;
 
   case 50:
-#line 106 "Lab2.y"
+#line 106 "Lab.y"
                              {yyval=asignarSimbolo(lexema,ID);}
 #line 1756 "y.tab.c"
     break;
 
   case 51:
-#line 106 "Lab2.y"
+#line 106 "Lab.y"
                                                                            {generaCodigo(DECLARARCONST,yyvsp[-2],yyvsp[0],'-');}
 #line 1762 "y.tab.c"
     break;
 
   case 52:
-#line 108 "Lab2.y"
+#line 108 "Lab.y"
          {yyval=localizaSimboloAnadeNum(lexema,ID);}
 #line 1768 "y.tab.c"
     break;
 
   case 53:
-#line 108 "Lab2.y"
+#line 108 "Lab.y"
                                                                     {if(yyvsp[-1]==1)generaCodigo(ASIGNAR,yyvsp[-2],yyvsp[0],'-');
                                                                 else if(yyvsp[-1]==2)generaCodigo(SUMAR,yyvsp[-2],yyvsp[-2],yyvsp[0]);
                                                                 else if(yyvsp[-1]==3)generaCodigo(RESTAR,yyvsp[-2],yyvsp[-2],yyvsp[0]);
@@ -1779,79 +1779,79 @@ yyreduce:
     break;
 
   case 54:
-#line 114 "Lab2.y"
+#line 114 "Lab.y"
          {yyval=localizaSimboloAnadeNum(lexema,ID);}
 #line 1785 "y.tab.c"
     break;
 
   case 55:
-#line 114 "Lab2.y"
+#line 114 "Lab.y"
                                                              {generaCodigo(INCREMENTAR,yyvsp[-1],'-','-');}
 #line 1791 "y.tab.c"
     break;
 
   case 56:
-#line 115 "Lab2.y"
+#line 115 "Lab.y"
          {yyval=localizaSimboloAnadeNum(lexema,ID);}
 #line 1797 "y.tab.c"
     break;
 
   case 57:
-#line 115 "Lab2.y"
+#line 115 "Lab.y"
                                                              {generaCodigo(DECREMENTAR,yyvsp[-1],'-','-');}
 #line 1803 "y.tab.c"
     break;
 
   case 58:
-#line 118 "Lab2.y"
+#line 118 "Lab.y"
          {yyval=1;}
 #line 1809 "y.tab.c"
     break;
 
   case 59:
-#line 119 "Lab2.y"
+#line 119 "Lab.y"
              {yyval=2;}
 #line 1815 "y.tab.c"
     break;
 
   case 60:
-#line 120 "Lab2.y"
+#line 120 "Lab.y"
                  {yyval=3;}
 #line 1821 "y.tab.c"
     break;
 
   case 61:
-#line 121 "Lab2.y"
+#line 121 "Lab.y"
            {yyval=4;}
 #line 1827 "y.tab.c"
     break;
 
   case 62:
-#line 122 "Lab2.y"
+#line 122 "Lab.y"
           {yyval=5;}
 #line 1833 "y.tab.c"
     break;
 
   case 63:
-#line 123 "Lab2.y"
+#line 123 "Lab.y"
          {yyval=6;}
 #line 1839 "y.tab.c"
     break;
 
   case 74:
-#line 138 "Lab2.y"
+#line 138 "Lab.y"
                      { int i=genTemp(); generaCodigo(SUMAR,i,yyvsp[-2],yyvsp[0]); yyval=i;}
 #line 1845 "y.tab.c"
     break;
 
   case 75:
-#line 139 "Lab2.y"
+#line 139 "Lab.y"
                       { int i=genTemp(); generaCodigo(RESTAR,i,yyvsp[-2],yyvsp[0]); yyval=i;}
 #line 1851 "y.tab.c"
     break;
 
   case 77:
-#line 142 "Lab2.y"
+#line 142 "Lab.y"
                       { int i=genTemp(); if(yyvsp[-1]==1) generaCodigo(MULTIPLICAR,i,yyvsp[-2],yyvsp[0]); 
                                     else if(yyvsp[-1]==2) generaCodigo(DIVIDIR,i,yyvsp[-2],yyvsp[0]); 
                                     else if(yyvsp[-1]==3) generaCodigo(MOVERBIZ,i,yyvsp[-2],yyvsp[0]); 
@@ -1861,133 +1861,133 @@ yyreduce:
     break;
 
   case 79:
-#line 149 "Lab2.y"
+#line 149 "Lab.y"
          {yyval=1;}
 #line 1867 "y.tab.c"
     break;
 
   case 80:
-#line 150 "Lab2.y"
+#line 150 "Lab.y"
           {yyval=2;}
 #line 1873 "y.tab.c"
     break;
 
   case 81:
-#line 151 "Lab2.y"
+#line 151 "Lab.y"
              {yyval=3;}
 #line 1879 "y.tab.c"
     break;
 
   case 82:
-#line 152 "Lab2.y"
+#line 152 "Lab.y"
              {yyval=4;}
 #line 1885 "y.tab.c"
     break;
 
   case 83:
-#line 153 "Lab2.y"
+#line 153 "Lab.y"
          {yyval=5;}
 #line 1891 "y.tab.c"
     break;
 
   case 84:
-#line 155 "Lab2.y"
+#line 155 "Lab.y"
           { yyval=localizaSimboloAnadeNum(lexema,NUM);}
 #line 1897 "y.tab.c"
     break;
 
   case 86:
-#line 157 "Lab2.y"
+#line 157 "Lab.y"
           { yyval=localizaSimboloAnadeNum(lexema,ID);}
 #line 1903 "y.tab.c"
     break;
 
   case 87:
-#line 158 "Lab2.y"
+#line 158 "Lab.y"
              { yyval=localizaSimboloAnadeNum(lexema,NUM);}
 #line 1909 "y.tab.c"
     break;
 
   case 88:
-#line 159 "Lab2.y"
+#line 159 "Lab.y"
             { yyval=localizaSimboloAnadeNum(lexema,NUM);}
 #line 1915 "y.tab.c"
     break;
 
   case 89:
-#line 161 "Lab2.y"
+#line 161 "Lab.y"
                          {int i=genTemp(); generaCodigo(COMPMAYORIGUAL,i,yyvsp[-3],yyvsp[0]);yyval=i;}
 #line 1921 "y.tab.c"
     break;
 
   case 90:
-#line 162 "Lab2.y"
+#line 162 "Lab.y"
                       {int i=genTemp(); generaCodigo(COMPMAYOR,i,yyvsp[-2],yyvsp[0]);yyval=i;}
 #line 1927 "y.tab.c"
     break;
 
   case 91:
-#line 163 "Lab2.y"
+#line 163 "Lab.y"
                       {int i=genTemp(); generaCodigo(COMPMENOR,i,yyvsp[-2],yyvsp[0]);yyval=i;}
 #line 1933 "y.tab.c"
     break;
 
   case 92:
-#line 164 "Lab2.y"
+#line 164 "Lab.y"
                           {int i=genTemp(); generaCodigo(COMPMENORIGUAL,i,yyvsp[-3],yyvsp[0]);yyval=i;}
 #line 1939 "y.tab.c"
     break;
 
   case 93:
-#line 165 "Lab2.y"
+#line 165 "Lab.y"
                           {int i=genTemp(); generaCodigo(COMPIGUAL,i,yyvsp[-2],yyvsp[0]);yyval=i;}
 #line 1945 "y.tab.c"
     break;
 
   case 94:
-#line 166 "Lab2.y"
+#line 166 "Lab.y"
                              {int i=genTemp(); generaCodigo(COMPDESIGUAL,i,yyvsp[-2],yyvsp[0]);yyval=i;}
 #line 1951 "y.tab.c"
     break;
 
   case 95:
-#line 167 "Lab2.y"
+#line 167 "Lab.y"
                     {int i=genTemp(); generaCodigo(COMPAND,i,yyvsp[-2],yyvsp[0]);yyval=i;}
 #line 1957 "y.tab.c"
     break;
 
   case 96:
-#line 168 "Lab2.y"
+#line 168 "Lab.y"
                    {int i=genTemp(); generaCodigo(COMPOR,i,yyvsp[-2],yyvsp[0]);yyval=i;}
 #line 1963 "y.tab.c"
     break;
 
   case 97:
-#line 169 "Lab2.y"
+#line 169 "Lab.y"
                      {int i=genTemp(); generaCodigo(COMPNAND,i,yyvsp[-2],yyvsp[0]);yyval=i;}
 #line 1969 "y.tab.c"
     break;
 
   case 98:
-#line 170 "Lab2.y"
+#line 170 "Lab.y"
                     {int i=genTemp(); generaCodigo(COMPXOR,i,yyvsp[-2],yyvsp[0]);yyval=i;}
 #line 1975 "y.tab.c"
     break;
 
   case 99:
-#line 171 "Lab2.y"
+#line 171 "Lab.y"
                     {int i=genTemp(); generaCodigo(COMPNOR,i,yyvsp[-2],yyvsp[0]);yyval=i;}
 #line 1981 "y.tab.c"
     break;
 
   case 101:
-#line 174 "Lab2.y"
+#line 174 "Lab.y"
                        {generaCodigo(SALTARF,yyvsp[-1],'?','-'); yyval=cx;}
 #line 1987 "y.tab.c"
     break;
 
   case 102:
-#line 174 "Lab2.y"
+#line 174 "Lab.y"
                                                                          { tablaCodigo[yyvsp[-1]].a2 = cx +1 ; }
 #line 1993 "y.tab.c"
     break;
@@ -2225,7 +2225,7 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 179 "Lab2.y"
+#line 179 "Lab.y"
 
 
 void imprimeTablaCodigo(){
@@ -2494,7 +2494,6 @@ int main(){
     if(!yyparse()){
         imprimeTablaSimbolo();
         imprimeTablaCodigo(); 
-        
         printf("Cadena válida\n\n");
 	}
 	else{
