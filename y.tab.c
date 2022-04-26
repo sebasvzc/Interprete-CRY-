@@ -2015,17 +2015,19 @@ void imprimeTablaCodigo(){
         i, tablaCodigo[i].op,tablaCodigo[i].a1, tablaCodigo[i].a2, tablaCodigo[i].a3);
     }putchar('\n');
 }
+
 void imprimeTablaSimbolo(){
     putchar('\n');
-    for(int p=0;p<35;p++)putchar('-');
+    for(int p=0;p<48;p++)putchar('-');
     printf("\nTabla de Simbolos\n");
-    for(int p=0;p<35;p++)putchar('-');
+    for(int p=0;p<48;p++)putchar('-');
     putchar('\n');
     for(int i=0;i<nSim ;i++){
-        printf("%2d   %-12s %5d %11.4lf\n",
+        printf("%2d   %-20s %5d %16.4lf\n",
         i, tablaSimbolos[i].nombre,tablaSimbolos[i].token,tablaSimbolos[i].valor);
     }putchar('\n');
 }
+
 int genTemp(){
     int pos;
     char t[10]; 
@@ -2033,6 +2035,7 @@ int genTemp(){
     pos= asignarSimbolo(t,ID);
     return pos;
 }
+
 void generaCodigo(int op,int a1,int a2,int a3){
     cx++;
     tablaCodigo[cx].op=op;
@@ -2072,10 +2075,12 @@ int localizaSimboloAnadeNum(char *lexema , int token){
         tablaSimbolos[i].valor=atof(lexema); 
         tablaSimbolos[i].token=token;  
     } 
-    else{ 
+    else if(token == ID){ 
         printf("Variable no reconocida\n");
         exit(1);
     }
+    nSim++;
+    return nSim-1;
 }
 
 int yylex(){
