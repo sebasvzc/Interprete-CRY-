@@ -53,7 +53,7 @@ int cont_r=0;
 //token de pedro Y
 %token SALTARV CONTINUAR
 //token de Marcelo Jara
-%token RETORNAR_TIPO
+%token RETORNAR_TIPO LEER
 //Cuidado usando tokens de otros que pueden ser otra operacion de la q parecen
 
 %%
@@ -88,7 +88,7 @@ comentarioComplejo
 imprimir
     : PRINT '(' expresion {generaCodigo(IMPRIMIR,$3,'-','-');} ')';
 leer
-    : SCAN '(' expr ')';
+    : SCAN '(' expr ')' {generaCodigo(LEER,$3,'-','-');};
 iterativa_do
     : DO {regreso[cont_r++]=cx+1; $$=cx+1;} bloque WHILE '(' {$$=cx+1;} comp {generaCodigo(SALTARV,$7,$2,'-'); cont_r--; $$=cx;} ')' ;
 iterativa_for
