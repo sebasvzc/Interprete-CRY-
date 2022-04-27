@@ -64,8 +64,8 @@ int numLoop=0;
 %token SALTARV CONTINUAR
 //token de omar
 %token PASAR RETORNAR FIN ROMPER
-//Cuidado usando tokens de otros que pueden ser otra operacion de la q parecen
-
+//token de Marcelo Jara
+%token RETORNAR_TIPO NEGAR LEER
 
 %%
 prog
@@ -99,25 +99,17 @@ comentarioComplejo
 imprimir
     : PRINT '(' expresion {generaCodigo(IMPRIMIR,$3,'-','-');} ')';
 leer
-    : SCAN '(' expr ')';
+    : SCAN '(' expr ')'{generaCodigo(LEER,$3,'-','-');};
 iterativa_do
     : DO {vuelta[cont_v++]=cx+1; numLoop++; $$=cx+1;} bloque WHILE '(' {$$=cx+1;} comp {generaCodigo(SALTARV,$7,$2,'-'); cont_v--; $$=cx; int i; for(i=0;i<actualLoop[numLoop-1];i++){tablaCodigo[avance[--contAvances]].a1 = cx +1;} numLoop--;} ')' ;
-    
-    
-    
 iterativa_for
     : FOR '(' asignacion ';' 
             {vuelta[cont_v++]=cx+1; numLoop++; $$=cx+1;} comp {generaCodigo(SALTARF,$6,'?','-'); $$=cx;} {generaCodigo(SALTAR,'?','-','-'); $$=cx;} ';' 
             {$$=cx+1;} asignacion {generaCodigo(SALTAR,$5,'-','-'); $$=cx;} ')' 
-            { tablaCodigo[$8].a1= cx + 1; } {$$=cx+1;} bloque {generaCodigo(SALTAR,$10,'-','-'); $$=cx;} { tablaCodigo[$7].a2 = cx +1 ; cont_v--;int i; for(i=0;i<actualLoop[numLoop-1];i++){tablaCodigo[avance[--contAvances]].a1 = cx +1;} numLoop--;} ;   
-            
-            
-            
+            { tablaCodigo[$8].a1= cx + 1; } {$$=cx+1;} bloque {generaCodigo(SALTAR,$10,'-','-'); $$=cx;} { tablaCodigo[$7].a2 = cx +1 ; cont_v--;int i; for(i=0;i<actualLoop[numLoop-1];i++){tablaCodigo[avance[--contAvances]].a1 = cx +1;} numLoop--;} ;           
 iterativa_while
     : WHILE '(' {vuelta[cont_v++]=cx+1; numLoop++; $$=cx+1;} comp {generaCodigo(SALTARF,$4,'?','-'); $$=cx;} ')' 
-            bloque {generaCodigo(SALTAR,$3,'-','-'); $$=cx;} { tablaCodigo[$5].a2 = cx +1 ; cont_v--; int i; for(i=0;i<actualLoop[numLoop-1];i++){tablaCodigo[avance[--contAvances]].a1 = cx +1;} numLoop--;};
-            
-            
+            bloque {generaCodigo(SALTAR,$3,'-','-'); $$=cx;} { tablaCodigo[$5].a2 = cx +1 ; cont_v--; int i; for(i=0;i<actualLoop[numLoop-1];i++){tablaCodigo[avance[--contAvances]].a1 = cx +1;} numLoop--;};    
 condicional
     : IF '(' comp ')' {generaCodigo(SALTARF,$3,'?','-'); $$=cx;} bloque { tablaCodigo[$5].a2 = cx +1 ; } else;
 bloque
@@ -134,7 +126,6 @@ asignacion
                                                                 else if($3==6)generaCodigo(MODULAR,$2,$2,$4);}
     | ID {$$=localizaSimboloAnadeNum(lexema,ID);} INCREMENTO {generaCodigo(INCREMENTAR,$2,'-','-');}
     | ID {$$=localizaSimboloAnadeNum(lexema,ID);} DECREMENTO {generaCodigo(DECREMENTAR,$2,'-','-');};
-    
 asignar
     : '='{$$=1;}
     | AUMENTO{$$=2;}
@@ -195,8 +186,8 @@ else
     | ELIF '(' comp ')'{generaCodigo(SALTARF,$3,'?','-'); $$=cx;} bloque { tablaCodigo[$5].a2 = cx +1 ; } else
     | ;
 funcion
-    : DE_TIPO '(' identificador ')' 
-    | NEGACION '(' expr ')' ;
+    : DE_TIPO '(' expr ')' {int i=genTemp(); generaCodigo(RETORNAR_TIPO,i,$3,'-'); $$=i;}
+    | NEGACION '(' expr ')' {int i=genTemp(); generaCodigo(NEGAR,i,$3,'-'); $$=i;};
 %%
 
 void imprimeTablaCodigo(){
