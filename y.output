@@ -32,6 +32,9 @@ Terminals unused in grammar
     RETORNAR
     FIN
     ROMPER
+    RETORNAR_TIPO
+    NEGAR
+    LEER
 
 
 Grammar
@@ -193,7 +196,7 @@ Grammar
   102 else: ELIF '(' comp ')' @23 bloque $@24 else
   103     | %empty
 
-  104 funcion: DE_TIPO '(' identificador ')'
+  104 funcion: DE_TIPO '(' expr ')'
   105        | NEGACION '(' expr ')'
 
 
@@ -291,157 +294,160 @@ Terminals, with rules where they appear
     RETORNAR (332)
     FIN (333)
     ROMPER (334)
+    RETORNAR_TIPO (335)
+    NEGAR (336)
+    LEER (337)
 
 
 Nonterminals, with rules where they appear
 
-    $accept (93)
+    $accept (96)
         on left: 0
-    prog (94)
+    prog (97)
         on left: 1
         on right: 0
-    listainst (95)
+    listainst (98)
         on left: 2 3
         on right: 1 2 46
-    instr (96)
+    instr (99)
         on left: 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18
         on right: 2
-    comentario (97)
+    comentario (100)
         on left: 19 20
         on right: 17
-    comentarioSimple (98)
+    comentarioSimple (101)
         on left: 21
         on right: 19
-    comentarioComplejo (99)
+    comentarioComplejo (102)
         on left: 22
         on right: 20
-    imprimir (100)
+    imprimir (103)
         on left: 24
         on right: 15
-    $@1 (101)
+    $@1 (104)
         on left: 23
         on right: 24
-    leer (102)
+    leer (105)
         on left: 25
         on right: 16
-    iterativa_do (103)
+    iterativa_do (106)
         on left: 29
         on right: 8
-    @2 (104)
+    @2 (107)
         on left: 26
         on right: 29
-    @3 (105)
+    @3 (108)
         on left: 27
         on right: 29
-    @4 (106)
+    @4 (109)
         on left: 28
         on right: 29
-    iterativa_for (107)
+    iterativa_for (110)
         on left: 38
         on right: 9
-    @5 (108)
+    @5 (111)
         on left: 30
         on right: 38
-    @6 (109)
+    @6 (112)
         on left: 31
         on right: 38
-    @7 (110)
+    @7 (113)
         on left: 32
         on right: 38
-    @8 (111)
+    @8 (114)
         on left: 33
         on right: 38
-    @9 (112)
+    @9 (115)
         on left: 34
         on right: 38
-    $@10 (113)
+    $@10 (116)
         on left: 35
         on right: 38
-    @11 (114)
+    @11 (117)
         on left: 36
         on right: 38
-    @12 (115)
+    @12 (118)
         on left: 37
         on right: 38
-    iterativa_while (116)
+    iterativa_while (119)
         on left: 42
         on right: 7
-    @13 (117)
+    @13 (120)
         on left: 39
         on right: 42
-    @14 (118)
+    @14 (121)
         on left: 40
         on right: 42
-    @15 (119)
+    @15 (122)
         on left: 41
         on right: 42
-    condicional (120)
+    condicional (123)
         on left: 45
         on right: 14
-    @16 (121)
+    @16 (124)
         on left: 43
         on right: 45
-    $@17 (122)
+    $@17 (125)
         on left: 44
         on right: 45
-    bloque (123)
+    bloque (126)
         on left: 46
         on right: 29 38 42 45 99 102
-    declaracion (124)
+    declaracion (127)
         on left: 48 50
         on right: 4
-    @18 (125)
+    @18 (128)
         on left: 47
         on right: 48
-    @19 (126)
+    @19 (129)
         on left: 49
         on right: 50
-    asignacion (127)
+    asignacion (130)
         on left: 52 54 56
         on right: 5 38
-    @20 (128)
+    @20 (131)
         on left: 51
         on right: 52
-    @21 (129)
+    @21 (132)
         on left: 53
         on right: 54
-    @22 (130)
+    @22 (133)
         on left: 55
         on right: 56
-    asignar (131)
+    asignar (134)
         on left: 57 58 59 60 61 62
         on right: 52
-    identificador (132)
+    identificador (135)
         on left: 63 64 65 66 67 68 69 70
-        on right: 48 50 104
-    expresion (133)
+        on right: 48 50
+    expresion (136)
         on left: 71 72
         on right: 24 50 52
-    expr (134)
+    expr (137)
         on left: 73 74 75
-        on right: 25 71 73 74 84 88 89 90 91 92 93 94 95 96 97 98 105
-    term (135)
+        on right: 25 71 73 74 84 88 89 90 91 92 93 94 95 96 97 98 104 105
+    term (138)
         on left: 76 77
         on right: 73 74 75 76
-    op (136)
+    op (139)
         on left: 78 79 80 81 82
         on right: 76
-    factor (137)
+    factor (140)
         on left: 83 84 85 86 87
         on right: 76 77
-    comp (138)
+    comp (141)
         on left: 88 89 90 91 92 93 94 95 96 97 98
         on right: 6 29 38 42 45 72 102
-    else (139)
+    else (142)
         on left: 99 102 103
         on right: 45 102
-    @23 (140)
+    @23 (143)
         on left: 100
         on right: 102
-    $@24 (141)
+    $@24 (144)
         on left: 101
         on right: 102
-    funcion (142)
+    funcion (145)
         on left: 104 105
         on right: 18
 
@@ -699,7 +705,7 @@ State 24
 
 State 25
 
-  104 funcion: DE_TIPO . '(' identificador ')'
+  104 funcion: DE_TIPO . '(' expr ')'
 
     '('  shift, and go to state 58
 
@@ -1050,18 +1056,17 @@ State 57
 
 State 58
 
-  104 funcion: DE_TIPO '(' . identificador ')'
+  104 funcion: DE_TIPO '(' . expr ')'
 
-    INT     shift, and go to state 8
-    LONG    shift, and go to state 9
-    SHORT   shift, and go to state 10
-    DOUBLE  shift, and go to state 11
-    FLOAT   shift, and go to state 12
-    CHAR    shift, and go to state 13
-    BOOL    shift, and go to state 14
-    VOID    shift, and go to state 17
+    ID      shift, and go to state 61
+    NUM     shift, and go to state 4
+    VERDAD  shift, and go to state 15
+    FALSO   shift, and go to state 16
+    '('     shift, and go to state 28
 
-    identificador  go to state 102
+    expr    go to state 102
+    term    go to state 45
+    factor  go to state 46
 
 
 State 59
@@ -1590,9 +1595,13 @@ State 101
 
 State 102
 
-  104 funcion: DE_TIPO '(' identificador . ')'
+   73 expr: expr . '+' term
+   74     | expr . '-' term
+  104 funcion: DE_TIPO '(' expr . ')'
 
     ')'  shift, and go to state 129
+    '+'  shift, and go to state 73
+    '-'  shift, and go to state 74
 
 
 State 103
@@ -1872,7 +1881,7 @@ State 128
 
 State 129
 
-  104 funcion: DE_TIPO '(' identificador ')' .
+  104 funcion: DE_TIPO '(' expr ')' .
 
     $default  reduce using rule 104 (funcion)
 
