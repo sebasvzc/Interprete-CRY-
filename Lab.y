@@ -28,8 +28,18 @@ TipoTS tablaSimbolos[100];
 int nSim=0;
 int cx = -1;
 int nVarTemp=1;
-int regreso[100];
-int cont_r=0;
+
+int vuelta[100]={0};
+int cont_v=0;
+
+int retornos[100]={0};
+int numRetorn=0;
+
+int avance[100]={0};
+int contAvances=0;
+
+int actualLoop[100]={0};
+int numLoop=0;
 %}
 
 
@@ -52,11 +62,14 @@ int cont_r=0;
 %token IMPRIMIR DECLARAR DECLARARCONST
 //token de pedro Y
 %token SALTARV CONTINUAR
+//token de omar
+%token PASAR RETORNAR FIN ROMPER
 //Cuidado usando tokens de otros que pueden ser otra operacion de la q parecen
+
 
 %%
 prog
-    : listainst;
+    : listainst {generaCodigo(FIN,'-','-','-'); int i=0; for(i=0;i<numRetorn;i++){tablaCodigo[retornos[i]].a1 = cx;} };
 listainst
     : instr listainst 
     | ;
@@ -67,10 +80,10 @@ instr
     | iterativa_while  
     | iterativa_do  
     | iterativa_for  
-    | CONTINUE {generaCodigo(CONTINUAR,regreso[cont_r-1],'-','-');}
-    | RETURN
-    | BREAK
-    | PASS
+    | CONTINUE {generaCodigo(CONTINUAR,vuelta[cont_v-1],'-','-');}
+    | RETURN {generaCodigo(RETORNAR,'?','-','-'); retornos[numRetorn++]=cx;}
+    | BREAK {generaCodigo(ROMPER,'?','-','-'); actualLoop[numLoop-1]++; avance[contAvances++]=cx;}
+    | PASS {generaCodigo(PASAR,'-','-','-');}
     | condicional 
     | imprimir 
     | leer 
@@ -88,15 +101,23 @@ imprimir
 leer
     : SCAN '(' expr ')';
 iterativa_do
-    : DO {regreso[cont_r++]=cx+1; $$=cx+1;} bloque WHILE '(' {$$=cx+1;} comp {generaCodigo(SALTARV,$7,$2,'-'); cont_r--; $$=cx;} ')' ;
+    : DO {vuelta[cont_v++]=cx+1; numLoop++; $$=cx+1;} bloque WHILE '(' {$$=cx+1;} comp {generaCodigo(SALTARV,$7,$2,'-'); cont_v--; $$=cx; int i; for(i=0;i<actualLoop[numLoop-1];i++){tablaCodigo[avance[--contAvances]].a1 = cx +1;} numLoop--;} ')' ;
+    
+    
+    
 iterativa_for
     : FOR '(' asignacion ';' 
-            {regreso[cont_r++]=cx+1; $$=cx+1;} comp {generaCodigo(SALTARF,$6,'?','-'); $$=cx;} {generaCodigo(SALTAR,'?','-','-'); $$=cx;} ';' 
+            {vuelta[cont_v++]=cx+1; numLoop++; $$=cx+1;} comp {generaCodigo(SALTARF,$6,'?','-'); $$=cx;} {generaCodigo(SALTAR,'?','-','-'); $$=cx;} ';' 
             {$$=cx+1;} asignacion {generaCodigo(SALTAR,$5,'-','-'); $$=cx;} ')' 
-            { tablaCodigo[$8].a1= cx + 1; } {$$=cx+1;} bloque {generaCodigo(SALTAR,$10,'-','-'); $$=cx;} { tablaCodigo[$7].a2 = cx +1 ; cont_r--;} ; 
+            { tablaCodigo[$8].a1= cx + 1; } {$$=cx+1;} bloque {generaCodigo(SALTAR,$10,'-','-'); $$=cx;} { tablaCodigo[$7].a2 = cx +1 ; cont_v--;int i; for(i=0;i<actualLoop[numLoop-1];i++){tablaCodigo[avance[--contAvances]].a1 = cx +1;} numLoop--;} ;   
+            
+            
+            
 iterativa_while
-    : WHILE '(' {regreso[cont_r++]=cx+1; $$=cx+1;} comp {generaCodigo(SALTARF,$4,'?','-'); $$=cx;} ')' 
-            bloque {generaCodigo(SALTAR,$3,'-','-'); $$=cx;} { tablaCodigo[$5].a2 = cx +1 ; cont_r--;};
+    : WHILE '(' {vuelta[cont_v++]=cx+1; numLoop++; $$=cx+1;} comp {generaCodigo(SALTARF,$4,'?','-'); $$=cx;} ')' 
+            bloque {generaCodigo(SALTAR,$3,'-','-'); $$=cx;} { tablaCodigo[$5].a2 = cx +1 ; cont_v--; int i; for(i=0;i<actualLoop[numLoop-1];i++){tablaCodigo[avance[--contAvances]].a1 = cx +1;} numLoop--;};
+            
+            
 condicional
     : IF '(' comp ')' {generaCodigo(SALTARF,$3,'?','-'); $$=cx;} bloque { tablaCodigo[$5].a2 = cx +1 ; } else;
 bloque

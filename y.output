@@ -28,6 +28,10 @@ Terminals unused in grammar
     DECLARARCONST
     SALTARV
     CONTINUAR
+    PASAR
+    RETORNAR
+    FIN
+    ROMPER
 
 
 Grammar
@@ -283,157 +287,161 @@ Terminals, with rules where they appear
     DECLARARCONST (328)
     SALTARV (329)
     CONTINUAR (330)
+    PASAR (331)
+    RETORNAR (332)
+    FIN (333)
+    ROMPER (334)
 
 
 Nonterminals, with rules where they appear
 
-    $accept (89)
+    $accept (93)
         on left: 0
-    prog (90)
+    prog (94)
         on left: 1
         on right: 0
-    listainst (91)
+    listainst (95)
         on left: 2 3
         on right: 1 2 46
-    instr (92)
+    instr (96)
         on left: 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18
         on right: 2
-    comentario (93)
+    comentario (97)
         on left: 19 20
         on right: 17
-    comentarioSimple (94)
+    comentarioSimple (98)
         on left: 21
         on right: 19
-    comentarioComplejo (95)
+    comentarioComplejo (99)
         on left: 22
         on right: 20
-    imprimir (96)
+    imprimir (100)
         on left: 24
         on right: 15
-    $@1 (97)
+    $@1 (101)
         on left: 23
         on right: 24
-    leer (98)
+    leer (102)
         on left: 25
         on right: 16
-    iterativa_do (99)
+    iterativa_do (103)
         on left: 29
         on right: 8
-    @2 (100)
+    @2 (104)
         on left: 26
         on right: 29
-    @3 (101)
+    @3 (105)
         on left: 27
         on right: 29
-    @4 (102)
+    @4 (106)
         on left: 28
         on right: 29
-    iterativa_for (103)
+    iterativa_for (107)
         on left: 38
         on right: 9
-    @5 (104)
+    @5 (108)
         on left: 30
         on right: 38
-    @6 (105)
+    @6 (109)
         on left: 31
         on right: 38
-    @7 (106)
+    @7 (110)
         on left: 32
         on right: 38
-    @8 (107)
+    @8 (111)
         on left: 33
         on right: 38
-    @9 (108)
+    @9 (112)
         on left: 34
         on right: 38
-    $@10 (109)
+    $@10 (113)
         on left: 35
         on right: 38
-    @11 (110)
+    @11 (114)
         on left: 36
         on right: 38
-    @12 (111)
+    @12 (115)
         on left: 37
         on right: 38
-    iterativa_while (112)
+    iterativa_while (116)
         on left: 42
         on right: 7
-    @13 (113)
+    @13 (117)
         on left: 39
         on right: 42
-    @14 (114)
+    @14 (118)
         on left: 40
         on right: 42
-    @15 (115)
+    @15 (119)
         on left: 41
         on right: 42
-    condicional (116)
+    condicional (120)
         on left: 45
         on right: 14
-    @16 (117)
+    @16 (121)
         on left: 43
         on right: 45
-    $@17 (118)
+    $@17 (122)
         on left: 44
         on right: 45
-    bloque (119)
+    bloque (123)
         on left: 46
         on right: 29 38 42 45 99 102
-    declaracion (120)
+    declaracion (124)
         on left: 48 50
         on right: 4
-    @18 (121)
+    @18 (125)
         on left: 47
         on right: 48
-    @19 (122)
+    @19 (126)
         on left: 49
         on right: 50
-    asignacion (123)
+    asignacion (127)
         on left: 52 54 56
         on right: 5 38
-    @20 (124)
+    @20 (128)
         on left: 51
         on right: 52
-    @21 (125)
+    @21 (129)
         on left: 53
         on right: 54
-    @22 (126)
+    @22 (130)
         on left: 55
         on right: 56
-    asignar (127)
+    asignar (131)
         on left: 57 58 59 60 61 62
         on right: 52
-    identificador (128)
+    identificador (132)
         on left: 63 64 65 66 67 68 69 70
         on right: 48 50 104
-    expresion (129)
+    expresion (133)
         on left: 71 72
         on right: 24 50 52
-    expr (130)
+    expr (134)
         on left: 73 74 75
         on right: 25 71 73 74 84 88 89 90 91 92 93 94 95 96 97 98 105
-    term (131)
+    term (135)
         on left: 76 77
         on right: 73 74 75 76
-    op (132)
+    op (136)
         on left: 78 79 80 81 82
         on right: 76
-    factor (133)
+    factor (137)
         on left: 83 84 85 86 87
         on right: 76 77
-    comp (134)
+    comp (138)
         on left: 88 89 90 91 92 93 94 95 96 97 98
         on right: 6 29 38 42 45 72 102
-    else (135)
+    else (139)
         on left: 99 102 103
         on right: 45 102
-    @23 (136)
+    @23 (140)
         on left: 100
         on right: 102
-    $@24 (137)
+    $@24 (141)
         on left: 101
         on right: 102
-    funcion (138)
+    funcion (142)
         on left: 104 105
         on right: 18
 
