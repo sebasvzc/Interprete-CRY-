@@ -1,5 +1,24 @@
+//Este es el inicio de un gran interprete
+
 enteroAmor entero
-constanteRechazo doblementeReal doblemente = 23
+enteroAmor i
 realAmor real
-entero = 32
-real = 234.4
+
+entero=4
+real=10.2
+
+mientras (entero < real)
+{
+	real = 523
+	para(i=2; i<43; i++)
+	{
+		sisi(i==4)
+		{
+			volvamos
+		}
+		entero = 42
+	}
+	entero = 423
+}
+
+real = 645.76
