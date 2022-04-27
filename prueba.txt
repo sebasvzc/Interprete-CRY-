@@ -1,24 +1,40 @@
 //Este es el inicio de un gran interprete
-
 enteroAmor entero
 enteroAmor i
+boolCool buleano
+constanteRechazo doblementeReal doblemente = 23
 realAmor real
-
-entero=4
-real=10.2
-
-mientras (entero < real)
-{
-	real = 523
-	para(i=2; i<43; i++)
-	{
-		sisi(i==4)
-		{
-			volvamos
+leer(entero)
+entero = 32 + 234
+real = 234.4 - 2323
+buleano = verdaderoSentimiento
+mientras (entero < real){
+	real = 1000.43 / entero
+	entero = 3434 % real
+	real %= 32
+	sisi(243243==3234){
+		entero = 3434 % 234
+		haz{
+			cortaRelacion cortito
+			cortito = 23/345
+			sisi(verdaderoSentimiento yh falsoAmor){
+				terminamos
+			}
+			nada
+		}mientras(entero > 234)
+		para(i=2;i<43;i=i+1){
+			sisi(i==4){
+				volvamos
+				cortito++
+			}
+			cortito = cortito + 22
 		}
-		entero = 42
 	}
-	entero = 423
+	entero = 3434 % 234
 }
-
-real = 645.76
+imprimir(real)
+real = real - entero * (24323.54)
+@
+casi fin de programa
+@
+regresemos
