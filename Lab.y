@@ -52,6 +52,8 @@ int cont_r=0;
 %token IMPRIMIR DECLARAR DECLARARCONST
 //token de pedro Y
 %token SALTARV CONTINUAR
+//token de Marcelo Jara
+%token RETORNAR_TIPO
 //Cuidado usando tokens de otros que pueden ser otra operacion de la q parecen
 
 %%
@@ -174,7 +176,7 @@ else
     | ELIF '(' comp ')'{generaCodigo(SALTARF,$3,'?','-'); $$=cx;} bloque { tablaCodigo[$5].a2 = cx +1 ; } else
     | ;
 funcion
-    : DE_TIPO '(' identificador ')' 
+    : DE_TIPO '(' identificador ')' {generaCodigo(RETORNAR_TIPO,$3,'-','-');}
     | NEGACION '(' expr ')' ;
 %%
 
