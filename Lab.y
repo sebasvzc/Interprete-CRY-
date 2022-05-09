@@ -99,7 +99,7 @@ comentarioComplejo
 imprimir
     : PRINT '(' expresion {generaCodigo(IMPRIMIR,$3,'-','-');} ')';
 leer
-    : SCAN '(' expr ')'{generaCodigo(LEER,$3,'-','-');};
+    : SCAN '(' otrofactor ')'{generaCodigo(LEER,$3,'-','-');};
 iterativa_do
     : DO {vuelta[cont_v++]=cx+1; numLoop++; $$=cx+1;} bloque WHILE '(' {$$=cx+1;} comp {generaCodigo(SALTARV,$7,$2,'-'); cont_v--; $$=cx; int i; for(i=0;i<actualLoop[numLoop-1];i++){tablaCodigo[avance[--contAvances]].a1 = cx +1;} numLoop--;} ')' ;
 iterativa_for
@@ -111,7 +111,7 @@ iterativa_while
     : WHILE '(' {vuelta[cont_v++]=cx+1; numLoop++; $$=cx+1;} comp {generaCodigo(SALTARF,$4,'?','-'); $$=cx;} ')' 
             bloque {generaCodigo(SALTAR,$3,'-','-'); $$=cx;} { tablaCodigo[$5].a2 = cx +1 ; cont_v--; int i; for(i=0;i<actualLoop[numLoop-1];i++){tablaCodigo[avance[--contAvances]].a1 = cx +1;} numLoop--;};    
 condicional
-    : IF '(' comp ')' {generaCodigo(SALTARF,$3,'?','-'); $$=cx;} bloque { tablaCodigo[$5].a2 = cx +1 ; } else;
+    : IF '(' comp ')' {generaCodigo(SALTARF,$3,'?','-'); $$=cx;} bloque {generaCodigo(SALTARV,$3,'?','-'); $$=cx;} { tablaCodigo[$5].a2 = cx +1 ; }  else { tablaCodigo[$7].a2 = cx +1 ; };
 bloque
     : '{' listainst '}' ; 
 declaracion
@@ -166,9 +166,11 @@ op
 factor
     : NUM { $$=localizaSimboloAnadeNum(lexema,NUM);}
     | '(' expr')'  
-    | ID  { $$=localizaSimboloAnadeNum(lexema,ID);} 
+    |  otrofactor
     | VERDAD { $$=localizaSimboloAnadeNum(lexema,NUM);}
     | FALSO { $$=localizaSimboloAnadeNum(lexema,NUM);} ; 
+otrofactor
+    : ID  { $$=localizaSimboloAnadeNum(lexema,ID);} ;
 comp
     : expr '>' '=' expr  {int i=genTemp(); generaCodigo(COMPMAYORIGUAL,i,$1,$4);$$=i;} 
     | expr '>'  expr  {int i=genTemp(); generaCodigo(COMPMAYOR,i,$1,$3);$$=i;} 
@@ -183,7 +185,7 @@ comp
     | expr NOR expr {int i=genTemp(); generaCodigo(COMPNOR,i,$1,$3);$$=i;};
 else
     : ELSE bloque
-    | ELIF '(' comp ')'{generaCodigo(SALTARF,$3,'?','-'); $$=cx;} bloque { tablaCodigo[$5].a2 = cx +1 ; } else
+    | ELIF '(' comp ')'{generaCodigo(SALTARF,$3,'?','-'); $$=cx;} bloque {generaCodigo(SALTARV,$3,'?','-'); $$=cx;} { tablaCodigo[$5].a2 = cx +1 ; }  else { tablaCodigo[$7].a2 = cx +1 ; }
     | ;
 funcion
     : DE_TIPO '(' expr ')' {int i=genTemp(); generaCodigo(RETORNAR_TIPO,i,$3,'-'); $$=i;}
