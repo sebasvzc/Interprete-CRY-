@@ -3,11 +3,14 @@
 #include<stdlib.h>
 #include<string.h>
 #include<ctype.h>
+#include<math.h>
 void yyerror(char *s);
 int yylex();
+void interpretaCodigo();
 void imprimeTablaCodigo();
 void imprimeTablaSimbolo();
 int genTemp();
+int esEntero(int tipo);
 void generaCodigo(int op,int a1,int a2,int a3);
 int asignarSimbolo(char *lexema, int token);
 int localizaSimboloAnadeNum(char *lexema , int token);
@@ -16,6 +19,8 @@ typedef struct{
         char nombre[100];
         int token;
         double valor;
+        int tipo; // 0:sintipo 1: int    2: float    3: double   4: char   5: long     6: bool      7:short
+        int noConstante; //0: constante    1: variable
 }TipoTS;
 typedef struct{
         int op;
@@ -40,12 +45,14 @@ int contAvances=0;
 
 int actualLoop[100]={0};
 int numLoop=0;
+
+int esConst=0;
 %}
 
 
 %token  WHILE IF ID NUM DO FOR
 %token  IGUALDAD ELSE ELIF CONTINUE
-%token  INT LONG SHORT DOUBLE FLOAT CHAR BOOL VERDAD FALSO VOID CONST BITSIZ BITSDE
+%token  INT LONG SHORT DOUBLE FLOAT CHAR BOOL VERDAD FALSO CONST BITSIZ BITSDE
 %token RETURN BREAK PASS
 %token  INCREMENTO DECREMENTO AUMENTO DISMINUCION MULTI DIVI MOD
 %token PRINT COMENTARIOSIMPLE COMENTARIOCOMPLEJO
@@ -53,13 +60,15 @@ int numLoop=0;
 %token NEGACION AND OR NAND XOR NOR;
 //tokens de pedro C
 %token COMPMAYOR COMPMENOR COMPMAYORIGUAL COMPMENORIGUAL COMPIGUAL COMPDESIGUAL SALTARF SALTAR COMPAND COMPOR COMPNAND
-%token ASIGNAR INCREMENTAR DECREMENTAR COMPXOR COMPNOR
+%token ASIGNAR INCREMENTAR DECREMENTAR COMPXOR COMPNOR DECLARARINT DECLARARDOUBLE DECLARARCHAR DECLARARLONG 
+%token DECLARARSHORT DECLARARFLOAT DECLARARBOOL
 //tokens de Pedro C y cbas
 %token MULTIPLICAR DIVIDIR MODULAR SUMAR RESTAR
 //tokens de cbas
 %token MOVERBDE MOVERBIZ
 //tokens de gerar
-%token IMPRIMIR DECLARAR DECLARARCONST
+%token IMPRIMIR DECLARARCONST DECLARARCONSTINT DECLARARCONSTDOUBLE DECLARARCONSTCHAR DECLARARCONSTLONG DECLARARCONSTSHORT
+%token DECLARARCONSTFLOAT DECLARARCONSTBOOL 
 //token de pedro Y
 %token SALTARV CONTINUAR
 //token de omar
@@ -115,8 +124,21 @@ condicional
 bloque
     : '{' listainst '}' ; 
 declaracion
-    : identificador ID {$$=asignarSimbolo(lexema,ID); } {generaCodigo(DECLARAR,$3,'-','-');}
-    | CONST identificador ID {$$=asignarSimbolo(lexema,ID);} '=' expresion {generaCodigo(DECLARARCONST,$4,$6,'-');};
+    : identificador ID {$$=asignarSimbolo(lexema,ID); } {if($1==1)generaCodigo(DECLARARINT,$3,'-','-');
+                                                                else if($1==2)generaCodigo(DECLARARFLOAT,$3,'-','-');
+                                                                else if($1==3)generaCodigo(DECLARARDOUBLE,$3,'-','-');
+                                                                else if($1==4)generaCodigo(DECLARARCHAR,$3,'-','-');
+                                                                else if($1==5)generaCodigo(DECLARARLONG,$3,'-','-');
+                                                                else if($1==6)generaCodigo(DECLARARBOOL,$3,'-','-');
+                                                                else if($1==7)generaCodigo(DECLARARSHORT,$3,'-','-');}
+                                                                
+    | CONST identificador ID {esConst=1;$$=asignarSimbolo(lexema,ID);esConst=0;} '=' expresion {if($2==1)generaCodigo(DECLARARCONSTINT,$4,$6,'-');
+                                                                else if($2==2)generaCodigo(DECLARARCONSTFLOAT,$4,$6,'-');
+                                                                else if($2==3)generaCodigo(DECLARARCONSTDOUBLE,$4,$6,'-');
+                                                                else if($2==4)generaCodigo(DECLARARCONSTCHAR,$4,$6,'-');
+                                                                else if($2==5)generaCodigo(DECLARARCONSTLONG,$4,$6,'-');
+                                                                else if($2==6)generaCodigo(DECLARARCONSTBOOL,$4,$6,'-');
+                                                                else if($2==7)generaCodigo(DECLARARCONSTSHORT,$4,$6,'-'); };
 asignacion
     : ID {$$=localizaSimboloAnadeNum(lexema,ID);} asignar expresion {if($3==1)generaCodigo(ASIGNAR,$2,$4,'-');
                                                                 else if($3==2)generaCodigo(SUMAR,$2,$2,$4);
@@ -135,17 +157,31 @@ asignar
     | MOD{$$=6;};
     
 identificador
-    : INT 
-    | FLOAT 
-    | DOUBLE 
-    | CHAR 
-    | LONG 
-    | VOID 
-    | BOOL 
-    | SHORT ; 
+    : INT {$$=1;}
+    | FLOAT {$$=2;}
+    | DOUBLE {$$=3;}
+    | CHAR {$$=4;}
+    | LONG {$$=5;}
+    | BOOL {$$=7;}
+    | SHORT {$$=8;}; 
+    
 expresion
-    : expr 
-    | comp ;
+    : comp ;
+
+comp
+    : comp '>' '=' expr  {int i=genTemp(); generaCodigo(COMPMAYORIGUAL,i,$1,$4);$$=i;} 
+    | comp '>'  expr  {int i=genTemp(); generaCodigo(COMPMAYOR,i,$1,$3);$$=i;} 
+    | comp '<'  expr  {int i=genTemp(); generaCodigo(COMPMENOR,i,$1,$3);$$=i;} 
+    | comp '<' '='  expr  {int i=genTemp(); generaCodigo(COMPMENORIGUAL,i,$1,$4);$$=i;} 
+    | comp IGUALDAD  expr {int i=genTemp(); generaCodigo(COMPIGUAL,i,$1,$3);$$=i;} 
+    | comp DESIGUALDAD  expr {int i=genTemp(); generaCodigo(COMPDESIGUAL,i,$1,$3);$$=i;} 
+    | comp AND expr {int i=genTemp(); generaCodigo(COMPAND,i,$1,$3);$$=i;}
+    | comp OR expr {int i=genTemp(); generaCodigo(COMPOR,i,$1,$3);$$=i;}
+    | comp NAND expr {int i=genTemp(); generaCodigo(COMPNAND,i,$1,$3);$$=i;}
+    | comp XOR expr {int i=genTemp(); generaCodigo(COMPXOR,i,$1,$3);$$=i;}
+    | comp NOR expr {int i=genTemp(); generaCodigo(COMPNOR,i,$1,$3);$$=i;}
+    | expr;   
+    
 expr 
     : expr '+' term  { int i=genTemp(); generaCodigo(SUMAR,i,$1,$3); $$=i;}  
     | expr '-' term   { int i=genTemp(); generaCodigo(RESTAR,i,$1,$3); $$=i;}  
@@ -165,24 +201,13 @@ op
     |'%' {$$=5;} ;
 factor
     : NUM { $$=localizaSimboloAnadeNum(lexema,NUM);}
-    | '(' expr')'  
+    | '(' expresion')'  {$$=$2;}
     |  otrofactor
-    | VERDAD { $$=localizaSimboloAnadeNum(lexema,NUM);}
-    | FALSO { $$=localizaSimboloAnadeNum(lexema,NUM);} ; 
+    | VERDAD { $$=localizaSimboloAnadeNum(lexema,VERDAD);}
+    | FALSO { $$=localizaSimboloAnadeNum(lexema,FALSO);} ; 
 otrofactor
     : ID  { $$=localizaSimboloAnadeNum(lexema,ID);} ;
-comp
-    : expr '>' '=' expr  {int i=genTemp(); generaCodigo(COMPMAYORIGUAL,i,$1,$4);$$=i;} 
-    | expr '>'  expr  {int i=genTemp(); generaCodigo(COMPMAYOR,i,$1,$3);$$=i;} 
-    | expr '<'  expr  {int i=genTemp(); generaCodigo(COMPMENOR,i,$1,$3);$$=i;} 
-    | expr '<' '='  expr  {int i=genTemp(); generaCodigo(COMPMENORIGUAL,i,$1,$4);$$=i;} 
-    | expr IGUALDAD  expr {int i=genTemp(); generaCodigo(COMPIGUAL,i,$1,$3);$$=i;} 
-    | expr DESIGUALDAD  expr {int i=genTemp(); generaCodigo(COMPDESIGUAL,i,$1,$3);$$=i;} 
-    | expr AND expr {int i=genTemp(); generaCodigo(COMPAND,i,$1,$3);$$=i;}
-    | expr OR expr {int i=genTemp(); generaCodigo(COMPOR,i,$1,$3);$$=i;}
-    | expr NAND expr {int i=genTemp(); generaCodigo(COMPNAND,i,$1,$3);$$=i;}
-    | expr XOR expr {int i=genTemp(); generaCodigo(COMPXOR,i,$1,$3);$$=i;}
-    | expr NOR expr {int i=genTemp(); generaCodigo(COMPNOR,i,$1,$3);$$=i;};
+    
 else
     : ELSE bloque
     | ELIF '(' comp ')'{generaCodigo(SALTARF,$3,'?','-'); $$=cx;} bloque {generaCodigo(SALTARV,$3,'?','-'); $$=cx;} { tablaCodigo[$5].a2 = cx +1 ; }  else { tablaCodigo[$7].a2 = cx +1 ; }
@@ -231,21 +256,290 @@ void generaCodigo(int op,int a1,int a2,int a3){
     tablaCodigo[cx].a3=a3;
 }
 
+int esEntero(int tipo){
+    if(tipo==1){
+        return 1;
+    }
+    if(tipo==4){
+        return 1;
+    }
+    if(tipo==5){
+        return 1;
+    }
+    if(tipo==6){
+        return 1;
+    }
+    if(tipo==7){
+        return 1;
+    }return 0;
+}
 
 /*codigo C*/
 /*análisis léxico*/
+
+void interpretaCodigo(){
+    int op,a1,a2,a3;
+    double aux1, aux2;
+    for(int i=0;i<=cx ;i++){
+        op=tablaCodigo[i].op;
+        a1=tablaCodigo[i].a1;
+        a2=tablaCodigo[i].a2;
+        a3=tablaCodigo[i].a3;
+        if (op==ASIGNAR){
+            if(tablaSimbolos[a1].noConstante) tablaSimbolos[a1].valor = tablaSimbolos[a2].valor;
+            else {
+                printf("Error al intentar cambiar una constante\n");
+                exit(1);
+            }
+        }
+        if(op==SALTARF){
+            if (fabs(tablaSimbolos[a1].valor-0)<=0.0001){
+                i=a2-1;
+            }
+        }
+        if(op==SALTARV){
+            if (fabs(tablaSimbolos[a1].valor-1)<=0.0001){
+                i=a2-1;
+            }
+        }
+        if(op==SALTAR){
+            i=a2-1;
+        }
+        if(op==COMPMENOR){
+            if(esEntero(tablaSimbolos[a2].tipo)){
+                tablaSimbolos[a1].valor = (int)(tablaSimbolos[a2].valor+0.5) < tablaSimbolos[a3].valor;
+            }
+            else if(esEntero(tablaSimbolos[a3].tipo)){
+                tablaSimbolos[a1].valor = tablaSimbolos[a2].valor < (int)(tablaSimbolos[a3].valor+0.5);
+            }
+            else if(esEntero(tablaSimbolos[a2].tipo) && esEntero(tablaSimbolos[a3].tipo)){
+                tablaSimbolos[a1].valor = (int)(tablaSimbolos[a2].valor+0.5) < (int)(tablaSimbolos[a3].valor+0.5);
+            }
+            else tablaSimbolos[a1].valor = tablaSimbolos[a2].valor < tablaSimbolos[a3].valor;
+        }
+        if(op==COMPMAYOR){
+            if(esEntero(tablaSimbolos[a2].tipo)){
+                tablaSimbolos[a1].valor = (int)(tablaSimbolos[a2].valor+0.5) > tablaSimbolos[a3].valor;
+            }
+            else if(esEntero(tablaSimbolos[a3].tipo)){
+                tablaSimbolos[a1].valor = tablaSimbolos[a2].valor > (int)(tablaSimbolos[a3].valor+0.5);
+            }
+            else if(esEntero(tablaSimbolos[a2].tipo) && esEntero(tablaSimbolos[a3].tipo)){
+                tablaSimbolos[a1].valor = (int)(tablaSimbolos[a2].valor+0.5) > (int)(tablaSimbolos[a3].valor+0.5);
+            }
+            else tablaSimbolos[a1].valor = tablaSimbolos[a2].valor > tablaSimbolos[a3].valor;
+        }
+        if(op==COMPMAYORIGUAL){
+            if(esEntero(tablaSimbolos[a2].tipo)){
+                tablaSimbolos[a1].valor = (int)(tablaSimbolos[a2].valor+0.5) >= tablaSimbolos[a3].valor;
+            }
+            else if(esEntero(tablaSimbolos[a3].tipo)){
+                tablaSimbolos[a1].valor = tablaSimbolos[a2].valor >= (int)(tablaSimbolos[a3].valor+0.5);
+            }
+            else if(esEntero(tablaSimbolos[a2].tipo) && esEntero(tablaSimbolos[a3].tipo)){
+                tablaSimbolos[a1].valor = (int)(tablaSimbolos[a2].valor+0.5) >= (int)(tablaSimbolos[a3].valor+0.5);
+            }
+            else tablaSimbolos[a1].valor = tablaSimbolos[a2].valor >= tablaSimbolos[a3].valor;
+        }
+        if(op==COMPMENORIGUAL){
+            if(esEntero(tablaSimbolos[a2].tipo)){
+                tablaSimbolos[a1].valor = (int)(tablaSimbolos[a2].valor+0.5) <= tablaSimbolos[a3].valor;
+            }
+            else if(esEntero(tablaSimbolos[a3].tipo)){
+                tablaSimbolos[a1].valor = tablaSimbolos[a2].valor <= (int)(tablaSimbolos[a3].valor+0.5);
+            }
+            else if(esEntero(tablaSimbolos[a2].tipo) && esEntero(tablaSimbolos[a3].tipo)){
+                tablaSimbolos[a1].valor = (int)(tablaSimbolos[a2].valor+0.5) <= (int)(tablaSimbolos[a3].valor+0.5);
+            }
+            else tablaSimbolos[a1].valor = tablaSimbolos[a2].valor <= tablaSimbolos[a3].valor;
+        }
+        if(op==COMPIGUAL){
+            if(esEntero(tablaSimbolos[a2].tipo)){
+                tablaSimbolos[a1].valor = (int)(tablaSimbolos[a2].valor+0.5) == tablaSimbolos[a3].valor;
+            }
+            else if(esEntero(tablaSimbolos[a3].tipo)){
+                tablaSimbolos[a1].valor = tablaSimbolos[a2].valor == (int)(tablaSimbolos[a3].valor+0.5);
+            }
+            else if(esEntero(tablaSimbolos[a2].tipo) && esEntero(tablaSimbolos[a3].tipo)){
+                tablaSimbolos[a1].valor = (int)(tablaSimbolos[a2].valor+0.5) == (int)(tablaSimbolos[a3].valor+0.5);
+            }
+            else tablaSimbolos[a1].valor = tablaSimbolos[a2].valor == tablaSimbolos[a3].valor;
+        }
+        if(op==COMPDESIGUAL){
+            if(esEntero(tablaSimbolos[a2].tipo)){
+                tablaSimbolos[a1].valor = (int)(tablaSimbolos[a2].valor+0.5) != tablaSimbolos[a3].valor;
+            }
+            else if(esEntero(tablaSimbolos[a3].tipo)){
+                tablaSimbolos[a1].valor = tablaSimbolos[a2].valor != (int)(tablaSimbolos[a3].valor+0.5);
+            }
+            else if(esEntero(tablaSimbolos[a2].tipo) && esEntero(tablaSimbolos[a3].tipo)){
+                tablaSimbolos[a1].valor = (int)(tablaSimbolos[a2].valor+0.5) != (int)(tablaSimbolos[a3].valor+0.5);
+            }
+            else tablaSimbolos[a1].valor = tablaSimbolos[a2].valor != tablaSimbolos[a3].valor;
+        }
+        if(op==COMPAND){
+            tablaSimbolos[a1].valor = ((int)(tablaSimbolos[a2].valor+0.5)) && ((int)(tablaSimbolos[a3].valor+0.5)); 
+        }
+        if(op==COMPOR){
+            tablaSimbolos[a1].valor = ((int)(tablaSimbolos[a2].valor+0.5)) || ((int)(tablaSimbolos[a3].valor+0.5)); 
+        }
+        if(op==COMPNAND){
+            tablaSimbolos[a1].valor = !(((int)(tablaSimbolos[a2].valor+0.5)) && ((int)(tablaSimbolos[a3].valor+0.5)));
+        }
+        if(op==COMPXOR){
+            tablaSimbolos[a1].valor = (!((int)(tablaSimbolos[a2].valor+0.5)) && ((int)(tablaSimbolos[a3].valor+0.5))) || (((int)(tablaSimbolos[a2].valor+0.5)) && !((int)(tablaSimbolos[a3].valor+0.5)));
+        }
+        if(op==COMPNOR){
+            tablaSimbolos[a1].valor = !(((int)(tablaSimbolos[a2].valor+0.5)) || ((int)(tablaSimbolos[a3].valor+0.5)));
+        }
+        if(op==INCREMENTAR){
+            if(tablaSimbolos[a1].noConstante) tablaSimbolos[a1].valor = tablaSimbolos[a1].valor + 1;
+            else {
+                printf("Error al intentar cambiar una constante\n");
+                exit(1);
+            }
+        }
+        if(op==DECREMENTO){
+            if(tablaSimbolos[a1].noConstante) tablaSimbolos[a1].valor = tablaSimbolos[a1].valor - 1;
+            else {
+                printf("Error al intentar cambiar una constante\n");
+                exit(1);
+            } 
+        }
+        if(op==SUMAR){
+            if(tablaSimbolos[a1].noConstante) {
+                if(esEntero(tablaSimbolos[a2].tipo)) tablaSimbolos[a2].valor=(int)(tablaSimbolos[a2].valor+0.5);
+                if(esEntero(tablaSimbolos[a3].tipo)) tablaSimbolos[a3].valor=(int)(tablaSimbolos[a3].valor+0.5);
+                tablaSimbolos[a1].valor = tablaSimbolos[a2].valor + tablaSimbolos[a3].valor;
+            }
+            else {
+                printf("Error al intentar cambiar una constante %d \n",a1);
+                exit(1);
+            } 
+        }
+        if(op==RESTAR){
+            if(tablaSimbolos[a1].noConstante){
+                if(esEntero(tablaSimbolos[a2].tipo)) tablaSimbolos[a2].valor=(int)(tablaSimbolos[a2].valor+0.5);
+                if(esEntero(tablaSimbolos[a3].tipo)) tablaSimbolos[a3].valor=(int)(tablaSimbolos[a3].valor+0.5);
+                tablaSimbolos[a1].valor = tablaSimbolos[a2].valor - tablaSimbolos[a3].valor;
+            }
+            else {
+                printf("Error al intentar cambiar una constante\n");
+                exit(1);
+            } 
+        }
+        if(op==MULTIPLICAR){
+            if(tablaSimbolos[a1].noConstante){
+                if(esEntero(tablaSimbolos[a2].tipo)) tablaSimbolos[a2].valor=(int)(tablaSimbolos[a2].valor+0.5);
+                if(esEntero(tablaSimbolos[a3].tipo)) tablaSimbolos[a3].valor=(int)(tablaSimbolos[a3].valor+0.5);
+                tablaSimbolos[a1].valor = tablaSimbolos[a2].valor * tablaSimbolos[a3].valor;
+            }
+            else {
+                printf("Error al intentar cambiar una constante\n");
+                exit(1);
+            } 
+        }
+        if(op==DIVIDIR){
+            if(tablaSimbolos[a1].noConstante) {
+                if(esEntero(tablaSimbolos[a2].tipo)) tablaSimbolos[a2].valor=(int)(tablaSimbolos[a2].valor+0.5);
+                if(esEntero(tablaSimbolos[a3].tipo)) tablaSimbolos[a3].valor=(int)(tablaSimbolos[a3].valor+0.5);
+                tablaSimbolos[a1].valor = tablaSimbolos[a2].valor / tablaSimbolos[a3].valor;
+            }
+            else {
+                printf("Error al intentar cambiar una constante\n");
+                exit(1);
+            } 
+        }
+        if(op==MODULAR){
+            aux1 = tablaSimbolos[a2].valor + 0.5;
+            aux2 = tablaSimbolos[a3].valor + 0.5;
+            if(tablaSimbolos[a1].noConstante) tablaSimbolos[a1].valor = (int)aux1 % (int)aux2;
+            else {
+                printf("Error al intentar cambiar una constante\n");
+                exit(1);
+            } 
+        }
+        
+        if(op==DECLARARCONSTINT){
+            tablaSimbolos[a1].valor = tablaSimbolos[a2].valor;
+            tablaSimbolos[a1].noConstante = 0;
+            tablaSimbolos[a1].tipo = 1;
+        }
+        if(op==DECLARARCONSTFLOAT){
+            tablaSimbolos[a1].valor = tablaSimbolos[a2].valor;
+            tablaSimbolos[a1].noConstante = 0;
+            tablaSimbolos[a1].tipo = 2;
+        }
+        if(op==DECLARARCONSTDOUBLE){
+            tablaSimbolos[a1].valor = tablaSimbolos[a2].valor;
+            tablaSimbolos[a1].noConstante = 0;
+            tablaSimbolos[a1].tipo = 3;
+        }        
+        if(op==DECLARARCONSTCHAR){
+            tablaSimbolos[a1].valor = tablaSimbolos[a2].valor;
+            tablaSimbolos[a1].noConstante = 0;
+            tablaSimbolos[a1].tipo = 4;
+        }
+        if(op==DECLARARCONSTLONG){
+            tablaSimbolos[a1].valor = tablaSimbolos[a2].valor;
+            tablaSimbolos[a1].noConstante = 0;
+            tablaSimbolos[a1].tipo = 5;
+        }
+        if(op==DECLARARCONSTBOOL){
+            tablaSimbolos[a1].valor = tablaSimbolos[a2].valor;
+            tablaSimbolos[a1].noConstante = 0;
+            tablaSimbolos[a1].tipo = 6;
+        }
+        if(op==DECLARARCONSTSHORT){
+            tablaSimbolos[a1].valor = tablaSimbolos[a2].valor;
+            tablaSimbolos[a1].noConstante = 0;
+            tablaSimbolos[a1].tipo = 7;
+        }
+        
+        if(op==DECLARARINT){
+            tablaSimbolos[a1].noConstante = 1;
+            tablaSimbolos[a1].tipo = 1;
+        }
+        if(op==DECLARARFLOAT){
+            tablaSimbolos[a1].noConstante = 1;
+            tablaSimbolos[a1].tipo = 2;
+        }
+        if(op==DECLARARDOUBLE){
+            tablaSimbolos[a1].noConstante = 1;
+            tablaSimbolos[a1].tipo = 3;
+        }
+        if(op==DECLARARCHAR){
+            tablaSimbolos[a1].noConstante = 1;
+            tablaSimbolos[a1].tipo = 4;
+        }
+        if(op==DECLARARLONG){
+            tablaSimbolos[a1].noConstante = 1;
+            tablaSimbolos[a1].tipo = 5;
+        }
+        if(op==DECLARARBOOL){
+            tablaSimbolos[a1].noConstante = 1;
+            tablaSimbolos[a1].tipo = 6;
+        }
+        if(op==DECLARARSHORT){
+            tablaSimbolos[a1].noConstante = 1;
+            tablaSimbolos[a1].tipo = 7;
+        }
+    }
+}
+
 /*localiza el lexema dentro de la tabla de simbolos*/
 int asignarSimbolo(char *lexema, int token){
 	int i;
 	for(i=0;i<nSim ;i++){
         if(!strcmp(tablaSimbolos[i].nombre,lexema)){
-            printf("Error al declarar una misma variable: %s\n",lexema);
+            printf("Error al declarar dos veces una misma variable: %s\n",lexema);
             exit(1);
         }
     }
     strcpy(tablaSimbolos[i].nombre,lexema);
-    tablaSimbolos[nSim].valor=0.0;
+    tablaSimbolos[i].valor=0.0;
     tablaSimbolos[i].token=token;
+    tablaSimbolos[i].noConstante=!esConst;
     nSim++;
     return nSim-1;
 }
@@ -261,6 +555,19 @@ int localizaSimboloAnadeNum(char *lexema , int token){
         strcpy(tablaSimbolos[i].nombre,lexema); 
         tablaSimbolos[i].valor=atof(lexema); 
         tablaSimbolos[i].token=token;  
+        tablaSimbolos[i].tipo = 2;
+    } 
+    if(token == VERDAD ){ 
+        strcpy(tablaSimbolos[i].nombre,lexema); 
+        tablaSimbolos[i].valor=1; 
+        tablaSimbolos[i].token=token;  
+        tablaSimbolos[i].tipo = 1;
+    } 
+    if(token == FALSO ){ 
+        strcpy(tablaSimbolos[i].nombre,lexema); 
+        tablaSimbolos[i].valor=0; 
+        tablaSimbolos[i].token=token;  
+        tablaSimbolos[i].tipo = 1;
     } 
     else if(token == ID){ 
         printf("Variable no reconocida: %s\n", lexema);
@@ -457,7 +764,10 @@ void yyerror(char *s){
 int main(){
     if(!yyparse()){
         imprimeTablaSimbolo();
-        imprimeTablaCodigo(); 
+        imprimeTablaCodigo();
+        printf("Luego de la interpretacion\n");
+        interpretaCodigo();
+        imprimeTablaSimbolo(); 
         printf("Cadena válida\n\n");
 	}
 	else{
