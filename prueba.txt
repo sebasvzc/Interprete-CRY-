@@ -1,40 +1,13 @@
 //Este es el inicio de un gran interprete
-enteroAmor entero
+
+enteroAmor numEntero
 enteroAmor i
-boolCool buleano
-constanteRechazo doblementeReal doblemente = 23
-realAmor real
-leer(entero)
-entero = 32 + 234
-real = 234.4 - 2323
-buleano = verdaderoSentimiento
-mientras (entero < real){
-	real = 1000.43 / entero
-	entero = 3434 % real
-	real %= 32
-	sisi(243243==3234){
-		entero = 3434 % 234
-		haz{
-			cortaRelacion cortito
-			cortito = 23/345
-			sisi(verdaderoSentimiento yh falsoAmor){
-				terminamos
-			}
-			nada
-		}mientras(entero > 234)
-		para(i=2;i<43;i=i+1){
-			sisi(i==4){
-				volvamos
-				cortito++
-			}
-			cortito = cortito + 22
-		}
-	}
-	entero = 3434 % 234
-}
-imprimir(real)
-real = real - entero * (24323.54)
-@
-casi fin de programa
-@
-regresemos
+realAmor numReal
+boolCool bandera
+constanteRechazo doblementeReal k = 0.5
+
+numEntero = 32 + 32
+numReal = ((1.5*2) - 4.5)/k
+bandera = (numEntero > numReal) oh falsoAmor
+
+
