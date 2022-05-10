@@ -1,6 +1,5 @@
 Terminals unused in grammar
 
-    VOID
     COMPMAYOR
     COMPMENOR
     COMPMAYORIGUAL
@@ -255,240 +254,239 @@ Terminals, with rules where they appear
     BOOL (274) 69
     VERDAD (275) 97
     FALSO (276) 98
-    VOID (277)
-    CONST (278) 51
-    BITSIZ (279) 91
-    BITSDE (280) 92
-    RETURN (281) 11
-    BREAK (282) 12
-    PASS (283) 13
-    INCREMENTO (284) 55
-    DECREMENTO (285) 57
-    AUMENTO (286) 59
-    DISMINUCION (287) 60
-    MULTI (288) 61
-    DIVI (289) 62
-    MOD (290) 63
-    PRINT (291) 24
-    COMENTARIOSIMPLE (292) 21
-    COMENTARIOCOMPLEJO (293) 22
-    DE_TIPO (294) 106
-    DESIGUALDAD (295) 77
-    SCAN (296) 25
-    NEGACION (297) 107
-    AND (298) 78
-    OR (299) 79
-    NAND (300) 80
-    XOR (301) 81
-    NOR (302) 82
-    COMPMAYOR (303)
-    COMPMENOR (304)
-    COMPMAYORIGUAL (305)
-    COMPMENORIGUAL (306)
-    COMPIGUAL (307)
-    COMPDESIGUAL (308)
-    SALTARF (309)
-    SALTAR (310)
-    COMPAND (311)
-    COMPOR (312)
-    COMPNAND (313)
-    ASIGNAR (314)
-    INCREMENTAR (315)
-    DECREMENTAR (316)
-    COMPXOR (317)
-    COMPNOR (318)
-    DECLARARINT (319)
-    DECLARARDOUBLE (320)
-    DECLARARCHAR (321)
-    DECLARARLONG (322)
-    DECLARARSHORT (323)
-    DECLARARFLOAT (324)
-    DECLARARBOOL (325)
-    MULTIPLICAR (326)
-    DIVIDIR (327)
-    MODULAR (328)
-    SUMAR (329)
-    RESTAR (330)
-    MOVERBDE (331)
-    MOVERBIZ (332)
-    IMPRIMIR (333)
-    DECLARARCONST (334)
-    DECLARARCONSTINT (335)
-    DECLARARCONSTDOUBLE (336)
-    DECLARARCONSTCHAR (337)
-    DECLARARCONSTLONG (338)
-    DECLARARCONSTSHORT (339)
-    DECLARARCONSTFLOAT (340)
-    DECLARARCONSTBOOL (341)
-    SALTARV (342)
-    CONTINUAR (343)
-    PASAR (344)
-    RETORNAR (345)
-    FIN (346)
-    ROMPER (347)
-    RETORNAR_TIPO (348)
-    NEGAR (349)
-    LEER (350)
+    CONST (277) 51
+    BITSIZ (278) 91
+    BITSDE (279) 92
+    RETURN (280) 11
+    BREAK (281) 12
+    PASS (282) 13
+    INCREMENTO (283) 55
+    DECREMENTO (284) 57
+    AUMENTO (285) 59
+    DISMINUCION (286) 60
+    MULTI (287) 61
+    DIVI (288) 62
+    MOD (289) 63
+    PRINT (290) 24
+    COMENTARIOSIMPLE (291) 21
+    COMENTARIOCOMPLEJO (292) 22
+    DE_TIPO (293) 106
+    DESIGUALDAD (294) 77
+    SCAN (295) 25
+    NEGACION (296) 107
+    AND (297) 78
+    OR (298) 79
+    NAND (299) 80
+    XOR (300) 81
+    NOR (301) 82
+    COMPMAYOR (302)
+    COMPMENOR (303)
+    COMPMAYORIGUAL (304)
+    COMPMENORIGUAL (305)
+    COMPIGUAL (306)
+    COMPDESIGUAL (307)
+    SALTARF (308)
+    SALTAR (309)
+    COMPAND (310)
+    COMPOR (311)
+    COMPNAND (312)
+    ASIGNAR (313)
+    INCREMENTAR (314)
+    DECREMENTAR (315)
+    COMPXOR (316)
+    COMPNOR (317)
+    DECLARARINT (318)
+    DECLARARDOUBLE (319)
+    DECLARARCHAR (320)
+    DECLARARLONG (321)
+    DECLARARSHORT (322)
+    DECLARARFLOAT (323)
+    DECLARARBOOL (324)
+    MULTIPLICAR (325)
+    DIVIDIR (326)
+    MODULAR (327)
+    SUMAR (328)
+    RESTAR (329)
+    MOVERBDE (330)
+    MOVERBIZ (331)
+    IMPRIMIR (332)
+    DECLARARCONST (333)
+    DECLARARCONSTINT (334)
+    DECLARARCONSTDOUBLE (335)
+    DECLARARCONSTCHAR (336)
+    DECLARARCONSTLONG (337)
+    DECLARARCONSTSHORT (338)
+    DECLARARCONSTFLOAT (339)
+    DECLARARCONSTBOOL (340)
+    SALTARV (341)
+    CONTINUAR (342)
+    PASAR (343)
+    RETORNAR (344)
+    FIN (345)
+    ROMPER (346)
+    RETORNAR_TIPO (347)
+    NEGAR (348)
+    LEER (349)
 
 
 Nonterminals, with rules where they appear
 
-    $accept (109)
+    $accept (108)
         on left: 0
-    prog (110)
+    prog (109)
         on left: 1
         on right: 0
-    listainst (111)
+    listainst (110)
         on left: 2 3
         on right: 1 2 47
-    instr (112)
+    instr (111)
         on left: 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18
         on right: 2
-    comentario (113)
+    comentario (112)
         on left: 19 20
         on right: 17
-    comentarioSimple (114)
+    comentarioSimple (113)
         on left: 21
         on right: 19
-    comentarioComplejo (115)
+    comentarioComplejo (114)
         on left: 22
         on right: 20
-    imprimir (116)
+    imprimir (115)
         on left: 24
         on right: 15
-    $@1 (117)
+    $@1 (116)
         on left: 23
         on right: 24
-    leer (118)
+    leer (117)
         on left: 25
         on right: 16
-    iterativa_do (119)
+    iterativa_do (118)
         on left: 29
         on right: 8
-    @2 (120)
+    @2 (119)
         on left: 26
         on right: 29
-    @3 (121)
+    @3 (120)
         on left: 27
         on right: 29
-    @4 (122)
+    @4 (121)
         on left: 28
         on right: 29
-    iterativa_for (123)
+    iterativa_for (122)
         on left: 38
         on right: 9
-    @5 (124)
+    @5 (123)
         on left: 30
         on right: 38
-    @6 (125)
+    @6 (124)
         on left: 31
         on right: 38
-    @7 (126)
+    @7 (125)
         on left: 32
         on right: 38
-    @8 (127)
+    @8 (126)
         on left: 33
         on right: 38
-    @9 (128)
+    @9 (127)
         on left: 34
         on right: 38
-    $@10 (129)
+    $@10 (128)
         on left: 35
         on right: 38
-    @11 (130)
+    @11 (129)
         on left: 36
         on right: 38
-    @12 (131)
+    @12 (130)
         on left: 37
         on right: 38
-    iterativa_while (132)
+    iterativa_while (131)
         on left: 42
         on right: 7
-    @13 (133)
+    @13 (132)
         on left: 39
         on right: 42
-    @14 (134)
+    @14 (133)
         on left: 40
         on right: 42
-    @15 (135)
+    @15 (134)
         on left: 41
         on right: 42
-    condicional (136)
+    condicional (135)
         on left: 46
         on right: 14
-    @16 (137)
+    @16 (136)
         on left: 43
         on right: 46
-    @17 (138)
+    @17 (137)
         on left: 44
         on right: 46
-    $@18 (139)
+    $@18 (138)
         on left: 45
         on right: 46
-    bloque (140)
+    bloque (139)
         on left: 47
         on right: 29 38 42 46 100 104
-    declaracion (141)
+    declaracion (140)
         on left: 49 51
         on right: 4
-    @19 (142)
+    @19 (141)
         on left: 48
         on right: 49
-    @20 (143)
+    @20 (142)
         on left: 50
         on right: 51
-    asignacion (144)
+    asignacion (143)
         on left: 53 55 57
         on right: 5 38
-    @21 (145)
+    @21 (144)
         on left: 52
         on right: 53
-    @22 (146)
+    @22 (145)
         on left: 54
         on right: 55
-    @23 (147)
+    @23 (146)
         on left: 56
         on right: 57
-    asignar (148)
+    asignar (147)
         on left: 58 59 60 61 62 63
         on right: 53
-    identificador (149)
+    identificador (148)
         on left: 64 65 66 67 68 69 70
         on right: 49 51
-    expresion (150)
+    expresion (149)
         on left: 71
         on right: 24 51 53 95
-    comp (151)
+    comp (150)
         on left: 72 73 74 75 76 77 78 79 80 81 82 83
         on right: 6 29 38 42 46 71 72 73 74 75 76 77 78 79 80 81 82 104
-    expr (152)
+    expr (151)
         on left: 84 85 86
         on right: 72 73 74 75 76 77 78 79 80 81 82 83 84 85 106 107
-    term (153)
+    term (152)
         on left: 87 88
         on right: 84 85 86 87
-    op (154)
+    op (153)
         on left: 89 90 91 92 93
         on right: 87
-    factor (155)
+    factor (154)
         on left: 94 95 96 97 98
         on right: 87 88
-    otrofactor (156)
+    otrofactor (155)
         on left: 99
         on right: 25 96
-    else (157)
+    else (156)
         on left: 100 104 105
         on right: 46 104
-    @24 (158)
+    @24 (157)
         on left: 101
         on right: 104
-    @25 (159)
+    @25 (158)
         on left: 102
         on right: 104
-    $@26 (160)
+    $@26 (159)
         on left: 103
         on right: 104
-    funcion (161)
+    funcion (160)
         on left: 106 107
         on right: 18
 

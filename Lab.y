@@ -113,9 +113,9 @@ iterativa_do
     : DO {vuelta[cont_v++]=cx+1; numLoop++; $$=cx+1;} bloque WHILE '(' {$$=cx+1;} comp {generaCodigo(SALTARV,$7,$2,'-'); cont_v--; $$=cx; int i; for(i=0;i<actualLoop[numLoop-1];i++){tablaCodigo[avance[--contAvances]].a1 = cx +1;} numLoop--;} ')' ;
 iterativa_for
     : FOR '(' asignacion ';' 
-            {vuelta[cont_v++]=cx+1; numLoop++; $$=cx+1;} comp {generaCodigo(SALTARF,$6,'?','-'); $$=cx;} {generaCodigo(SALTAR,'?','-','-'); $$=cx;} ';' 
-            {$$=cx+1;} asignacion {generaCodigo(SALTAR,$5,'-','-'); $$=cx;} ')' 
-            { tablaCodigo[$8].a1= cx + 1; } {$$=cx+1;} bloque {generaCodigo(SALTAR,$10,'-','-'); $$=cx;} { tablaCodigo[$7].a2 = cx +1 ; cont_v--;int i; for(i=0;i<actualLoop[numLoop-1];i++){tablaCodigo[avance[--contAvances]].a1 = cx +1;} numLoop--;} ;           
+            {numLoop++; $$=cx+1;} comp {generaCodigo(SALTARF,$6,'?','-'); $$=cx;} {generaCodigo(SALTAR,'?','-','-'); $$=cx;} ';' 
+            {vuelta[cont_v++]=cx+1; $$=cx+1;} asignacion {generaCodigo(SALTAR,$5,'-','-'); $$=cx;} ')' 
+            { tablaCodigo[$8].a1= cx + 1; } {$$=cx+1;} bloque {generaCodigo(SALTAR,$10,'-','-'); $$=cx;} { tablaCodigo[$7].a2 = cx +1 ; cont_v--;int i; for(i=0;i<actualLoop[numLoop-1];i++){tablaCodigo[avance[--contAvances]].a1 = cx +1;} numLoop--;} ;             
 iterativa_while
     : WHILE '(' {vuelta[cont_v++]=cx+1; numLoop++; $$=cx+1;} comp {generaCodigo(SALTARF,$4,'?','-'); $$=cx;} ')' 
             bloque {generaCodigo(SALTAR,$3,'-','-'); $$=cx;} { tablaCodigo[$5].a2 = cx +1 ; cont_v--; int i; for(i=0;i<actualLoop[numLoop-1];i++){tablaCodigo[avance[--contAvances]].a1 = cx +1;} numLoop--;};    
@@ -162,8 +162,8 @@ identificador
     | DOUBLE {$$=3;}
     | CHAR {$$=4;}
     | LONG {$$=5;}
-    | BOOL {$$=7;}
-    | SHORT {$$=8;}; 
+    | BOOL {$$=6;}
+    | SHORT {$$=7;}; 
     
 expresion
     : comp ;
@@ -278,7 +278,7 @@ int esEntero(int tipo){
 /*análisis léxico*/
 
 void interpretaCodigo(){
-    int op,a1,a2,a3;
+    int op,a1,a2,a3,imprimio=0;
     double aux1, aux2;
     for(int i=0;i<=cx ;i++){
         op=tablaCodigo[i].op;
@@ -303,7 +303,7 @@ void interpretaCodigo(){
             }
         }
         if(op==SALTAR){
-            i=a2-1;
+            i=a1-1;
         }
         if(op==COMPMENOR){
             if(esEntero(tablaSimbolos[a2].tipo)){
@@ -410,12 +410,12 @@ void interpretaCodigo(){
             if(tablaSimbolos[a1].noConstante) {
                 if(esEntero(tablaSimbolos[a2].tipo)) tablaSimbolos[a2].valor=(int)(tablaSimbolos[a2].valor+0.5);
                 if(esEntero(tablaSimbolos[a3].tipo)) tablaSimbolos[a3].valor=(int)(tablaSimbolos[a3].valor+0.5);
-                tablaSimbolos[a1].valor = tablaSimbolos[a2].valor + tablaSimbolos[a3].valor;
+            tablaSimbolos[a1].valor = tablaSimbolos[a2].valor + tablaSimbolos[a3].valor; 
             }
             else {
                 printf("Error al intentar cambiar una constante %d \n",a1);
                 exit(1);
-            } 
+            }
         }
         if(op==RESTAR){
             if(tablaSimbolos[a1].noConstante){
@@ -459,6 +459,28 @@ void interpretaCodigo(){
                 exit(1);
             } 
         }
+        if(op==MOVERBIZ){
+            int auxbits1=(int)(tablaSimbolos[a2].valor+0.5);
+            int auxbits2=(int)(tablaSimbolos[a3].valor+0.5);
+            if(tablaSimbolos[a1].noConstante) {
+                tablaSimbolos[a1].valor = (double)(auxbits1<<auxbits2);
+            }
+            else {
+                printf("Error al intentar cambiar una constante\n");
+                exit(1);
+            } 
+        }
+        if(op==MOVERBDE){
+            int auxbits1=(int)(tablaSimbolos[a2].valor+0.5);
+            int auxbits2=(int)(tablaSimbolos[a3].valor+0.5);
+            if(tablaSimbolos[a1].noConstante) {
+                tablaSimbolos[a1].valor = (double)(auxbits1>>auxbits2);
+            }
+            else {
+                printf("Error al intentar cambiar una constante\n");
+                exit(1);
+            } 
+        }
         
         if(op==DECLARARCONSTINT){
             tablaSimbolos[a1].valor = tablaSimbolos[a2].valor;
@@ -495,6 +517,18 @@ void interpretaCodigo(){
             tablaSimbolos[a1].noConstante = 0;
             tablaSimbolos[a1].tipo = 7;
         }
+        if(op == IMPRIMIR){
+            if(!imprimio){
+                printf("+-----------------------------------+\n");
+                printf("| Terminal                          |\n");
+            }imprimio=1;
+            if(esEntero(tablaSimbolos[a1].tipo))
+                printf("| >  %-30d |\n",(int)tablaSimbolos[a1].valor);
+            else printf("| >  %-30lf |\n",tablaSimbolos[a1].valor);
+        }
+        if(op == CONTINUAR) {
+            i = a1 - 1;
+        }
         
         if(op==DECLARARINT){
             tablaSimbolos[a1].noConstante = 1;
@@ -524,7 +558,14 @@ void interpretaCodigo(){
             tablaSimbolos[a1].noConstante = 1;
             tablaSimbolos[a1].tipo = 7;
         }
+        if(op==RETORNAR){
+            i=a1-1;
+        }
+        if(op==ROMPER){
+            i=a1-1;
+        }
     }
+    if(imprimio) printf("+-----------------------------------+\n");
 }
 
 /*localiza el lexema dentro de la tabla de simbolos*/
@@ -611,7 +652,6 @@ int yylex(){
         if(!strcmp(lexema,"falsoAmor")) return FALSO;
         if(!strcmp(lexema,"verdaderoSentimiento")) return VERDAD;
         if(!strcmp(lexema,"constanteRechazo"))    return CONST;
-        if(!strcmp(lexema,"vacioProfundo")) return VOID;
         if(!strcmp(lexema,"haz")) return DO;
         if(!strcmp(lexema,"para")) return FOR;
         if(!strcmp(lexema,"osino")) return ELSE;
