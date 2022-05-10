@@ -1,13 +1,43 @@
 //Este es el inicio de un gran interprete
-
 enteroAmor numEntero
 enteroAmor i
 realAmor numReal
 boolCool bandera
 constanteRechazo doblementeReal k = 0.5
 
-numEntero = 32 + 32
-numReal = ((1.5*2) - 4.5)/k
+i=0
+numEntero = 33 + 33
+numReal = (4.5 - (1.5*2))/k
 bandera = (numEntero > numReal) oh falsoAmor
+imprimir(numEntero)
+imprimir(numReal)
 
+mientras (numReal < numEntero){
+	i++
+	sisi(i==4){
+		@ Este es un comentario, la instruccion regresemos termina el programa @
+		regresemos
+	}
+	osisi(i==3){
+		numEntero = 5
+		
+		haz{
+			cortaRelacion cortito
+			cortito = 1
+			cortito = cortito << 1
+			sisi(cortito > 4){
+				terminamos
+			}
+			nada
+			cortito++
+		}mientras( verdaderoSentimiento )
+		
+		para(i=2;i<3;i=i+1){
+			sisi(i==2){
+				volvamos
+			}
+		}
+	}
+}
 
+imprimir(4)
