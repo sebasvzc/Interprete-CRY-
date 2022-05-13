@@ -30,7 +30,7 @@ mientras (numReal < numEntero){
 			}
 			nada
 			cortito++
-		}mientras( verdaderoSentimiento )
+		}mientras( cortito < 2 )
 		
 		para(i=2;i<3;i=i+1){
 			sisi(i==2){
